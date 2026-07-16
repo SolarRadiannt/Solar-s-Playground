@@ -5,6 +5,7 @@ using SolFramework.Core;
 using SolFramework.HealthManager;
 using SolFramework.Scheduler;
 using System.ComponentModel.DataAnnotations;
+using SolFramework.EEvents;
 
 public partial class HealthApply : Node, ISystem
 {
@@ -21,9 +22,9 @@ public partial class HealthApply : Node, ISystem
 	
 	private static World world = Core.World;
 	private static Stream<DamageTarget, DamageAmount> queryApplyDamage =
-		world.Stream<DamageTarget, DamageAmount>();
+		world.Query<DamageTarget, DamageAmount>().Not<EventCancelled>().Stream();
 	private static Stream<HealTarget, HealAmount> queryApplyHeal =
-		world.Stream<HealTarget, HealAmount>();
+		world.Query<HealTarget, HealAmount>().Not<EventCancelled>().Stream();
 	
 	private static void _applyDamage()
 	{
