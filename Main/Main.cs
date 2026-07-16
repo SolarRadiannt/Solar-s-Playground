@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using SolFramework;
-
+namespace Main;
 public partial class Main : Node
 {
 	// Called when the node enters the scene tree for the first time.
