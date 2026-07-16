@@ -30,7 +30,7 @@ public partial class Movement : Node, ISystem
 		query_moveto.For(
 			static (in Entity entity, ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveGoal moveGoal) =>
 			{
-				var origin = body.Position;
+				var origin = body.GlobalPosition;
 				var goal = moveGoal.Value;
 				
 				var resultant = origin - goal;
