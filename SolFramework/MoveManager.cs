@@ -2,11 +2,13 @@ namespace SolFramework.MoveManager;
 
 using fennecs;
 using Godot;
+using SolFramework.Components;
+
 
 public record struct MoveSpeed(float Value);
 public record struct MoveDirection(Vector2 Value);
 public record struct MoveGoal(Vector2 Value);
-public record struct MoveVelocity(Vector2 Value);
+public record struct MoveVelocity(Vector2 Value) : IVelocity;
 public record struct MoveToReach(float Value);
 
 public static class MoveManager

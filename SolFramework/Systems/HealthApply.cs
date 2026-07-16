@@ -6,58 +6,59 @@ using SolFramework.HealthManager;
 using SolFramework.Scheduler;
 using System.ComponentModel.DataAnnotations;
 using SolFramework.EEvents;
+using System;
+
 
 public partial class HealthApply : Node, ISystem
 {
 	public int Priority => SPriority.Applying;
-	public void Init()
-	{
-		Scheduler.RegisterSystem(this);
-	}
 	public void Process(double _)
 	{
 		_applyHeal();
+		_clampHealth();
 		_applyDamage();
 	}
 	
 	private static World world = Core.World;
-	private static Stream<DamageTarget, DamageAmount> queryApplyDamage =
-		world.Query<DamageTarget, DamageAmount>().Not<EventCancelled>().Stream();
-	private static Stream<HealTarget, HealAmount> queryApplyHeal =
-		world.Query<HealTarget, HealAmount>().Not<EventCancelled>().Stream();
+	private static Stream<Health, MaxHealth> toClampHealth =
+		world.Stream<Health, MaxHealth>();
+	private static void _clampHealth()
+	{
+		toClampHealth.For(
+			static (ref Health health, ref MaxHealth maxHealth) =>
+			{
+				health.Value = Math.Min(maxHealth.Value, health.Value);
+			});
+	}
 	
+	private static Stream<DamageTarget, DamageAmount> toApplyDamage =
+		world.Query<DamageTarget, DamageAmount>().Not<EventCancelled>().Stream();
 	private static void _applyDamage()
 	{
-		queryApplyDamage.For(
-			static (ref DamageTarget t, ref DamageAmount a) =>
+		toApplyDamage.For(
+			static (ref DamageTarget target, ref DamageAmount amount) =>
 			{
-				var target = t.Value;
-				var amount = a.Value;
-				
-				if (target.Has<Health>())
-					target.Ref<Health>().Value -= amount;
-				
-			});
-	}
-	private static void _applyHeal()
-	{
-		queryApplyHeal.For(
-			static (ref HealTarget t, ref HealAmount a) =>
-			{
-				var target = t.Value;
-				var amount = a.Value;
-				
-				if (!target.Has<Health>()) return;
-				
-				ref var health = ref target.Ref<Health>(); 
-				
-				if (target.Has<MaxHealth>())
-					health.Value = Mathf.Min(health.Value + amount, target.Ref<MaxHealth>().Value);
-				else
-					health.Value += amount;
+				if (!target.Value.Has<Health>() || amount.Value <= 0) return;
+				target.Value.Ref<Health>().Value -= amount.Value;
 			});
 	}
 	
+	private static Stream<HealTarget, HealAmount> toApplyHealth =
+		world.Query<HealTarget, HealAmount>().Not<EventCancelled>().Stream();
+	private static void _applyHeal()
+	{
+		toApplyHealth.For(
+			static (ref HealTarget target, ref HealAmount amount) =>
+			{
+				if (!target.Value.Has<Health>() || amount.Value <= 0) return;
+				target.Value.Ref<Health>().Value += amount.Value;
+			});
+	}
+	
+	public void Init()
+	{
+		Scheduler.RegisterSystem(this);
+	}
 	public override void _Ready()
 	{
 		Init();

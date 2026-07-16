@@ -12,10 +12,7 @@ public partial class TransientFlusher : Node, ISystem
 	public int Priority => SPriority.Flush;
 	public void Process(double _)
 	{
-		query_evententity.For(static (in Entity entity, ref Transient _) =>
-		{
-			entity.Despawn();
-		});
+		query_evententity.Despawn();
 	}
 	public static World world = Core.World;
 	public static Stream<Transient> query_evententity = query_evententity = world.Stream<Transient>();
