@@ -18,6 +18,7 @@ public partial class Movement : Node, ISystem
 		query_apply_movevel.For(
 			static (ref MoveDirection moveDir, ref MoveSpeed speed, ref MoveVelocity moveVel) =>
 			{
+				
 				moveVel.Value = moveDir.Value.Normalized() * speed.Value;
 			});
 	}
@@ -27,17 +28,21 @@ public partial class Movement : Node, ISystem
 	private static void _SystemMoveTo()
 	{
 		query_moveto.For(
-			static (ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveGoal moveGoal) =>
+			static (in Entity entity, ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveGoal moveGoal) =>
 			{
 				var origin = body.Position;
 				var goal = moveGoal.Value;
 				
-				var direction = (origin - goal).Normalized();
-				moveDir.Value = direction;
+				var resultant = origin - goal;
+				
+				if (resultant.Length() <= MoveManager.GetMoveToReach(entity))
+					moveDir.Value = Vector2.Zero;
+				else
+					moveDir.Value = resultant.Normalized();
 			});
 	}
 	
-	public int Priority => SPriority.Default;
+	public int Priority => SPriority.Action;
 	public void Process(double delta)
 	{
 		_SystemMoveTo();
