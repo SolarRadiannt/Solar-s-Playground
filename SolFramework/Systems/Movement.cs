@@ -4,23 +4,56 @@ using Godot;
 using fennecs;
 
 using SolFramework.Core;
-using SolFramework.Components;
 using SolFramework.Scheduler;
-using System;
+using SolFramework.MoveManager;
 
 
 public partial class Movement : Node, ISystem
 {
 	private static World world = Core.World;
-	public int Priority => SPriority.Highest;
+	private static Stream<MoveDirection, MoveSpeed, MoveVelocity> query_apply_movevel =
+		world.Stream<MoveDirection, MoveSpeed, MoveVelocity>();
+	private static void _SystemApplyMoveVel()
+	{
+		query_apply_movevel.For(
+			static (ref MoveDirection moveDir, ref MoveSpeed speed, ref MoveVelocity moveVel) =>
+			{
+				
+				moveVel.Value = moveDir.Value.Normalized() * speed.Value;
+			});
+	}
+	
+	private static Stream<ECSCharBody2D, MoveDirection, MoveGoal> query_moveto =
+		world.Stream<ECSCharBody2D, MoveDirection, MoveGoal>();
+	private static void _SystemMoveTo()
+	{
+		query_moveto.For(
+			static (in Entity entity, ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveGoal moveGoal) =>
+			{
+				var origin = body.Position;
+				var goal = moveGoal.Value;
+				
+				var resultant = origin - goal;
+				
+				if (resultant.Length() <= MoveManager.GetMoveToReach(entity))
+					moveDir.Value = Vector2.Zero;
+				else
+					moveDir.Value = resultant.Normalized();
+			});
+	}
+	
+	public int Priority => SPriority.Action;
+	public void Process(double delta)
+	{
+		_SystemMoveTo();
+		_SystemApplyMoveVel();
+	}
+	
 	public void Init()
 	{
 		Scheduler.RegisterSystem(this);
 	}
-	public void Process(double delta)
-	{
-		
-	}
+	
 	public override void _Ready()
 	{
 		Init();
