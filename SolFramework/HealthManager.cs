@@ -1,6 +1,6 @@
-namespace SolFramework.HealthManager
-{
-	using fennecs;
+namespace SolFramework.HealthManager;
+
+using fennecs;
 	using SolFramework.EEvents;
 	
 	public record struct MaxHealth(float Value);
@@ -49,4 +49,3 @@ namespace SolFramework.HealthManager
 			return entity;
 		}
 	}
-}

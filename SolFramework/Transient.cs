@@ -11,5 +11,10 @@ namespace SolFramework.ETransient
 			return world.Spawn()
 				.Add<Transient>();
 		}
+		public static EntitySpawner Spawner()
+		{
+			return world.Entity()
+				.Add<Transient>();
+		}
 	}
 }
