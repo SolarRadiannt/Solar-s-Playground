@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solar-s Playground", "Solar-s Playground.csproj", "{CE1C8C6A-D270-4917-ABCC-65B528A1C1AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE1C8C6A-D270-4917-ABCC-65B528A1C1AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1C8C6A-D270-4917-ABCC-65B528A1C1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1C8C6A-D270-4917-ABCC-65B528A1C1AD}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{CE1C8C6A-D270-4917-ABCC-65B528A1C1AD}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{CE1C8C6A-D270-4917-ABCC-65B528A1C1AD}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{CE1C8C6A-D270-4917-ABCC-65B528A1C1AD}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
