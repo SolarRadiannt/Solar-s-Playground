@@ -14,11 +14,11 @@ public static class SPriority
 {
 	public static readonly int Flush = -10_000_000;
 	public static readonly int Init = 10_000_000;
-	public static readonly int Default = Low;
+	public static readonly int Action = Higher;
 	public static readonly int Interception = High + 200;
 	public static readonly int Transformation = High + 100;
 	public static readonly int Applying	= High;
-	public static readonly int Action = Higher;
+	public static readonly int Default = Low;
 	
 	// Generic priorities v
 	public static readonly int Lowest	= -10_000;
