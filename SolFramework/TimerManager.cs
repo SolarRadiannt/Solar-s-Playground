@@ -21,6 +21,7 @@ public record struct TimerTicks(float Value);
 
 public struct TimerConfig
 {
+	public string Name;
 	public bool? Weak;
 	public bool? AutoTick;
 	public bool? Repeating;
@@ -31,8 +32,10 @@ public static class TimerManager
 	private static readonly World world = Core.World;
 	private static void ApplyConfig(Entity timer, TimerConfig config)
 	{
+		timer.Add(new Name(config.Name));
+		
 		if (config.Weak.HasValue && config.Repeating.HasValue)
-			GD.PushWarning("Weak and Repeating config should not coexist! Timer: ", Core.GetName(timer));
+			GD.PushWarning("Weak and Repeating config should not coexist! Timer: ", config.Name);
 		
 		if (config.AutoTick.HasValue)
 			timer.Add<TimerAutoTick>();
@@ -120,7 +123,7 @@ public static class TimerManager
 		if (!timer.Has<TimerFinished>()) return false;
 		if (timer.Has<TimerWeak>())
 		{
-			GD.PushWarning("Cannot reset ", Core.GetName(timer), " as its a weak entity!");
+			GD.PushWarning("Cannot reset ", Core.GetName(timer), " as it is a weak entity!");
 			return false;
 		}
 		

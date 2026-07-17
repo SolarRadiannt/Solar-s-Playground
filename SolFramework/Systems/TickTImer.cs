@@ -13,6 +13,7 @@ public partial class TickTimer : Node, ISystem
 	public void Process(double delta)
 	{
 		AutoTick(delta);
+		
 	}
 	
 	public void Init()
@@ -25,6 +26,7 @@ public partial class TickTimer : Node, ISystem
 	private static readonly World world = Core.World;
 	private static readonly Stream<TimerEntity> toTick =
 		world.Query<TimerEntity>()
+			.Has<TimerAutoTick>()
 			.Not<TimerPaused>()
 			.Stream();
 	private static void AutoTick(double delta)
