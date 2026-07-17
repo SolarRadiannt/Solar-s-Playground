@@ -12,7 +12,7 @@ public partial class MoveDirInput : Node, ISystem
     public int Priority => SPriority.Action - 1;
     public void Process(double _)
     {
-        _main();
+        Control();
     }
 
     public void Init()
@@ -24,13 +24,13 @@ public partial class MoveDirInput : Node, ISystem
     {
         Init();
     }
-    private static World world = Core.World;
-    private static Stream<MoveDirection> _controllable = world.Query<MoveDirection>()
+    private static readonly World world = Core.World;
+    private static readonly Stream<MoveDirection> controllable = world.Query<MoveDirection>()
         .Has<Player>()
         .Stream();
-    public void _main()
+    private static void Control()
     {
-        _controllable.For(
+        controllable.For(
             static (ref MoveDirection moveDir) =>
             {
                 var dir = Vector2.Zero;
