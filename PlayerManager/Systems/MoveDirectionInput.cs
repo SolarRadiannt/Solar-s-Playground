@@ -2,6 +2,7 @@ namespace PlayerManager.Systems;
 using fennecs;
 using Godot;
 
+using SolFramework.Components;
 using SolFramework.Scheduler;
 using SolFramework.Core;
 using SolFramework.MoveManager;
@@ -25,7 +26,7 @@ public partial class MoveDirectionInput : Node, ISystem
 	}
 	private static readonly World world = Core.World;
 	private static readonly Stream<MoveDirection> controllable = world.Query<MoveDirection>()
-		// .Has<Player>()
+		.Has<Player>()
 		.Stream();
 	private static void Control()
 	{
@@ -41,6 +42,7 @@ public partial class MoveDirectionInput : Node, ISystem
 					dir += Vector2.Left;
 				if (Input.IsActionPressed("move_right"))
 					dir += Vector2.Right;
+				
 				GD.Print("input processed", dir);
 				moveDir.Value = dir;
 			});

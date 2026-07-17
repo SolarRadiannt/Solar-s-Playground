@@ -15,7 +15,7 @@ public partial class HealthApply : Node, ISystem
 	public void Process(double _)
 	{
 		ApplyHeals();
-		ClampHealths();
+		ApplyClamping();
 		ApplyDamages();
 	}
 
@@ -28,7 +28,7 @@ public partial class HealthApply : Node, ISystem
 	private static readonly World world = Core.World;
 	private static readonly Stream<Health, MaxHealth> toClampHealth =
 		world.Stream<Health, MaxHealth>();
-	private static void ClampHealths()
+	private static void ApplyClamping()
 	{
 		toClampHealth.For(
 			static (ref Health health, ref MaxHealth maxHealth) =>

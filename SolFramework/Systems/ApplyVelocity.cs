@@ -5,6 +5,7 @@ using Godot;
 
 using SolFramework.Components;
 using SolFramework.Core;
+using SolFramework.MoveManager;
 using SolFramework.Scheduler;
 
 public partial class ApplyVelocity : Node, ISystem
@@ -30,9 +31,15 @@ public partial class ApplyVelocity : Node, ISystem
 	private static void ApplyVelocities()
 	{
 		toApplyVelocities.For(
-			static (ref ECSCharBody2D body, ref Velocity vel) =>
+			static (in Entity entity, ref ECSCharBody2D body, ref Velocity vel) =>
 			{
 				body.Velocity = vel.Value;
+				
+				if (!entity.Has<Moving>() && vel.Value.Length() > 0.01)
+					entity.Add<Moving>();
+				else
+					if (entity.Has<Moving>())
+						entity.Remove<Moving>();
 			});
 	}
 }
