@@ -7,16 +7,17 @@ using SolFramework.Core;
 using fennecs;
 using SolFramework.MoveManager;
 
+
 public partial class ComputeVelocity : Node, ISystem
 {
-	private static World world = Core.World;
+	private static readonly World world = Core.World;
 	
 	public int Priority => SPriority.Transformation + 10;
 	
 	public void Process(double _)
 	{
-		_resetVelocity();
-		_applyMoveVel();
+		ResetVelocity();
+		ApplyMoveVelocity();
 	}
 	
 	public void Init()
@@ -26,26 +27,28 @@ public partial class ComputeVelocity : Node, ISystem
 
 	public override void _Ready() => Init();
 	
-	private static Stream<Velocity> toReset =
+	private static readonly Stream<Velocity> toReset =
 		world.Query<Velocity>()
-		.Has<MoveVelocity>()
-		.Stream();
-	private void _resetVelocity()
+			.Has<MoveVelocity>()
+			.Stream();
+	private void ResetVelocity()
 	{
-		toReset.Batch()
-			.Remove<Velocity>()
-			.Add(new Velocity(Vector2.Zero));
+		toReset.For(static(ref Velocity vel) =>
+		{
+			vel.Value = Vector2.Zero;
+		});
 	}
 	
-	private static Stream<Velocity, MoveVelocity> toApplyMoveVel =
+	private static readonly Stream<Velocity, MoveVelocity> toApplyMoveVel =
 		world.Query<Velocity, MoveVelocity>()
 			.Stream();
-	private void _applyMoveVel()
+	private void ApplyMoveVelocity()
 	{
 		toApplyMoveVel.For(
-			static (ref Velocity vel, ref MoveVelocity moveVel) =>
-				vel.Value += moveVel.Value
+			static (ref Velocity vel, ref MoveVelocity moveVel) =>{
+				vel.Value += moveVel.Value;
+				GD.Print("new velocity: ", vel.Value);
+				}
 			);
-			
 	}
 }
