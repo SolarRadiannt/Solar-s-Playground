@@ -14,15 +14,21 @@ public partial class HealthApply : Node, ISystem
 	public int Priority => SPriority.Applying;
 	public void Process(double _)
 	{
-		_applyHeal();
-		_clampHealth();
-		_applyDamage();
+		ApplyHeals();
+		ClampHealths();
+		ApplyDamages();
 	}
-	
-	private static World world = Core.World;
-	private static Stream<Health, MaxHealth> toClampHealth =
+
+	public void Init()
+	{
+		Scheduler.RegisterSystem(this);
+	}
+	public override void _Ready() => Init();
+
+	private static readonly World world = Core.World;
+	private static readonly Stream<Health, MaxHealth> toClampHealth =
 		world.Stream<Health, MaxHealth>();
-	private static void _clampHealth()
+	private static void ClampHealths()
 	{
 		toClampHealth.For(
 			static (ref Health health, ref MaxHealth maxHealth) =>
@@ -31,9 +37,9 @@ public partial class HealthApply : Node, ISystem
 			});
 	}
 	
-	private static Stream<DamageTarget, DamageAmount> toApplyDamage =
+	private static readonly Stream<DamageTarget, DamageAmount> toApplyDamage =
 		world.Query<DamageTarget, DamageAmount>().Not<EventCancelled>().Stream();
-	private static void _applyDamage()
+	private static void ApplyDamages()
 	{
 		toApplyDamage.For(
 			static (ref DamageTarget target, ref DamageAmount amount) =>
@@ -43,9 +49,9 @@ public partial class HealthApply : Node, ISystem
 			});
 	}
 	
-	private static Stream<HealTarget, HealAmount> toApplyHealth =
+	private static readonly Stream<HealTarget, HealAmount> toApplyHealth =
 		world.Query<HealTarget, HealAmount>().Not<EventCancelled>().Stream();
-	private static void _applyHeal()
+	private static void ApplyHeals()
 	{
 		toApplyHealth.For(
 			static (ref HealTarget target, ref HealAmount amount) =>
@@ -53,14 +59,5 @@ public partial class HealthApply : Node, ISystem
 				if (!target.Value.Has<Health>() || amount.Value <= 0) return;
 				target.Value.Ref<Health>().Value += amount.Value;
 			});
-	}
-	
-	public void Init()
-	{
-		Scheduler.RegisterSystem(this);
-	}
-	public override void _Ready()
-	{
-		Init();
 	}
 }
