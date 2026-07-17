@@ -6,15 +6,13 @@ namespace SolFramework.ETransient
 	public static class ETransient
 	{
 		private static World world = Core.World;
-		public static Entity Spawn()
-		{
-			return world.Spawn()
+		public static Entity Spawn() =>
+			world.Spawn()
 				.Add<Transient>();
-		}
-		public static EntitySpawner Spawner()
-		{
-			return world.Entity()
+		
+		public static EntitySpawner Spawner() =>
+			world.Entity()
 				.Add<Transient>();
-		}
+		
 	}
 }
