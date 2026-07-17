@@ -1,6 +1,16 @@
 [gd_scene format=3 uid="uid://bskyw3xu2kikb"]
 
 [ext_resource type="Script" uid="uid://dj05uxr7koh43" path="res://Main/Main.cs" id="1_yh5la"]
+[ext_resource type="PackedScene" uid="uid://cv2stkbw5y72y" path="res://Character/character.tscn" id="2_2w1kt"]
 
 [node name="Main" type="Node" unique_id=1220271164]
 script = ExtResource("1_yh5la")
+
+[node name="Character" parent="." unique_id=1080916824 instance=ExtResource("2_2w1kt")]
+position = Vector2(424, 179)
+
+[node name="Character2" parent="." unique_id=763652050 instance=ExtResource("2_2w1kt")]
+position = Vector2(327, 357)
+
+[node name="Character3" parent="." unique_id=1173273386 instance=ExtResource("2_2w1kt")]
+position = Vector2(530, 343)

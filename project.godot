@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Solar's Playground"
+run/main_scene="uid://bskyw3xu2kikb"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -21,6 +22,7 @@ HealthApply="uid://dmd0dk6mrrtpf"
 Movement="uid://ybb03e67bdn4"
 TransientFlusher="uid://d3f4hf6d1053c"
 ComputeVelocity="uid://cjfatl57ku4vg"
+MoveDirectionInput="uid://cii5vnck0kk0k"
 
 [display]
 
