@@ -1,3 +1,4 @@
-namespace Player.Components;
-
-public struct Player;
+namespace PlayerManager.Components
+{
+	public struct Player;
+};
