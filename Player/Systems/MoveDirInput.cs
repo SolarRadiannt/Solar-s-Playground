@@ -25,12 +25,12 @@ public partial class MoveDirInput : Node, ISystem
         Init();
     }
     private static World world = Core.World;
-    private static Stream<MoveDirection> _arePlayers = world.Query<MoveDirection>()
+    private static Stream<MoveDirection> _controllable = world.Query<MoveDirection>()
         .Has<Player>()
         .Stream();
     public void _main()
     {
-        _arePlayers.For(
+        _controllable.For(
             static (ref MoveDirection moveDir) =>
             {
                 var dir = Vector2.Zero;
