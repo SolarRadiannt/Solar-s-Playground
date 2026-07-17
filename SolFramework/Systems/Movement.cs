@@ -10,12 +10,26 @@ using SolFramework.MoveManager;
 
 public partial class Movement : Node, ISystem
 {
-	private static World world = Core.World;
-	private static Stream<MoveDirection, MoveSpeed, MoveVelocity> query_apply_movevel =
-		world.Stream<MoveDirection, MoveSpeed, MoveVelocity>();
-	private static void _SystemApplyMoveVel()
+	public int Priority => SPriority.Action;
+	public void Process(double delta)
 	{
-		query_apply_movevel.For(
+		HandleMoveTo();
+		ApplyMoveVelocity();
+	}
+	
+	public void Init()
+	{
+		Scheduler.RegisterSystem(this);
+	}
+	
+	public override void _Ready() => Init();
+
+	private static readonly World world = Core.World;
+	private static readonly Stream<MoveDirection, MoveSpeed, MoveVelocity> toApplyVel =
+		world.Stream<MoveDirection, MoveSpeed, MoveVelocity>();
+	private static void ApplyMoveVelocity()
+	{
+		toApplyVel.For(
 			static (ref MoveDirection moveDir, ref MoveSpeed speed, ref MoveVelocity moveVel) =>
 			{
 				
@@ -23,11 +37,11 @@ public partial class Movement : Node, ISystem
 			});
 	}
 	
-	private static Stream<ECSCharBody2D, MoveDirection, MoveGoal> query_moveto =
+	private static readonly Stream<ECSCharBody2D, MoveDirection, MoveGoal> toMoveTo =
 		world.Stream<ECSCharBody2D, MoveDirection, MoveGoal>();
-	private static void _SystemMoveTo()
+	private static void HandleMoveTo()
 	{
-		query_moveto.For(
+		toMoveTo.For(
 			static (in Entity entity, ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveGoal moveGoal) =>
 			{
 				var origin = body.GlobalPosition;
@@ -40,22 +54,5 @@ public partial class Movement : Node, ISystem
 				else
 					moveDir.Value = resultant.Normalized();
 			});
-	}
-	
-	public int Priority => SPriority.Action;
-	public void Process(double delta)
-	{
-		_SystemMoveTo();
-		_SystemApplyMoveVel();
-	}
-	
-	public void Init()
-	{
-		Scheduler.RegisterSystem(this);
-	}
-	
-	public override void _Ready()
-	{
-		Init();
 	}
 }
