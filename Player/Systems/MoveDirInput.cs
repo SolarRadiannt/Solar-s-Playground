@@ -1,7 +1,8 @@
 namespace PlayerManager.Systems;
 using fennecs;
-using PlayerManager.Components;
 using Godot;
+
+using PlayerManager.Components;
 using SolFramework.Scheduler;
 using SolFramework.Core;
 using SolFramework.MoveManager;
