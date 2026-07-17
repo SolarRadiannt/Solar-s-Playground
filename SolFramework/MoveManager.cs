@@ -10,6 +10,7 @@ public record struct MoveDirection(Vector2 Value);
 public record struct MoveGoal(Vector2 Value);
 public record struct MoveVelocity(Vector2 Value);
 public record struct MoveToReach(float Value);
+public struct Moving;
 
 public static class MoveManager
 {
