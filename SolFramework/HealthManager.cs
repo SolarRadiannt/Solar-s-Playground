@@ -16,35 +16,30 @@ using fennecs;
 	public record struct HealAmount(float Value);
 	public struct HealEvent;
 	
-	
-	
-	public record struct DamageData(float Amount, Entity Target, Entity? Source = null!);
-	public record struct HealData(float Amount, Entity Target, Entity? Source = null!);
-	
 	public static class HealthManager
 	{
-		static Entity Damage(DamageData data)
+		static Entity Damage(float amount, Entity target, Entity? source = null!)
 		{
 			var entity = EEvent.Spawn()
-				.Add(new DamageAmount(data.Amount))
-				.Add(new DamageTarget(data.Target))
+				.Add(new DamageAmount(amount))
+				.Add(new DamageTarget(target))
 				.Add<DamageEvent>();
 			
 			// Only add Source if it has a value
-			if (data.Source.HasValue)
-			entity.Add(new DamageSource(data.Source.Value));
+			if (source.HasValue)
+				entity.Add(new DamageSource(source.Value));
 
 			return entity;
 		}
-		static Entity Heal(HealData data)
+		static Entity Heal(float amount, Entity target, Entity? source = null!)
 		{
 			var entity = EEvent.Spawn()
-				.Add(new HealAmount(data.Amount))
-				.Add(new HealTarget(data.Target))
+				.Add(new HealAmount(amount))
+				.Add(new HealTarget(target))
 				.Add<HealEvent>();
 
-			if (data.Source.HasValue)
-			entity.Add(new HealSource(data.Source.Value));
+			if (source.HasValue)
+				entity.Add(new HealSource(source.Value));
 
 			return entity;
 		}
