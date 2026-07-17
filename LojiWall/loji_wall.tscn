@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dyknff3o83066"]
+
+[ext_resource type="Texture2D" uid="uid://btb3y7oq8seet" path="res://LojiWall/e963ec6887909626795b3aef0082aa51.jpg" id="1_7iwk4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q0c55"]
+size = Vector2(466, 193)
+
+[node name="LojiWall" type="StaticBody2D" unique_id=1973346265]
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1702626665]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_q0c55")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=800024741]
+position = Vector2(-1.1444092e-05, -1.5000038)
+scale = Vector2(0.72136223, 0.3846154)
+texture = ExtResource("1_7iwk4")
