@@ -6,6 +6,8 @@ using Godot;
 using SolFramework.Scheduler;
 using SolFramework.Core;
 using SolFramework.ETransient;
+using SolFramework.Components;
+
 
 public partial class TransientFlusher : Node, ISystem
 {
@@ -13,6 +15,7 @@ public partial class TransientFlusher : Node, ISystem
 	public void Process(double _)
 	{
 		transientEntities.Despawn();
+		destroyEntities.Despawn();
 	}
 	
 	public void Init()
@@ -24,5 +27,5 @@ public partial class TransientFlusher : Node, ISystem
 	
 	private static readonly World world = Core.World;
 	private static readonly Stream<Transient> transientEntities = world.Stream<Transient>();
-
+	private static readonly Stream<Destroy> destroyEntities = world.Stream<Destroy>();
 }
