@@ -14,9 +14,8 @@ public abstract partial class ECSCharBody2D : CharacterBody2D
 	public override void _EnterTree()
 	{
 		if (!entity)
-		{
 			entity = Core.World.Spawn();
-		}
+		
 		
 		entity.Add(this);
 		OnEntityReady();
