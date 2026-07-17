@@ -12,18 +12,17 @@ public partial class TransientFlusher : Node, ISystem
 	public int Priority => SPriority.Flush;
 	public void Process(double _)
 	{
-		query_evententity.Despawn();
+		transientEntities.Despawn();
 	}
-	public static World world = Core.World;
-	public static Stream<Transient> query_evententity = query_evententity = world.Stream<Transient>();
 	
 	public void Init()
 	{
 		Scheduler.RegisterSystem(this.Process, Priority);
 	}
 
-	public override void _Ready()
-	{
-		Init();
-	}
+	public override void _Ready() => Init();
+	
+	private static readonly World world = Core.World;
+	private static readonly Stream<Transient> transientEntities = world.Stream<Transient>();
+
 }

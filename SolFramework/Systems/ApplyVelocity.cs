@@ -7,24 +7,32 @@ using SolFramework.Components;
 using SolFramework.Core;
 using SolFramework.Scheduler;
 
-public partial class ApplyVelocity : ISystem
+public partial class ApplyVelocity : Node, ISystem
 {
 	public int Priority => SPriority.Applying + 5;
 	public void Process(double _)
 	{
-		query_characterbody.For(
-			static (ref ECSCharBody2D body, ref Velocity vel) =>
-			{
-				body.Velocity = vel.Value;
-			});
+		ApplyVelocities();
 	}
 	
-	private static World world = Core.World;
-	private static Stream<ECSCharBody2D, Velocity> query_characterbody =
-		world.Stream<ECSCharBody2D, Velocity>();
+	
 	
 	public void Init()
 	{
 		Scheduler.RegisterSystem(this);
+	}
+
+    public override void _Ready() => Init();
+
+	private static readonly World world = Core.World;
+	private static readonly Stream<ECSCharBody2D, Velocity> toApplyVelocities =
+		world.Stream<ECSCharBody2D, Velocity>();
+	private static void ApplyVelocities()
+	{
+		toApplyVelocities.For(
+			static (ref ECSCharBody2D body, ref Velocity vel) =>
+			{
+				body.Velocity = vel.Value;
+			});
 	}
 }
