@@ -66,6 +66,7 @@ public static class TimerManager
 		
 		return timer;
 	}
+	public static Entity Spawn(float duration) => Spawn(duration, null);
 	
 	public static bool Finished(Entity timer)
 	{
