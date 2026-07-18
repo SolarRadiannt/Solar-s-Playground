@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://nam1r1q5xb50"
+path="res://.godot/imported/ESE - Foot Step - Wood - Medium 10.wav-e8faf9f36753aedbd7a7724ceacede65.sample"
+
+[deps]
+
+source_file="res://Sounds/FootSteps/Wood/ESE - Foot Step - Wood - Medium 10.wav"
+dest_files=["res://.godot/imported/ESE - Foot Step - Wood - Medium 10.wav-e8faf9f36753aedbd7a7724ceacede65.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

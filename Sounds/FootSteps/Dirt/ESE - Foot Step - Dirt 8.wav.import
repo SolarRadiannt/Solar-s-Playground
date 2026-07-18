@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://06gq3usqme61"
+path="res://.godot/imported/ESE - Foot Step - Dirt 8.wav-7f4e8a9fbb9175bd98982b5e37f2cfcb.sample"
+
+[deps]
+
+source_file="res://Sounds/FootSteps/Dirt/ESE - Foot Step - Dirt 8.wav"
+dest_files=["res://.godot/imported/ESE - Foot Step - Dirt 8.wav-7f4e8a9fbb9175bd98982b5e37f2cfcb.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
