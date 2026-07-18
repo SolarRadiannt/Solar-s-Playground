@@ -7,7 +7,7 @@ using SolFramework.Core;
 using SolFramework.TimerManager;
 using SolFramework.Scheduler;
 
-public partial class TickTimer : Node, ISystem
+public partial class TimerTicker : Node, ISystem
 {
 	public int Priority => SPriority.Applying;
 	public void Process(double delta)

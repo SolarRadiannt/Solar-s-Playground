@@ -23,6 +23,7 @@ Movement="uid://ybb03e67bdn4"
 TransientFlusher="uid://d3f4hf6d1053c"
 ComputeVelocity="uid://cjfatl57ku4vg"
 MoveDirectionInput="uid://cii5vnck0kk0k"
+FootstepsEmitter="uid://chrcp5apd3u3c"
 
 [display]
 

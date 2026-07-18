@@ -8,6 +8,7 @@ public partial class Character : ECSCharBody2D
 	protected override void OnEntityReady()
 	{
 		entity.Add<Player>();
+		entity.Add<Grounded>();
 		MoveManager.ApplyMovement(entity, 400);
 		GD.Print("Character spawned!");
 	}

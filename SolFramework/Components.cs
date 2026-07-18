@@ -11,3 +11,4 @@ public interface IVelocity
 public struct ChildOf;
 public struct Destroy;
 public struct Player;
+public struct Grounded;

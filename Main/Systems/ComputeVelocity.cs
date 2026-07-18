@@ -45,10 +45,9 @@ public partial class ComputeVelocity : Node, ISystem
 	private void ApplyMoveVelocity()
 	{
 		toApplyMoveVel.For(
-			static (ref Velocity vel, ref MoveVelocity moveVel) =>{
+			static (ref Velocity vel, ref MoveVelocity moveVel) =>
+			{
 				vel.Value += moveVel.Value;
-				GD.Print("new velocity: ", vel.Value);
-				}
-			);
+			});
 	}
 }

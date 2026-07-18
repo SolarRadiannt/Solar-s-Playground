@@ -8,6 +8,7 @@ using SolFramework.Core;
 using SolFramework.FootstepManager;
 using fennecs;
 using SolFramework.MoveManager;
+using SolFramework.Components;
 
 public partial class FootstepsEmitter : Node, ISystem
 {
@@ -28,9 +29,9 @@ public partial class FootstepsEmitter : Node, ISystem
 	private static Stream<ECSCharBody2D, FootstepTimer> toProcess =
 		world.Query<ECSCharBody2D, FootstepTimer>()
 			.Has<Moving>()
+			.Has<Grounded>()
 			.Stream();
-	private static void ProcessFootstep(double delta)
-	{
+	private static void ProcessFootstep(double delta) =>
 		toProcess.For(
 			delta,
 			static (double delta, in Entity entity, ref ECSCharBody2D body, ref FootstepTimer footstepTimer) =>
@@ -48,7 +49,5 @@ public partial class FootstepsEmitter : Node, ISystem
 				
 				if (timer.JustFinished())
 					FootstepManager.EmitFootstep(body.GlobalPosition, "Unknown", entity);
-				
 			});
-	}
 }

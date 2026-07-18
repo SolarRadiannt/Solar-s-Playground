@@ -42,8 +42,6 @@ public partial class MoveDirectionInput : Node, ISystem
 					dir += Vector2.Left;
 				if (Input.IsActionPressed("move_right"))
 					dir += Vector2.Right;
-				
-				GD.Print("input processed", dir);
 				moveDir.Value = dir;
 			});
 	}
