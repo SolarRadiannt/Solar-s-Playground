@@ -37,8 +37,7 @@ public partial class ApplyVelocity : Node, ISystem
 				
 				if (!entity.Has<Moving>() && vel.Value.Length() > 0.01)
 					entity.Add<Moving>();
-				else
-					if (entity.Has<Moving>())
+				else if (entity.Has<Moving>())
 						entity.Remove<Moving>();
 			});
 	}

@@ -18,12 +18,11 @@ public abstract partial class ECSCharBody2D : CharacterBody2D
 			entity = Core.World.Spawn()
 						.Add(new Velocity(Vector2.Zero));
 		
-		
 		entity.Add(this);
 		OnEntityReady();
 	}
 	public override void _ExitTree() =>
-		entity.Remove<ECSCharBody2D>();
+		entity.Despawn();
 
 	protected override void Dispose(bool disposing)
 	{

@@ -13,6 +13,6 @@ public static class Core
 		if (entity.Has<Name>())
 			return entity.Ref<Name>().Value;
 		
-		return entity.ToRaw().ToString();
+		return entity.ToRaw().ToString(); // if no Name get its id
 	}
 }

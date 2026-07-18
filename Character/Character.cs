@@ -7,9 +7,7 @@ public partial class Character : ECSCharBody2D
 {
 	protected override void OnEntityReady()
 	{
-		entity
-			.Add(new Velocity(Vector2.Zero))
-			.Add<Player>();
+		entity.Add<Player>();
 		MoveManager.ApplyMovement(entity, 400);
 		GD.Print("Character spawned!");
 	}

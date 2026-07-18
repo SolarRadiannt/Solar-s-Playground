@@ -35,6 +35,7 @@ static class Scheduler
 	{
 		RegisterSystem(system.Process, system.Priority);
 	}
+	
 	public static void RegisterSystem(Action<double> system, int priority)
 	{
 		_systems.Add((system, priority));
