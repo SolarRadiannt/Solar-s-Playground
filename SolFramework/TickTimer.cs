@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
+namespace SolFramework.TickTimer;
+
 using Godot;
-
-namespace SolFramework.Timer;
-
 public struct TimerConfig
 {
 	public bool? Repeating;
 }
 
-public struct Timer
+public struct TickTimer
 {
 	private static TimerConfig defaultConfig = new TimerConfig
 	{
@@ -44,6 +41,8 @@ public struct Timer
 			if (_currentTick >= _duration)
 			{
 				_currentTick = _duration;
+				
+				if (_finished) return;
 				_finished = true;
 				_justFinished = true;
 			}
@@ -55,15 +54,15 @@ public struct Timer
 		_repeating = config.Repeating.Value;
 	}
 	
-	public Timer(float duration, TimerConfig? config)
+	public TickTimer(float duration, TimerConfig? config)
 	{
 		_duration = Mathf.Max(0, duration);
 		
 		if (config.HasValue)
 			_ApplyConfig(config.Value);
 	}
-	public Timer(float duration) => _duration = Mathf.Max(0, duration);
-	public Timer(float duration, bool repeating)
+	public TickTimer(float duration) => _duration = Mathf.Max(0, duration);
+	public TickTimer(float duration, bool repeating)
 	{
 		_duration = Mathf.Max(0, duration);
 		_repeating = repeating;
@@ -110,7 +109,7 @@ public struct Timer
 		return true;
 	}
 	
-	public Timer Tick(float delta)
+	public TickTimer Tick(float delta)
 	{
 		if (_repeating && _finished) Reset();
 		if (_paused) return this;
@@ -129,5 +128,5 @@ public struct Timer
 		return this;
 	}
 	
-	public Timer Tick(double delta) => Tick((float)delta);
+	public TickTimer Tick(double delta) => Tick((float)delta);
 }

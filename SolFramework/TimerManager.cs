@@ -34,14 +34,14 @@ public static class TimerManager
 	{
 		timer.Add(new Name(config.Name));
 		
-		if (config.Weak.HasValue && config.Repeating.HasValue)
+		if (config.Weak.Value && config.Repeating.Value)
 			GD.PushWarning("Weak and Repeating config should not coexist! Timer: ", config.Name);
 		
-		if (config.AutoTick.HasValue)
+		if (config.AutoTick.Value)
 			timer.Add<TimerAutoTick>();
-		if (config.Weak.HasValue)
+		if (config.Weak.Value)
 			timer.Add<TimerWeak>();
-		if (config.Repeating.HasValue)
+		if (config.Repeating.Value)
 			timer.Add<TimerRepeating>();
 	}
 	
@@ -109,6 +109,19 @@ public static class TimerManager
 		return true;
 	}
 	
+	public static void SetDuration(Entity timer, float newDuration)
+	{
+		if (!IsTimer(timer)) return;
+		ref var duration = ref timer.Ref<TimerDuration>();
+		duration.Value = Math.Max(0, newDuration);
+		
+		ref var currentTick = ref timer.Ref<TimerTicks>();
+		currentTick.Value = Mathf.Max(currentTick.Value, newDuration);
+		
+		if (currentTick.Value >= newDuration)
+			OnFinished(timer);
+	}
+	
 	public static bool Resume(Entity timer)
 	{
 		if (!IsTimer(timer)) return false;
@@ -121,18 +134,39 @@ public static class TimerManager
 	public static bool Reset(Entity timer)
 	{
 		if (!IsTimer(timer)) return false;
-		if (!timer.Has<TimerFinished>()) return false;
-		if (timer.Has<TimerWeak>())
+		
+		bool finished = timer.Has<TimerFinished>();
+		
+		if (finished && timer.Has<TimerWeak>())
 		{
 			GD.PushWarning("Cannot reset ", Core.GetName(timer), " as it is a weak entity!");
 			return false;
 		}
-		
-		timer.Remove<TimerFinished>();
-		if (timer.Has<TimerJustFinished>())
+		if (finished)
+			timer.Remove<TimerFinished>();
+		if (finished && timer.Has<TimerJustFinished>())
 			timer.Remove<TimerJustFinished>();
 		
+		timer.Ref<TimerTicks>().Value = 0f;
+		
 		return true;
+	}
+	
+	private static void OnFinished(Entity timer)
+	{
+		timer.Add<TimerFinished>();
+			timer.Add<TimerJustFinished>();
+			
+			if (timer.Has<TimerWeak>())
+				timer.Add<Destroy>();
+			else if (timer.Has<TimerRepeating>()) // if timer were weak this wont run if Repeating were enabled
+				Callable.From(
+				() =>
+				{
+					if (timer.Alive && timer.Has<TimerRepeating>())
+						Reset(timer);
+					
+				}).CallDeferred(); // deferred to give JustFinished a chance to get called.
 	}
 	
 	public static float Tick(Entity timer, float delta)
@@ -151,23 +185,7 @@ public static class TimerManager
 		
 		float newTick = Mathf.Clamp(timerTick.Value + delta, 0, duration);
 		if (newTick >= duration)
-		{
-			timer.Add<TimerFinished>();
-			timer.Add<TimerJustFinished>();
-			
-			if (timer.Has<TimerWeak>())
-				timer.Add<Destroy>();
-			else if (timer.Has<TimerRepeating>()) // if timer were weak this wont run if Repeating were enabled
-				Callable.From(
-				() =>
-				{
-					if (timer.Alive && timer.Has<TimerRepeating>())
-						Reset(timer);
-					
-				}).CallDeferred(); // deferred to give JustFinished a chance to get called.
-			
-			return duration;
-		}
+			OnFinished(timer);
 		
 		timerTick.Value = newTick;
 		return newTick;
