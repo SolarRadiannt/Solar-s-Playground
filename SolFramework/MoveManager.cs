@@ -15,6 +15,14 @@ public struct Moving;
 public static class MoveManager
 {
 	public const float MOVETO_REACH = 0.5f;
+	
+	public static Entity ApplyMovement(Entity entity, float moveSpeed) =>
+		entity
+			.Add(new MoveSpeed(moveSpeed))
+			.Add(new MoveVelocity(Vector2.Zero))
+			.Add(new MoveDirection(Vector2.Zero));
+	
+	
 	public static bool MoveTo(Entity entity, Vector2 goal)
 	{
 		bool overriden = false;

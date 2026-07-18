@@ -13,4 +13,4 @@ position = Vector2(173, 102)
 [node name="LojiWall" parent="." unique_id=1973346265 instance=ExtResource("3_qvhan")]
 position = Vector2(580, 295)
 
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1344610733]
+[node name="Map" type="Node" parent="." unique_id=879561448]
