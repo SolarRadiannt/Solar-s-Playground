@@ -9,6 +9,7 @@ size = Vector2(466, 193)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1702626665]
+z_index = 1
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_q0c55")
 

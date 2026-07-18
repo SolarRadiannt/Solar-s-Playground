@@ -11,6 +11,7 @@ script = ExtResource("1_yh5la")
 position = Vector2(173, 102)
 
 [node name="LojiWall" parent="." unique_id=1973346265 instance=ExtResource("3_qvhan")]
-position = Vector2(580, 295)
+z_index = 1
+position = Vector2(538, 364)
 
 [node name="Map" type="Node" parent="." unique_id=879561448]
