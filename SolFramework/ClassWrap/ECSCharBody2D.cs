@@ -1,5 +1,6 @@
 using fennecs;
 using Godot;
+using SolFramework.Components;
 
 using SolFramework.Core;
 
@@ -14,7 +15,8 @@ public abstract partial class ECSCharBody2D : CharacterBody2D
 	public override void _EnterTree()
 	{
 		if (!entity)
-			entity = Core.World.Spawn();
+			entity = Core.World.Spawn()
+						.Add(new Velocity(Vector2.Zero));
 		
 		
 		entity.Add(this);

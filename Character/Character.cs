@@ -9,11 +9,8 @@ public partial class Character : ECSCharBody2D
 	{
 		entity
 			.Add(new Velocity(Vector2.Zero))
-			.Add(new MoveDirection(Vector2.Zero))
-			.Add(new MoveVelocity(Vector2.Zero))
-			.Add(new MoveSpeed(400))
 			.Add<Player>();
-		
+		MoveManager.ApplyMovement(entity, 400);
 		GD.Print("Character spawned!");
 	}
 }
