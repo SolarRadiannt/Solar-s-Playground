@@ -14,24 +14,22 @@ public record struct FootstepOrigin(Vector2 Value);
 public record struct FootstepSource(Entity Value);
 
 public record struct FootstepTimer(TickTimer Value);
-public record struct FootstepBaseRate(float Value);
+public record struct FootstepStride(float Value);
 
 static class FootstepManager
 {
-	public static Entity ApplyFootstep(Entity entity, float stepRate) =>
+	public static Entity ApplyFootstep(Entity entity, float stride) =>
 			entity
-				.Add(new FootstepTimer(new TickTimer(stepRate)))
-				.Add(new FootstepBaseRate(stepRate))
+				.Add(new FootstepTimer(new TickTimer(0.1f, true)))
+				.Add(new FootstepStride(stride))
 				.Add<FootstepEmitter>();
 	
 	public static Entity SetBaseStepRate(Entity entity, float baseStepRate)
 	{
 		if (entity.Has<FootstepTimer>())
-		{
-			entity.Ref<FootstepBaseRate>().Value = baseStepRate;
-		}
+			entity.Ref<FootstepStride>().Value = baseStepRate;
 		else
-			GD.PushWarning(Core.GetName(entity), "does not have footstep timer!");
+			GD.PushWarning(Core.GetName(entity), "does not have footstep stride!");
 		
 		return entity;
 	}

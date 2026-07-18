@@ -12,7 +12,7 @@ public partial class FootstepsSound : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	
-	public int Priority => SPriority.Transformation + 10;
+	public int Priority => SPriority.Default;
 	
 	public void Process(double _)
 	{

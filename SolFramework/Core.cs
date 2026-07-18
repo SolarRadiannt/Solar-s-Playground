@@ -15,4 +15,6 @@ public static class Core
 		
 		return entity.ToRaw().ToString(); // if no Name get its id
 	}
+	
+	
 }

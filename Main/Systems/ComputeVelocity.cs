@@ -42,7 +42,7 @@ public partial class ComputeVelocity : Node, ISystem
 	private static readonly Stream<Velocity, MoveVelocity> toApplyMoveVel =
 		world.Query<Velocity, MoveVelocity>()
 			.Stream();
-	private void ApplyMoveVelocity()
+	private static void ApplyMoveVelocity()
 	{
 		toApplyMoveVel.For(
 			static (ref Velocity vel, ref MoveVelocity moveVel) =>

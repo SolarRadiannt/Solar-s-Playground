@@ -112,6 +112,7 @@ public struct TickTimer
 	public TickTimer Tick(float delta)
 	{
 		if (_repeating && _finished) Reset();
+		
 		if (_paused) return this;
 		if (_finished) return this;
 		
