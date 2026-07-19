@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cvghgu7vtp8pa"
+path="res://.godot/imported/FDirt 9.wav-83f8f5fb473b1cc9d791592db2d95aaa.sample"
+
+[deps]
+
+source_file="res://Sounds/FDirt 9.wav"
+dest_files=["res://.godot/imported/FDirt 9.wav-83f8f5fb473b1cc9d791592db2d95aaa.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cxyay7qcotiqb"
+path="res://.godot/imported/FDirt 11.wav-4d1e1605527943120e1b671845f4377a.sample"
+
+[deps]
+
+source_file="res://Sounds/FDirt 11.wav"
+dest_files=["res://.godot/imported/FDirt 11.wav-4d1e1605527943120e1b671845f4377a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,6 +1,7 @@
 namespace SolFramework.TickTimer;
 
 using Godot;
+
 public struct TimerConfig
 {
 	public bool? Repeating;
@@ -11,6 +12,7 @@ public struct TickTimer
 	private static TimerConfig defaultConfig = new TimerConfig
 	{
 		Repeating = false,
+		
 	};
 	
 	private bool _repeating = false;

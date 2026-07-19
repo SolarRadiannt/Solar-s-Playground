@@ -1,0 +1,13 @@
+using Godot;
+
+namespace GodotUtilities;
+
+public static class Vector2Extensions
+{
+    public static Vector2 RotatedDegrees(this Vector2 vector, float deg) =>
+        vector.Rotated(Mathf.DegToRad(deg));
+        
+    public static bool IsWithinDistanceSquared(this Vector2 v1, Vector2 v2, float distance) => 
+        v1.DistanceSquaredTo(v2) <= distance * distance;
+}
+

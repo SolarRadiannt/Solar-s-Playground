@@ -3,13 +3,16 @@
 [ext_resource type="Script" path="res://Main/MainNode.cs" id="1_qvhan"]
 [ext_resource type="PackedScene" uid="uid://cv2stkbw5y72y" path="res://Character/character.tscn" id="2_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://dyknff3o83066" path="res://LojiWall/loji_wall.tscn" id="3_qvhan"]
-[ext_resource type="AudioStream" uid="uid://lc02sf4pekjs" path="res://Sounds/FootSteps/Concrete/Concrete 1.wav" id="4_eunhr"]
+[ext_resource type="AudioStream" uid="uid://be0knihw8fled" path="res://Sounds/Footsteps/Concrete/FConcrete1.wav" id="4_eunhr"]
 
 [node name="Main" type="Node" unique_id=1220271164]
 script = ExtResource("1_qvhan")
 
 [node name="Character" parent="." unique_id=1080916824 instance=ExtResource("2_2w1kt")]
-position = Vector2(175, 104)
+position = Vector2(436, 169)
+metadata/_edit_group_ = true
+
+[node name="Camera2D" type="Camera2D" parent="Character" unique_id=629970012]
 
 [node name="LojiWall" parent="." unique_id=1973346265 instance=ExtResource("3_qvhan")]
 z_index = 1
@@ -19,18 +22,3 @@ position = Vector2(538, 364)
 
 [node name="StepTest" type="AudioStreamPlayer" parent="." unique_id=354179052]
 stream = ExtResource("4_eunhr")
-
-[node name="Character2" parent="." unique_id=2028481542 instance=ExtResource("2_2w1kt")]
-position = Vector2(243, 137)
-
-[node name="Character3" parent="." unique_id=786959869 instance=ExtResource("2_2w1kt")]
-position = Vector2(256, 59)
-
-[node name="Character4" parent="." unique_id=264847355 instance=ExtResource("2_2w1kt")]
-position = Vector2(198, 147)
-
-[node name="Character5" parent="." unique_id=1117939540 instance=ExtResource("2_2w1kt")]
-position = Vector2(182, 258)
-
-[node name="Character6" parent="." unique_id=1510499950 instance=ExtResource("2_2w1kt")]
-position = Vector2(253, 246)

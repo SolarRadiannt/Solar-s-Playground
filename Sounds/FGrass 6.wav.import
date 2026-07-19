@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cnlaf78c686u2"
+path="res://.godot/imported/FGrass 6.wav-ce90fe976043f4eaebcad872b341be78.sample"
+
+[deps]
+
+source_file="res://Sounds/FGrass 6.wav"
+dest_files=["res://.godot/imported/FGrass 6.wav-ce90fe976043f4eaebcad872b341be78.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
