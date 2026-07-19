@@ -18,6 +18,12 @@ config/icon="res://icon.svg"
 [autoload]
 
 Main="*uid://44mb5o57lg06"
+AudioManager="*uid://caq1gclvaujpj"
+SaveManager="*uid://ct07tdeqc0q6n"
+ParticlesManager="*uid://cciu6hrgn5iky"
+UIManager="*uid://b67orv5oep1ty"
+InventoryManager="*uid://bmpqswyqdtegd"
+PhysicsQuery2D="*uid://dy63opd73mytn"
 
 [display]
 
@@ -30,7 +36,22 @@ project/assembly_name="Solar-s Playground"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/GodotUtilities/plugin.cfg", "res://addons/any_audio_manager/plugin.cfg")
+
+[godot_utilities]
+
+audio/sfx_folder="res://AudioFlat/Sfx"
+audio/music_folder=""
+audio/ambience_folder=""
+audio/sfx_pool_trim_cooldown=5.0
+particles/particles_folder=""
+ui/panels_folder=""
+ui/hud_panels_folder=""
+inventory/items_folder=""
+inventory/player_inventory_path=""
+inventory/hotbar_inventory_path=""
+inventory/loot_item_scene_path=""
+inventory/item_preview_scene_path=""
 
 [input]
 
