@@ -6,6 +6,7 @@
 
 [node name="Main" type="Node2D" unique_id=1856033696]
 script = ExtResource("1_qvhan")
+metadata/juj = true
 
 [node name="LojiWall" parent="." unique_id=1973346265 instance=ExtResource("3_qvhan")]
 position = Vector2(561, 332)

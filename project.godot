@@ -18,7 +18,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 Main="*uid://44mb5o57lg06"
-AudioManager="*uid://caq1gclvaujpj"
 SaveManager="*uid://ct07tdeqc0q6n"
 ParticlesManager="*uid://cciu6hrgn5iky"
 UIManager="*uid://b67orv5oep1ty"
