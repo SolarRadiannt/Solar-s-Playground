@@ -40,7 +40,6 @@ public partial class FootstepsEmitter : Node, ISystem
 				ref FootstepTimer footstepTimer,
 				ref FootstepStride stride
 			) => {
-				// GD.Print("processing footstep");
 				var timer = footstepTimer.Value;
 				if (entity.Has<MoveSpeed>())
 				{
