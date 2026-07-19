@@ -1,4 +1,4 @@
-namespace Main.Systems;
+namespace Root.Systems;
 
 using Godot;
 using SolFramework.Components;
@@ -8,7 +8,7 @@ using fennecs;
 using SolFramework.MoveManager;
 using SolFramework.FootstepManager;
 
-public partial class FootstepsSound : Node, ISystem
+public partial class FootstepSounds : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	
@@ -30,10 +30,12 @@ public partial class FootstepsSound : Node, ISystem
 		world.Query<FootstepOrigin, FootstepMaterial, FootstepSource>()
 		.Has<FootstepEvent>()
 		.Stream();
-	private static void PlayFootsteps() =>
+	private void PlayFootsteps() =>
 		footstepEmitter.For(
-			static (ref FootstepOrigin origin, ref FootstepMaterial material, ref FootstepSource source) =>
+			(ref FootstepOrigin origin, ref FootstepMaterial material, ref FootstepSource source) =>
 			{
-				GD.Print("step!");
+				GD.Print("Step!");
+				// GetNode<AudioStreamPlayer>("root/main/StepTest")
+				// 	.Play();
 			});
 }

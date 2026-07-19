@@ -20,7 +20,7 @@ static class FootstepManager
 {
 	public static Entity ApplyFootstep(Entity entity, float stride) =>
 			entity
-				.Add(new FootstepTimer(new TickTimer(0.1f, true)))
+				.Add(new FootstepTimer(new TickTimer(0.25f, true)))
 				.Add(new FootstepStride(stride))
 				.Add<FootstepEmitter>();
 	

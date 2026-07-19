@@ -1,11 +1,12 @@
 [gd_scene format=3 uid="uid://bskyw3xu2kikb"]
 
-[ext_resource type="Script" uid="uid://dj05uxr7koh43" path="res://Main/Main.cs" id="1_yh5la"]
+[ext_resource type="Script" path="res://Main/MainNode.cs" id="1_qvhan"]
 [ext_resource type="PackedScene" uid="uid://cv2stkbw5y72y" path="res://Character/character.tscn" id="2_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://dyknff3o83066" path="res://LojiWall/loji_wall.tscn" id="3_qvhan"]
+[ext_resource type="AudioStream" uid="uid://lc02sf4pekjs" path="res://Sounds/FootSteps/Concrete/Concrete 1.wav" id="4_eunhr"]
 
 [node name="Main" type="Node" unique_id=1220271164]
-script = ExtResource("1_yh5la")
+script = ExtResource("1_qvhan")
 
 [node name="Character" parent="." unique_id=1080916824 instance=ExtResource("2_2w1kt")]
 position = Vector2(173, 102)
@@ -15,3 +16,6 @@ z_index = 1
 position = Vector2(538, 364)
 
 [node name="Map" type="Node" parent="." unique_id=879561448]
+
+[node name="StepTest" type="AudioStreamPlayer" parent="." unique_id=354179052]
+stream = ExtResource("4_eunhr")

@@ -10,5 +10,6 @@ public static class SystemRegistry
 		new Systems.Movement(),
 		new Systems.TimerTicker(),
 		new Systems.TransientFlusher(),
+		new Systems.MovingChecker()
 	];
 }

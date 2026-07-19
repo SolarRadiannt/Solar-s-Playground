@@ -1,4 +1,4 @@
-namespace Main.Systems;
+namespace Root.Systems;
 
 using Godot;
 using SolFramework.Components;

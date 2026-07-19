@@ -1,15 +1,13 @@
 namespace SolFramework.Systems;
 
 using Godot;
+using fennecs;
+
 using SolFramework.Scheduler;
-using SolFramework.EEvents;
-using SolFramework.TickTimer;
 using SolFramework.Core;
 using SolFramework.FootstepManager;
-using fennecs;
 using SolFramework.MoveManager;
 using SolFramework.Components;
-
 public partial class FootstepsEmitter : Node, ISystem
 {
 	public int Priority => SPriority.Action;
@@ -20,20 +18,21 @@ public partial class FootstepsEmitter : Node, ISystem
 	
 	public void Init()
 	{
+		GD.Print("footstep sounds initialized");
 		Scheduler.RegisterSystem(this);
 	}
 
 	public override void _Ready() => Init();
 	
-	private static World world = Core.World;
-	private static Stream<ECSCharBody2D, FootstepTimer, FootstepStride> toProcess =
+	private static readonly World world = Core.World;
+	private static readonly Stream<ECSCharBody2D, FootstepTimer, FootstepStride> toProcess =
 		world.Query<ECSCharBody2D, FootstepTimer, FootstepStride>()
-			.Has<Moving>()
+			.Has<SolFramework.MoveManager.Moving>()
 			.Has<Grounded>()
 			.Stream();
 	private static void ProcessFootstep(double delta) =>
 		toProcess.For(
-			delta,
+			uniform: delta,
 			static (
 				double delta,
 				in Entity entity,
@@ -41,6 +40,7 @@ public partial class FootstepsEmitter : Node, ISystem
 				ref FootstepTimer footstepTimer,
 				ref FootstepStride stride
 			) => {
+				// GD.Print("processing footstep");
 				var timer = footstepTimer.Value;
 				if (entity.Has<MoveSpeed>())
 				{

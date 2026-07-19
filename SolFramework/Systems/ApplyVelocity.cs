@@ -20,6 +20,7 @@ public partial class ApplyVelocity : Node, ISystem
 	
 	public void Init()
 	{
+		GD.Print("Aply velocity initialized");
 		Scheduler.RegisterSystem(this);
 	}
 
@@ -34,11 +35,6 @@ public partial class ApplyVelocity : Node, ISystem
 			static (in Entity entity, ref ECSCharBody2D body, ref Velocity vel) =>
 			{
 				body.Velocity = vel.Value;
-				
-				if (!entity.Has<Moving>() && vel.Value.Length() > 0.01)
-					entity.Add<Moving>();
-				else if (entity.Has<Moving>())
-						entity.Remove<Moving>();
 			});
 	}
 }
