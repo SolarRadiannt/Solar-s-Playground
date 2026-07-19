@@ -4,6 +4,7 @@ using Godot;
 public static class SystemRegistry
 {
 	public static Node[] GetAll() => [
-		new Systems.MoveDirectionInput()
+		new Systems.MoveDirectionInput(),
+		new Systems.LookAtCursor(),
 	];
 }
