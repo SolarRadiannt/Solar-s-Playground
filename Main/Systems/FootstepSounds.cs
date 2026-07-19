@@ -22,6 +22,7 @@ public partial class FootstepSounds : Node, ISystem
 	public void Init()
 	{
 		Scheduler.RegisterSystem(this);
+		
 	}
 
 	public override void _Ready() => Init();
@@ -35,7 +36,6 @@ public partial class FootstepSounds : Node, ISystem
 			(ref FootstepOrigin origin, ref FootstepMaterial material, ref FootstepSource source) =>
 			{
 				GD.Print("Step!");
-				// GetNode<AudioStreamPlayer>("root/main/StepTest")
-				// 	.Play();
+				GetTree().CurrentScene.GetNode<AudioStreamPlayer>("StepTest").Play();
 			});
 }

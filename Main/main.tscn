@@ -9,7 +9,7 @@
 script = ExtResource("1_qvhan")
 
 [node name="Character" parent="." unique_id=1080916824 instance=ExtResource("2_2w1kt")]
-position = Vector2(173, 102)
+position = Vector2(175, 104)
 
 [node name="LojiWall" parent="." unique_id=1973346265 instance=ExtResource("3_qvhan")]
 z_index = 1
@@ -19,3 +19,18 @@ position = Vector2(538, 364)
 
 [node name="StepTest" type="AudioStreamPlayer" parent="." unique_id=354179052]
 stream = ExtResource("4_eunhr")
+
+[node name="Character2" parent="." unique_id=2028481542 instance=ExtResource("2_2w1kt")]
+position = Vector2(243, 137)
+
+[node name="Character3" parent="." unique_id=786959869 instance=ExtResource("2_2w1kt")]
+position = Vector2(256, 59)
+
+[node name="Character4" parent="." unique_id=264847355 instance=ExtResource("2_2w1kt")]
+position = Vector2(198, 147)
+
+[node name="Character5" parent="." unique_id=1117939540 instance=ExtResource("2_2w1kt")]
+position = Vector2(182, 258)
+
+[node name="Character6" parent="." unique_id=1510499950 instance=ExtResource("2_2w1kt")]
+position = Vector2(253, 246)
