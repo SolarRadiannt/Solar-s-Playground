@@ -15,8 +15,7 @@ public partial class Destruction : Node, ISystem
 	public int Priority => SPriority.Flush;
 	public void Process(double _)
 	{
-		destroyBody.Raw(bodies =>
-		{
+		destroyBody.Raw(static bodies => {
 			foreach (ref var body in bodies.Span)
 				body.QueueFree();
 		});
@@ -26,7 +25,7 @@ public partial class Destruction : Node, ISystem
 	
 	public void Init()
 	{
-		Scheduler.RegisterSystem(this.Process, Priority);
+		Scheduler.RegisterSystem(this);
 	}
 
 	public override void _Ready() => Init();

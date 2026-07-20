@@ -10,7 +10,7 @@ using SolFramework.MoveManager;
 using SolFramework.Components;
 public partial class FootstepsEmitter : Node, ISystem
 {
-	public int Priority => SPriority.Action;
+	public int Priority => SPriority.Action - 1;
 	public void Process(double delta)
 	{
 		ProcessFootstep(delta);
@@ -32,7 +32,7 @@ public partial class FootstepsEmitter : Node, ISystem
 			.Stream();
 	private static void ProcessFootstep(double delta) =>
 		toProcess.For(
-			uniform: delta,
+			delta,
 			static (
 				double delta,
 				in Entity entity,

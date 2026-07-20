@@ -35,7 +35,7 @@ project/assembly_name="Solar-s Playground"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GodotUtilities/plugin.cfg", "res://addons/any_audio_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/GodotUtilities/plugin.cfg")
 
 [godot_utilities]
 

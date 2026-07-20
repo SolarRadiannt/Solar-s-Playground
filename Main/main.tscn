@@ -16,3 +16,27 @@ position = Vector2(159, 114)
 metadata/_edit_group_ = true
 
 [node name="Camera2D" type="Camera2D" parent="Character" unique_id=633422272]
+
+[node name="LojiWall2" parent="." unique_id=176771862 instance=ExtResource("3_qvhan")]
+position = Vector2(3, 349)
+scale = Vector2(-0.23181136, -2.0417383)
+
+[node name="LojiWall3" parent="." unique_id=253457711 instance=ExtResource("3_qvhan")]
+position = Vector2(1118, 320)
+scale = Vector2(0.20179549, 3.776383)
+
+[node name="LojiWall4" parent="." unique_id=384942345 instance=ExtResource("3_qvhan")]
+position = Vector2(531, -305.00006)
+scale = Vector2(2.4455805, 0.6476517)
+
+[node name="LojiWall5" parent="." unique_id=1437258999 instance=ExtResource("3_qvhan")]
+position = Vector2(1435.9999, -87)
+scale = Vector2(0.2429312, 7.9273524)
+
+[node name="LojiWall6" parent="." unique_id=1143112867 instance=ExtResource("3_qvhan")]
+position = Vector2(975, -1085.0001)
+scale = Vector2(2.4455805, 0.6476517)
+
+[node name="LojiWall7" parent="." unique_id=421296974 instance=ExtResource("3_qvhan")]
+position = Vector2(62, -931)
+scale = Vector2(0.20179549, 3.776383)

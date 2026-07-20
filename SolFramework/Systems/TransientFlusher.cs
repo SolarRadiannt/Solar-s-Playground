@@ -12,14 +12,13 @@ using SolFramework.Components;
 public partial class TransientFlusher : Node, ISystem
 {
 	public int Priority => SPriority.Flush;
-	public void Process(double _)
-	{
+	public void Process(double _) =>
 		transientEntities.Despawn();
-	}
+	
 	
 	public void Init()
 	{
-		Scheduler.RegisterSystem(this.Process, Priority);
+		Scheduler.RegisterSystem(this);
 	}
 
 	public override void _Ready() => Init();

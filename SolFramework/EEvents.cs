@@ -15,5 +15,4 @@ public static class EEvent
 	public static EntitySpawner Spawner() =>
 		ETransient.Spawner()
 			.Add<EventEntity>();
-	
 }
