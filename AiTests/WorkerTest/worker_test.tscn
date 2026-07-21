@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b00idbshutp33"]
+
+[ext_resource type="Script" uid="uid://dou1pig3q1kj5" path="res://AiTests/WorkerTest/WorkerTest.cs" id="1_0oq1u"]
+[ext_resource type="Texture2D" uid="uid://cjpd82ut4emqm" path="res://AiTests/WorkerTest/yDE9veI_400x400.jpg" id="1_vj36l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q0c55"]
+size = Vector2(39.647163, 39.46836)
+
+[node name="WorkerTest" type="CharacterBody2D" unique_id=778723696]
+script = ExtResource("1_0oq1u")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=94566327]
+z_index = 1
+position = Vector2(-4.7683716e-07, -7.1525574e-07)
+scale = Vector2(1.0088993, 1.0134699)
+shape = SubResource("RectangleShape2D_q0c55")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=592796984]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_vj36l")
