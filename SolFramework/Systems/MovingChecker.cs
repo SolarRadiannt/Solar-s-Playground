@@ -23,14 +23,15 @@ public partial class MovingChecker : Node, ISystem
 	public void Init()
 	{
 		Scheduler.RegisterSystem(this);
+		GD.Print("moving checker initialized");
 	}
 	public override void _Ready() => Init();
 	
 	private static readonly Stream<ECSCharBody2D, Velocity, LastPosition> toCheck =
 		world.Stream<ECSCharBody2D, Velocity, LastPosition>();
 	public static void CheckMoving() =>
-		toCheck.For(
-		static (in Entity entity, ref ECSCharBody2D body, ref Velocity vel, ref LastPosition lastPos) =>
+		toCheck.For(static
+		(in Entity entity, ref ECSCharBody2D body, ref Velocity vel, ref LastPosition lastPos) =>
 		{
 			var current = body.GlobalPosition;
 			var last = lastPos.Value;
@@ -48,9 +49,9 @@ public partial class MovingChecker : Node, ISystem
 
 			// Update Moving component based on actual movement
 			if (!moving && isActuallyMoving)
-				entity.Add<Moving>();
+				{entity.Add<Moving>(); GD.Print("Moving!");}
 			else if (moving && !isActuallyMoving)
-				entity.Remove<Moving>();
+				{entity.Remove<Moving>(); GD.Print("Stopped!");};
 
 			// Detect blocked state: trying to move but not actually moving
 			if (isTryingToMove && !isActuallyMoving)
@@ -67,13 +68,13 @@ public partial class MovingChecker : Node, ISystem
 	
 	public static readonly Stream<ECSCharBody2D> toUpdate = world.Stream<ECSCharBody2D>();
 	public static void UpdateLastPosition() =>
-		toUpdate.For(static (in Entity entity, ref ECSCharBody2D body) =>
+		toUpdate.For(static
+		(in Entity entity, ref ECSCharBody2D body) =>
 		{
 			if (entity.Has<LastPosition>())
 				entity.Ref<LastPosition>().Value = body.GlobalPosition;
 			else
 				entity.Add(new LastPosition(body.GlobalPosition));
-			
 		});
 	
 }

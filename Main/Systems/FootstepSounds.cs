@@ -24,7 +24,6 @@ public partial class FootstepSounds : Node, ISystem
 	public void Init()
 	{
 		Scheduler.RegisterSystem(this);
-		
 	}
 
 	public override void _Ready() => Init();
@@ -48,12 +47,12 @@ public partial class FootstepSounds : Node, ISystem
 		AudioManager.SfxName.FConcrete16,
 	];
 	
-	private static readonly Stream<FootstepOrigin, FootstepMaterial, FootstepSource> footstepEmitter =
+	private static readonly Stream<FootstepOrigin, FootstepMaterial, FootstepSource> footstepEvents =
 		world.Query<FootstepOrigin, FootstepMaterial, FootstepSource>()
 		.Has<FootstepEvent>()
 		.Stream();
 	private void PlayFootsteps() =>
-		footstepEmitter.For(
+		footstepEvents.For(static
 			(ref FootstepOrigin origin, ref FootstepMaterial material, ref FootstepSource source) =>
 			{
 				GD.Print("Step!");

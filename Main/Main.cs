@@ -11,11 +11,8 @@ public partial class Main : Node2D
 		foreach (Node node in nodes)
 			AddChild(node);
 	}
-	private static bool init = false;
-	public override void _EnterTree()
+	public override void _Ready()
 	{
-		if (init) return;
-		init = true;
 		Instance = this;
 		AddChildBatch(SolFramework.Systems.SystemRegistry.GetAll());
 		AddChildBatch(PlayerManager.Systems.SystemRegistry.GetAll());

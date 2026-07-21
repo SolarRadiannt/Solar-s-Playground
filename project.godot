@@ -17,12 +17,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Main="*uid://44mb5o57lg06"
 SaveManager="*uid://ct07tdeqc0q6n"
 ParticlesManager="*uid://cciu6hrgn5iky"
 UIManager="*uid://b67orv5oep1ty"
 InventoryManager="*uid://bmpqswyqdtegd"
 PhysicsQuery2D="*uid://dy63opd73mytn"
+AudioManager="*uid://caq1gclvaujpj"
 
 [display]
 

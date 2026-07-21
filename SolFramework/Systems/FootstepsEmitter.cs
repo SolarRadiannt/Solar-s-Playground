@@ -10,7 +10,7 @@ using SolFramework.MoveManager;
 using SolFramework.Components;
 public partial class FootstepsEmitter : Node, ISystem
 {
-	public int Priority => SPriority.Action - 1;
+	public int Priority => SPriority.Action + 1;
 	public void Process(double delta)
 	{
 		ProcessFootstep(delta);
@@ -27,7 +27,7 @@ public partial class FootstepsEmitter : Node, ISystem
 	private static readonly World world = Core.World;
 	private static readonly Stream<ECSCharBody2D, FootstepTimer, FootstepStride> toProcess =
 		world.Query<ECSCharBody2D, FootstepTimer, FootstepStride>()
-			.Has<SolFramework.MoveManager.Moving>()
+			.Has<Moving>()
 			.Has<Grounded>()
 			.Stream();
 	private static void ProcessFootstep(double delta) =>

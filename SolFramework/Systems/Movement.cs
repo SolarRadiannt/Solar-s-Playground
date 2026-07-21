@@ -37,12 +37,12 @@ public partial class Movement : Node, ISystem
 			});
 	}
 	
-	private static readonly Stream<ECSCharBody2D, MoveDirection, MoveGoal> toMoveTo =
-		world.Stream<ECSCharBody2D, MoveDirection, MoveGoal>();
+	private static readonly Stream<ECSCharBody2D, MoveDirection, MoveToGoal> toMoveTo =
+		world.Stream<ECSCharBody2D, MoveDirection, MoveToGoal>();
 	private static void HandleMoveTo()
 	{
 		toMoveTo.For(
-			static (in Entity entity, ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveGoal moveGoal) =>
+			static (in Entity entity, ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveToGoal moveGoal) =>
 			{
 				var origin = body.GlobalPosition;
 				var goal = moveGoal.Value;
