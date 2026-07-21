@@ -2,6 +2,7 @@ using Godot;
 using SolFramework.Components;
 using SolFramework.MoveManager;
 using SolFramework.FootstepManager;
+using FluidHTN;
 
 public partial class WorkerTest : ECSCharBody2D
 {
