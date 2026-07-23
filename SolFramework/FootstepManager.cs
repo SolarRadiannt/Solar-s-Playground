@@ -4,7 +4,7 @@ using fennecs;
 using Godot;
 
 using SolFramework.EEvents;
-using SolFramework.TickTimer;
+using SolFramework.Tools;
 using SolFramework.Core;
 public struct FootstepEmitter;
 public struct FootstepEvent;
@@ -40,5 +40,4 @@ static class FootstepManager
 			.Add(new FootstepMaterial(material))
 			.Add(new FootstepSource(source))
 			.Add<FootstepEvent>();
-	
 }

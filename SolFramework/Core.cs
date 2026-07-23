@@ -3,6 +3,13 @@ using Godot;
 using fennecs;
 
 using SolFramework.Components;
+using System.Collections.Generic;
+using System;
+
+public interface IValueComponent<T>
+{
+	T Value {get; set;}
+}
 
 public static class Core
 {

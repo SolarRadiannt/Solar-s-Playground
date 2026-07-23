@@ -1,4 +1,4 @@
-namespace SolFramework.TickTimer;
+namespace SolFramework.Tools;
 
 using Godot;
 

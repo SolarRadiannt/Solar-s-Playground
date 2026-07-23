@@ -8,7 +8,7 @@ using SolFramework.Components;
 public struct Transient;
 public static class ETransient
 {
-	private static World world = Core.World;
+	private static readonly World world = Core.World;
 	public static Entity Spawn(string name) =>
 		world.Spawn()
 			.Add(new Name(name))
