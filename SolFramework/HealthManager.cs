@@ -18,22 +18,21 @@ using fennecs;
 	
 	public static class HealthManager
 	{
-		static Entity Damage(float amount, Entity target, Entity? source = null!)
+		static Entity Damage(string name, float amount, Entity target, Entity? source = null!)
 		{
-			var entity = EEvent.Spawn()
+			var entity = EEvent.Spawn(name)
 				.Add(new DamageAmount(amount))
 				.Add(new DamageTarget(target))
 				.Add<DamageEvent>();
 			
-			// Only add Source if it has a value
 			if (source.HasValue)
 				entity.Add(new DamageSource(source.Value));
 
 			return entity;
 		}
-		static Entity Heal(float amount, Entity target, Entity? source = null!)
+		static Entity Heal(string name, float amount, Entity target, Entity? source = null!)
 		{
-			var entity = EEvent.Spawn()
+			var entity = EEvent.Spawn(name)
 				.Add(new HealAmount(amount))
 				.Add(new HealTarget(target))
 				.Add<HealEvent>();

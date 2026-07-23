@@ -26,7 +26,7 @@ static class FootstepManager
 	
 	public static Entity SetBaseStepRate(Entity entity, float baseStepRate)
 	{
-		if (entity.Has<FootstepTimer>())
+		if (entity.Has<FootstepStride>())
 			entity.Ref<FootstepStride>().Value = baseStepRate;
 		else
 			GD.PushWarning(Core.GetName(entity), "does not have footstep stride!");
@@ -35,7 +35,7 @@ static class FootstepManager
 	}
 	
 	public static Entity EmitFootstep(Vector2 origin, string material, Entity source) =>
-		EEvent.Spawn()
+		EEvent.Spawn($"{Core.GetName(source)}'s Footstep")
 			.Add(new FootstepOrigin(origin))
 			.Add(new FootstepMaterial(material))
 			.Add(new FootstepSource(source))
