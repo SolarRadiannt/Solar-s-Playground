@@ -76,5 +76,4 @@ public partial class MovingChecker : Node, ISystem
 			else
 				entity.Add(new LastPosition(body.GlobalPosition));
 		});
-	
 }

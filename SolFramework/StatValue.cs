@@ -5,9 +5,9 @@ using Godot;
 
 public struct Modifier
 {
-	public float Additive = 0;
-	public float Multiplier = 1;
-	public float Flat = 0;
+	public readonly float Additive = 0;
+	public readonly float Multiplier = 1;
+	public readonly float Flat = 0;
 	public Modifier() {}
 }
 

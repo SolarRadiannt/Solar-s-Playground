@@ -8,7 +8,6 @@ using SolFramework.Core;
 using SolFramework.ETransient;
 using SolFramework.Components;
 
-
 public partial class TransientFlusher : Node, ISystem
 {
 	public int Priority => SPriority.Flush;

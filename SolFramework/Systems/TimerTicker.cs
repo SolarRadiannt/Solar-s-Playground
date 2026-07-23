@@ -13,7 +13,6 @@ public partial class TimerTicker : Node, ISystem
 	public void Process(double delta)
 	{
 		AutoTick(delta);
-		
 	}
 	
 	public void Init()

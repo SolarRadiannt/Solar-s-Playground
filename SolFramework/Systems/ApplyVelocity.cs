@@ -5,7 +5,6 @@ using Godot;
 
 using SolFramework.Components;
 using SolFramework.Core;
-using SolFramework.MoveManager;
 using SolFramework.Scheduler;
 
 public partial class ApplyVelocity : Node, ISystem
@@ -15,8 +14,6 @@ public partial class ApplyVelocity : Node, ISystem
 	{
 		ApplyVelocities();
 	}
-	
-	
 	
 	public void Init()
 	{

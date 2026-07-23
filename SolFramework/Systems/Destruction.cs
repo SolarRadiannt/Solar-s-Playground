@@ -1,14 +1,10 @@
 namespace SolFramework.Systems;
-
 using fennecs;
 using Godot;
 
 using SolFramework.Scheduler;
 using SolFramework.Core;
-using SolFramework.ETransient;
 using SolFramework.Components;
-using System;
-using System.Linq;
 
 public partial class Destruction : Node, ISystem
 {
