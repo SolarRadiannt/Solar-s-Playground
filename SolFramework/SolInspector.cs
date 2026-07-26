@@ -24,8 +24,6 @@ public class InspectorColorAttribute : Attribute
 
 public static class SolInspector
 {
-	private record struct InspectorFilter(string Value);
-	
 	private static readonly string TITLE = "Sol ECS Inspector";
 	private static readonly int MAX_RECURIONS_DEPTH = 7;
 	
@@ -65,6 +63,13 @@ public static class SolInspector
 		
 	}
 	
+	private static bool IsFiltered(string target, string filter)
+	{
+		if (!string.IsNullOrWhiteSpace(filter))
+					if (!target.Contains(filter, StringComparison.OrdinalIgnoreCase))
+						return true;
+		return false;
+	}
 	private static void HandleSearch(string title, ref string filter)
 	{
 		if (ImGui.Button("Clear"))
@@ -76,20 +81,19 @@ public static class SolInspector
 		ImGui.SameLine();
 		
 		ImGui.SetNextItemWidth(160.0f);
+		
 		ImGui.InputText($"##{title}", ref filter, 50, ImGuiInputTextFlags.EscapeClearsAll);
 	}
 	
 	private static void ProcessEntitiesDisplay(Query entities)
 	{
-		if (ImGui.BeginChild("EntityScrollRegion", new System.Numerics.Vector2(0, 300), ImGuiChildFlags.None))
+		if (ImGui.BeginChild("EntityScrollRegion", new System.Numerics.Vector2(0, 0), ImGuiChildFlags.None))
 		{
 			foreach (Entity entity in entities)
 			{
 				string entityName = Core.GetName(entity);
 				
-				if (!string.IsNullOrWhiteSpace(_searchFilter))
-					if (!entityName.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
-						continue;
+				if (IsFiltered(entityName, _searchFilter)) continue;
 				
 				ImGui.PushID(entity.GetHashCode());
 				DisplayEntity(entity);
@@ -111,10 +115,13 @@ public static class SolInspector
 		}
 	}
 	
-	private static readonly List<(Entity entity, ComponentTypeCache members)>
+	private static readonly List<ComponentTypeCache>
 		entityComponents = new();
 	private static readonly List<(string name, System.Numerics.Vector4? color)>
 		entityTags = new();
+	// Replaced the ECS component approach with a clean dictionary cache for component filters
+	private static Dictionary<Entity, string> entitiesComponentFilter = new();
+	private static Dictionary<Entity, string> entitiesTagsFilter = new();
 	
 	private static void DisplayResources(Entity entity)
 	{
@@ -126,24 +133,49 @@ public static class SolInspector
 			if (members.IsTag)
 				entityTags.Add((type.Name, members.CustomColor));
 			else
-				entityComponents.Add((entity, members));
+				entityComponents.Add(members);
 		}
 		
-		ShowComponents();
-		ShowTags();
+		ShowComponents(entity);
+		ShowTags(entity);
 		
 		entityComponents.Clear();
 		entityTags.Clear();
 	}
 	
-	private static void ShowComponents()
+	private static string HandleEntitySearch(string title, Entity entity, Dictionary<Entity, string> filterDict)
+	{
+		if (!filterDict.TryGetValue(entity, out string filter))
+		{
+			filter = "";
+			filterDict[entity] = filter;
+		}
+		
+		
+		HandleSearch(title, ref filter);
+		
+		
+		filterDict[entity] = filter;
+		
+		return filter;
+	}
+	private static void ShowComponents(Entity entity)
 	{
 		if (!ImGui.CollapsingHeader("Components", ImGuiTreeNodeFlags.None)) return;
 		
+		ImGui.PushID(entity.GetHashCode());
+			string filter = HandleEntitySearch("Search Components:", entity, entitiesComponentFilter);
+		ImGui.PopID();
+		
 		ImGui.Indent();
 		
-		foreach (var data in entityComponents)
-			DisplayComponent(data.entity, data.members);
+		foreach (var members in entityComponents)
+		{
+			if (IsFiltered(members.Type.Name, filter))
+				continue;
+			
+			DisplayComponent(entity, members);
+		}
 			
 		ImGui.Unindent();
 	}
@@ -157,7 +189,7 @@ public static class SolInspector
 
 		bool hasColor = members.CustomColor.HasValue;
 		if (hasColor)
-			ImGui.PushStyleColor(ImGuiCol.Text, members.CustomColor.Value);
+			ImGui.PushStyleColor(ImGuiCol.Header, members.CustomColor.Value);
 		
 		bool isOpen = ImGui.CollapsingHeader(type.Name, ImGuiTreeNodeFlags.None);
 
@@ -185,11 +217,12 @@ public static class SolInspector
 		ImGui.Unindent();
 	}
 	
-	private static void ShowTags()
+	private static void ShowTags(Entity entity)
 	{
 		if (entityTags.Count == 0) return;
-		
 		if (!ImGui.CollapsingHeader("Tags", ImGuiTreeNodeFlags.None)) return;
+		
+		string filter = HandleEntitySearch("Search Tags:", entity, entitiesTagsFilter);
 		
 		ImGui.Indent();
 		
@@ -200,6 +233,9 @@ public static class SolInspector
 		
 		foreach (var (tagName, color) in entityTags)
 		{
+			if (IsFiltered(tagName, filter))
+				continue;
+			
 			var textSize = ImGui.CalcTextSize(tagName);
 			float itemWidth = textSize.X + HORIZONTAL_TAGS_SPACE; // Text width + horizontal padding
 			
