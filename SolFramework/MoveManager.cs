@@ -2,14 +2,20 @@ namespace SolFramework.Managers;
 
 using fennecs;
 using Godot;
+using SolFramework.Tools;
 
+[InspectorColor(0.5f, 0.5f, 0.2f)]
 public record struct MoveSpeed(float Value);
 public record struct MoveDirection(Vector2 Value);
 public record struct MoveToGoal(Vector2 Value);
 public record struct MoveVelocity(Vector2 Value);
 public record struct MoveToReachDistance(float Value);
 public record struct LookSpeed(float Value);
+
+[InspectorColor(1f, 0f, 0f)]
 public struct MovingBlocked;
+
+[InspectorColor(0f, 1f, 0f)]
 public struct Moving;
 public struct LookAtMoveDir;
 

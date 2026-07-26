@@ -40,7 +40,7 @@ enabled=PackedStringArray("res://addons/GodotUtilities/plugin.cfg", "res://addon
 
 [godot_utilities]
 
-audio/sfx_folder="res://AudioFlat/Sfx"
+audio/sfx_folder="res://Audios/SFXs"
 audio/music_folder=""
 audio/ambience_folder=""
 audio/sfx_pool_trim_cooldown=5.0
