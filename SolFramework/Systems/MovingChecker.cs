@@ -36,30 +36,29 @@ public partial class MovingChecker : Node, ISystem
 			var current = body.GlobalPosition;
 			var last = lastPos.Value;
 			var delta = current - last;
+
 			float speed = delta.Length();
-			bool moving = entity.Has<Moving>();
-
-
 			float intendedSpeed = vel.Value.Length();
-
-			// Actual movement threshold
-			bool isActuallyMoving = speed > 0.01f;
-			// Trying to move threshold
-			bool isTryingToMove = intendedSpeed > 0.01f;
-
-			// Update Moving component based on actual movement
+			
+			bool moving = entity.Has<Moving>();
+			bool isActuallyMoving = speed > 0.1f;
+			bool isTryingToMove = intendedSpeed > 0.1f;
+			
 			if (!moving && isActuallyMoving)
 				entity.Add<Moving>();
 			else if (moving && !isActuallyMoving)
 				entity.Remove<Moving>();
-
-			// Detect blocked state: trying to move but not actually moving
+			
 			if (isTryingToMove && !isActuallyMoving)
+			{
 				if (!entity.Has<MovingBlocked>())
 					entity.Add<MovingBlocked>();
+			}
 			else
+			{
 				if (entity.Has<MovingBlocked>())
 					entity.Remove<MovingBlocked>();
+			}
 		});
 	
 	public static readonly Stream<EcsCharBody2D> toUpdate = world.Stream<EcsCharBody2D>();
