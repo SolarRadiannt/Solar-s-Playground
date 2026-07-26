@@ -3,8 +3,11 @@ using Godot;
 using SolFramework.Components;
 
 using SolFramework;
+using SolFramework.Tools;
+
 
 [GlobalClass]
+[InspectorColor(0.518f, 0.047f, 0.961f)]
 public abstract partial class EcsCharBody2D : CharacterBody2D
 {
 	protected Entity entity;

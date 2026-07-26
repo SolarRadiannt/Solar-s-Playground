@@ -15,8 +15,6 @@ public partial class ApplyVelocity : Node, ISystem
 		ApplyVelocities();
 	}
 	
-	
-	
 	public void Init()
 	{
 		GD.Print("Aply velocity initialized");
