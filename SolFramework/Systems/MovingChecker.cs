@@ -4,10 +4,10 @@ using Godot;
 using System;
 using fennecs;
 
+using SolFramework;
 using SolFramework.Components;
-using SolFramework.Core;
 using SolFramework.Scheduler;
-using SolFramework.MoveManager;
+using SolFramework.Managers;
 
 public partial class MovingChecker : Node, ISystem
 {
@@ -27,11 +27,11 @@ public partial class MovingChecker : Node, ISystem
 	}
 	public override void _Ready() => Init();
 	
-	private static readonly Stream<ECSCharBody2D, Velocity, LastPosition> toCheck =
-		world.Stream<ECSCharBody2D, Velocity, LastPosition>();
+	private static readonly Stream<EcsCharBody2D, Velocity, LastPosition> toCheck =
+		world.Stream<EcsCharBody2D, Velocity, LastPosition>();
 	public static void CheckMoving() =>
 		toCheck.For(static
-		(in Entity entity, ref ECSCharBody2D body, ref Velocity vel, ref LastPosition lastPos) =>
+		(in Entity entity, ref EcsCharBody2D body, ref Velocity vel, ref LastPosition lastPos) =>
 		{
 			var current = body.GlobalPosition;
 			var last = lastPos.Value;
@@ -39,7 +39,7 @@ public partial class MovingChecker : Node, ISystem
 			float speed = delta.Length();
 			bool moving = entity.Has<Moving>();
 
-			// New: intended speed from velocity
+
 			float intendedSpeed = vel.Value.Length();
 
 			// Actual movement threshold
@@ -49,27 +49,23 @@ public partial class MovingChecker : Node, ISystem
 
 			// Update Moving component based on actual movement
 			if (!moving && isActuallyMoving)
-				{entity.Add<Moving>(); GD.Print("Moving!");}
+				entity.Add<Moving>();
 			else if (moving && !isActuallyMoving)
-				{entity.Remove<Moving>(); GD.Print("Stopped!");};
+				entity.Remove<Moving>();
 
 			// Detect blocked state: trying to move but not actually moving
 			if (isTryingToMove && !isActuallyMoving)
-			{
 				if (!entity.Has<MovingBlocked>())
 					entity.Add<MovingBlocked>();
-			}
 			else
-			{
 				if (entity.Has<MovingBlocked>())
 					entity.Remove<MovingBlocked>();
-			}
 		});
 	
-	public static readonly Stream<ECSCharBody2D> toUpdate = world.Stream<ECSCharBody2D>();
+	public static readonly Stream<EcsCharBody2D> toUpdate = world.Stream<EcsCharBody2D>();
 	public static void UpdateLastPosition() =>
 		toUpdate.For(static
-		(in Entity entity, ref ECSCharBody2D body) =>
+		(in Entity entity, ref EcsCharBody2D body) =>
 		{
 			if (entity.Has<LastPosition>())
 				entity.Ref<LastPosition>().Value = body.GlobalPosition;

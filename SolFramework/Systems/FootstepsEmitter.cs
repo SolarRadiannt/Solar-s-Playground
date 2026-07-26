@@ -3,10 +3,9 @@ namespace SolFramework.Systems;
 using Godot;
 using fennecs;
 
+using SolFramework;
 using SolFramework.Scheduler;
-using SolFramework.Core;
-using SolFramework.FootstepManager;
-using SolFramework.MoveManager;
+using SolFramework.Managers;
 using SolFramework.Components;
 public partial class FootstepsEmitter : Node, ISystem
 {
@@ -25,8 +24,8 @@ public partial class FootstepsEmitter : Node, ISystem
 	public override void _Ready() => Init();
 	
 	private static readonly World world = Core.World;
-	private static readonly Stream<ECSCharBody2D, FootstepTimer, FootstepStride> toProcess =
-		world.Query<ECSCharBody2D, FootstepTimer, FootstepStride>()
+	private static readonly Stream<EcsCharBody2D, FootstepTimer, FootstepStride> toProcess =
+		world.Query<EcsCharBody2D, FootstepTimer, FootstepStride>()
 			.Has<Moving>()
 			.Has<Grounded>()
 			.Stream();
@@ -36,7 +35,7 @@ public partial class FootstepsEmitter : Node, ISystem
 			static (
 				double delta,
 				in Entity entity,
-				ref ECSCharBody2D body,
+				ref EcsCharBody2D body,
 				ref FootstepTimer footstepTimer,
 				ref FootstepStride stride
 			) => {

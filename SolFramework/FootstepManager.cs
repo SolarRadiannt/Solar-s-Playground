@@ -1,11 +1,12 @@
-namespace SolFramework.FootstepManager;
+namespace SolFramework.Managers;
 
 using fennecs;
 using Godot;
 
-using SolFramework.EEvents;
-using SolFramework.TickTimer;
-using SolFramework.Core;
+using SolFramework;
+using SolFramework.Tools;
+
+
 public struct FootstepEmitter;
 public struct FootstepEvent;
 
@@ -26,7 +27,7 @@ static class FootstepManager
 	
 	public static Entity SetBaseStepRate(Entity entity, float baseStepRate)
 	{
-		if (entity.Has<FootstepTimer>())
+		if (entity.Has<FootstepStride>())
 			entity.Ref<FootstepStride>().Value = baseStepRate;
 		else
 			GD.PushWarning(Core.GetName(entity), "does not have footstep stride!");

@@ -3,9 +3,9 @@ namespace SolFramework.Systems;
 using Godot;
 using fennecs;
 
-using SolFramework.Core;
+using SolFramework;
 using SolFramework.Scheduler;
-using SolFramework.MoveManager;
+using SolFramework.Managers;
 
 
 public partial class Movement : Node, ISystem
@@ -32,22 +32,21 @@ public partial class Movement : Node, ISystem
 		toApplyVel.For(
 			static (ref MoveDirection moveDir, ref MoveSpeed speed, ref MoveVelocity moveVel) =>
 			{
-				
 				moveVel.Value = moveDir.Value.Normalized() * speed.Value;
 			});
 	}
 	
-	private static readonly Stream<ECSCharBody2D, MoveDirection, MoveToGoal> toMoveTo =
-		world.Stream<ECSCharBody2D, MoveDirection, MoveToGoal>();
+	private static readonly Stream<EcsCharBody2D, MoveDirection, MoveToGoal> toMoveTo =
+		world.Stream<EcsCharBody2D, MoveDirection, MoveToGoal>();
 	private static void HandleMoveTo()
 	{
 		toMoveTo.For(
-			static (in Entity entity, ref ECSCharBody2D body, ref MoveDirection moveDir, ref MoveToGoal moveGoal) =>
+			static (in Entity entity, ref EcsCharBody2D body, ref MoveDirection moveDir, ref MoveToGoal moveGoal) =>
 			{
 				var origin = body.GlobalPosition;
 				var goal = moveGoal.Value;
 				
-				var resultant = origin - goal;
+				var resultant = goal - origin;
 				
 				if (resultant.Length() <= MoveManager.GetMoveToReach(entity))
 					moveDir.Value = Vector2.Zero;

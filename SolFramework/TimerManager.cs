@@ -1,6 +1,6 @@
-namespace SolFramework.TimerManager;
+namespace SolFramework.Managers;
 
-using SolFramework.Core;
+using SolFramework;
 
 using fennecs;
 using Godot;

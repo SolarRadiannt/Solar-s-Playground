@@ -4,10 +4,7 @@ using fennecs;
 using Godot;
 
 using SolFramework.Scheduler;
-using SolFramework.Core;
-using SolFramework.ETransient;
-using SolFramework.Components;
-
+using SolFramework;
 
 public partial class TransientFlusher : Node, ISystem
 {

@@ -3,8 +3,8 @@ namespace SolFramework.Systems;
 using fennecs;
 using Godot;
 
-using SolFramework.Core;
-using SolFramework.TimerManager;
+using SolFramework;
+using SolFramework.Managers;
 using SolFramework.Scheduler;
 
 public partial class TimerTicker : Node, ISystem

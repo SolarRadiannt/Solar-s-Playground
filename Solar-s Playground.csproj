@@ -4,10 +4,12 @@
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>SolarsPlayground</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="fennecs" Version="0.6.12" />
     <PackageReference Include="Fluid-HTN" Version="0.0.0" />
+    <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
     <PackageReference Include="SharpResults" Version="0.4.4" />
   </ItemGroup>
 </Project>

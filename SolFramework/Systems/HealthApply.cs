@@ -1,12 +1,13 @@
 namespace SolFramework.Systems;
+
 using Godot;
-using fennecs;
-using SolFramework.Core;
-using SolFramework.HealthManager;
-using SolFramework.Scheduler;
-using System.ComponentModel.DataAnnotations;
-using SolFramework.EEvents;
 using System;
+using fennecs;
+
+using SolFramework;
+using SolFramework.Managers;
+using SolFramework.Scheduler;
+
 
 
 public partial class HealthApply : Node, ISystem
@@ -38,7 +39,10 @@ public partial class HealthApply : Node, ISystem
 	}
 	
 	private static readonly Stream<DamageTarget, DamageAmount> toApplyDamage =
-		world.Query<DamageTarget, DamageAmount>().Not<EventCancelled>().Stream();
+		world.Query<DamageTarget, DamageAmount>()
+			.Has<DamageEvent>()
+			.Not<EventCancelled>()
+			.Stream();
 	private static void ApplyDamages()
 	{
 		toApplyDamage.For(
@@ -50,7 +54,10 @@ public partial class HealthApply : Node, ISystem
 	}
 	
 	private static readonly Stream<HealTarget, HealAmount> toApplyHealth =
-		world.Query<HealTarget, HealAmount>().Not<EventCancelled>().Stream();
+		world.Query<HealTarget, HealAmount>()
+			.Has<HealEvent>()
+			.Not<EventCancelled>()
+			.Stream();
 	private static void ApplyHeals()
 	{
 		toApplyHealth.For(

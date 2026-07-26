@@ -1,4 +1,4 @@
-namespace SolFramework.TickTimer;
+namespace SolFramework.Tools;
 
 using Godot;
 
@@ -7,32 +7,25 @@ public struct TimerConfig
 	public bool? Repeating;
 }
 
-public struct TickTimer
+public class TickTimer
 {
 	private static TimerConfig defaultConfig = new TimerConfig
 	{
 		Repeating = false,
-		
 	};
-	
-	private bool _repeating = false;
+
 	private bool _justFinished = false;
-	private bool _finished = false;
-	private bool _paused = false;
-	private bool _started = false;
-	
 	private float _duration;
 	private float _currentTick = 0f;
 	
+	public bool Repeating {get; private set;}
+	public bool Finished {get; private set;}
+	public bool Paused {get; private set;}
+	public bool Started {get; private set;}
 	
-	public readonly bool Finished => _finished;
-	public readonly bool Paused => _paused;
-	public readonly bool Started => _started;
-	
-	public readonly float Elapsed => _currentTick;
-	public readonly float Countdown => _duration - _currentTick;
-	public readonly float Progress => Mathf.Clamp(_currentTick / _duration, 0f, 1f);
-	
+	public float Elapsed => _currentTick;
+	public float Countdown => Mathf.Clamp(_duration - _currentTick, 0f, 1f);
+	public float Progress => Mathf.Clamp(_currentTick / _duration, 0f, 1f);
 	
 	public float Duration
 	{
@@ -44,8 +37,8 @@ public struct TickTimer
 			{
 				_currentTick = _duration;
 				
-				if (_finished) return;
-				_finished = true;
+				if (Finished) return;
+				Finished = true;
 				_justFinished = true;
 			}
 		}
@@ -53,7 +46,7 @@ public struct TickTimer
 	
 	private void _ApplyConfig(TimerConfig config)
 	{
-		_repeating = config.Repeating.Value;
+		Repeating = config.Repeating.Value;
 	}
 	
 	public TickTimer(float duration, TimerConfig? config)
@@ -67,7 +60,7 @@ public struct TickTimer
 	public TickTimer(float duration, bool repeating)
 	{
 		_duration = Mathf.Max(0, duration);
-		_repeating = repeating;
+		Repeating = repeating;
 	}
 	
 	public bool JustFinished()
@@ -82,12 +75,12 @@ public struct TickTimer
 	
 	public bool Reset()
 	{
-		if (_started)
+		if (Started)
 		{
-			_started = false;
+			Started = false;
 			_currentTick = 0;
 			
-			_finished = false;
+			Finished = false;
 			_justFinished = false;
 			return true;
 		}
@@ -97,34 +90,34 @@ public struct TickTimer
 	
 	public bool Pause()
 	{
-		if (_paused) return false;
+		if (Paused) return false;
 		
-		_paused = true;
+		Paused = true;
 		return true;
 	}
 	
 	public bool Resume()
 	{
-		if (!_paused) return false;
+		if (!Paused) return false;
 		
-		_paused = false;
+		Paused = false;
 		return true;
 	}
 	
 	public TickTimer Tick(float delta)
 	{
-		if (_repeating && _finished) Reset();
+		if (Repeating && Finished) Reset();
 		
-		if (_paused) return this;
-		if (_finished) return this;
+		if (Paused) return this;
+		if (Finished) return this;
 		
-		if (!_started)
-			_started = true;
+		if (!Started)
+			Started = true;
 		
 		_currentTick = Mathf.Clamp(_currentTick + delta, 0, _duration);
 		if (_currentTick >= _duration)
 		{
-			_finished = true;
+			Finished = true;
 			_justFinished = true;
 		}
 		

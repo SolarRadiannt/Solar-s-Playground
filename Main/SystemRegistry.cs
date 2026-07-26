@@ -1,9 +1,9 @@
-namespace Root.Systems;
+namespace Root;
 using Godot;
 
 public static class SystemRegistry
 {
-	public static Node[] GetAll() => [
+	public static Node[] All => [
 		new Systems.ComputeVelocity(),
 		new Systems.FootstepSounds(),
 	];

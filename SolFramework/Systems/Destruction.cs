@@ -4,11 +4,8 @@ using fennecs;
 using Godot;
 
 using SolFramework.Scheduler;
-using SolFramework.Core;
-using SolFramework.ETransient;
+using SolFramework;
 using SolFramework.Components;
-using System;
-using System.Linq;
 
 public partial class Destruction : Node, ISystem
 {
@@ -32,10 +29,12 @@ public partial class Destruction : Node, ISystem
 	
 	private static readonly World world = Core.World;
 	private static readonly Stream<Destroy> toDestroy =
-		world.Stream<Destroy>();
+		world.Query<Destroy>()
+			.Not<EcsCharBody2D>()
+			.Stream();
 	
-	private static readonly Stream<ECSCharBody2D> destroyBody =
-		world.Query<ECSCharBody2D>()
-		.Has<Destroy>()
-		.Stream();
+	private static readonly Stream<EcsCharBody2D> destroyBody =
+		world.Query<EcsCharBody2D>()
+			.Has<Destroy>()
+			.Stream();
 }

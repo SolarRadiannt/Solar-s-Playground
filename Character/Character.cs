@@ -1,10 +1,8 @@
 using Godot;
 using SolFramework.Components;
-using SolFramework.FootstepManager;
-using SolFramework.MoveManager;
-using System;
+using SolFramework.Managers;
 
-public partial class Character : ECSCharBody2D
+public partial class Character : EcsCharBody2D
 {
 	protected override void OnEntityReady()
 	{
@@ -14,4 +12,10 @@ public partial class Character : ECSCharBody2D
 		FootstepManager.ApplyFootstep(entity, 150);
 		GD.Print("Character spawned!");
 	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		MoveAndSlide();
+	}
+
 }

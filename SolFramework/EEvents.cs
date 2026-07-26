@@ -1,8 +1,6 @@
-namespace SolFramework.EEvents;
+namespace SolFramework;
 
 using fennecs;
-using SolFramework.ETransient;
-using SolFramework.Core;
 
 public struct EventEntity;
 public struct EventCancelled;

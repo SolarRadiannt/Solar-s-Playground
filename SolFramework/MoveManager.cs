@@ -1,39 +1,46 @@
-namespace SolFramework.MoveManager;
+namespace SolFramework.Managers;
 
 using fennecs;
 using Godot;
-using SolFramework.Components;
-
 
 public record struct MoveSpeed(float Value);
 public record struct MoveDirection(Vector2 Value);
 public record struct MoveToGoal(Vector2 Value);
 public record struct MoveVelocity(Vector2 Value);
 public record struct MoveToReachDistance(float Value);
+public record struct LookSpeed(float Value);
 public struct MovingBlocked;
 public struct Moving;
+public struct LookAtMoveDir;
 
 public static class MoveManager
 {
-	public const float MOVETO_REACH = 0.5f;
+	public const float MOVETO_REACH = 5f;
 	
-	public static Entity ApplyMovement(Entity entity, float moveSpeed) =>
+	public static void ApplyMovement(Entity entity, float moveSpeed) =>
 		entity
 			.Add(new MoveSpeed(moveSpeed))
 			.Add(new MoveVelocity(Vector2.Zero))
 			.Add(new MoveDirection(Vector2.Zero));
-	
+	public static void SetMoveDirection(Entity entity, Vector2 direction)
+	{
+		if (entity.Has<MoveDirection>())
+			entity.Ref<MoveDirection>().Value = direction;
+		else
+			entity.Add(new MoveDirection(direction));
+	}
 	public static bool MoveTo(Entity entity, Vector2 goal)
 	{
-		bool overriden = false;
 		if (entity.Has<MoveToGoal>())
 		{
-			entity.Remove<MoveToGoal>();
-			overriden = true;
+			entity.Ref<MoveToGoal>().Value = goal;
+			return false;
 		}
-		
-		entity.Add(new MoveToGoal(goal));
-		return overriden;
+		else
+		{
+			entity.Add(new MoveToGoal(goal));
+			return true;
+		}
 	}
 	
 	public static bool MoveToActive(Entity entity) =>

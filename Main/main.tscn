@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://bskyw3xu2kikb"]
+[gd_scene format=3 uid="uid://clf0yc4b6inw2"]
 
-[ext_resource type="Script" uid="uid://44mb5o57lg06" path="res://Main/Main.cs" id="1_qvhan"]
+[ext_resource type="Script" uid="uid://ddkvocap1chk5" path="res://Main/MainGame.cs" id="1_qvhan"]
 [ext_resource type="PackedScene" uid="uid://cv2stkbw5y72y" path="res://Character/character.tscn" id="2_2w1kt"]
 [ext_resource type="PackedScene" uid="uid://dyknff3o83066" path="res://LojiWall/loji_wall.tscn" id="3_qvhan"]
 
-[node name="Main" type="Node2D" unique_id=1856033696]
+[node name="MainGame" type="Node2D" unique_id=1856033696]
 script = ExtResource("1_qvhan")
 metadata/juj = true
 
