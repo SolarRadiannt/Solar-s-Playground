@@ -25,12 +25,10 @@ public partial class ComputeVelocity : Node, ISystem
 	}
 
 	public override void _Ready() => Init();
-	
 	private static readonly Stream<Velocity> toReset =
 		world.Query<Velocity>()
-			.Has<MoveVelocity>()
 			.Stream();
-	private void ResetVelocity()
+	private static void ResetVelocity()
 	{
 		toReset.For(static
 		(ref Velocity vel) =>
@@ -41,6 +39,7 @@ public partial class ComputeVelocity : Node, ISystem
 	
 	private static readonly Stream<Velocity, MoveVelocity> toApplyMoveVel =
 		world.Query<Velocity, MoveVelocity>()
+			.Has<Grounded>()
 			.Stream();
 	private static void ApplyMoveVelocity()
 	{
