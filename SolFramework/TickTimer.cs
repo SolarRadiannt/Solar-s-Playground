@@ -24,7 +24,7 @@ public class TickTimer
 	public bool Started {get; private set;}
 	
 	public float Elapsed => _currentTick;
-	public float Countdown => Mathf.Clamp(_duration - _currentTick, 0f, 1f);
+	public float Countdown => _duration - _currentTick;
 	public float Progress => Mathf.Clamp(_currentTick / _duration, 0f, 1f);
 	
 	public float Duration
