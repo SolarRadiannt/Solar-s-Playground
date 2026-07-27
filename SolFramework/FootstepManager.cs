@@ -13,7 +13,6 @@ public struct FootstepEvent;
 public record struct FootstepMaterial(string Value);
 public record struct FootstepOrigin(Vector2 Value);
 public record struct FootstepSource(Entity Value);
-
 public record struct FootstepTimer(TickTimer Value);
 public record struct FootstepStride(float Value);
 
