@@ -24,8 +24,8 @@ public partial class FootstepsEmitter : Node, ISystem
 	public override void _Ready() => Init();
 	
 	private static readonly World world = Core.World;
-	private static readonly Stream<EcsCharBody2D, FootstepTimer, FootstepStride> toProcess =
-		world.Query<EcsCharBody2D, FootstepTimer, FootstepStride>()
+	private static readonly Stream<EcsCharBody2D, FootstepTimer, FootstepStride, ActualSpeed> toProcess =
+		world.Query<EcsCharBody2D, FootstepTimer, FootstepStride, ActualSpeed>()
 			.Has<Moving>()
 			.Has<Grounded>()
 			.Stream();
@@ -37,17 +37,12 @@ public partial class FootstepsEmitter : Node, ISystem
 				in Entity entity,
 				ref EcsCharBody2D body,
 				ref FootstepTimer footstepTimer,
-				ref FootstepStride stride
+				ref FootstepStride stride,
+				ref ActualSpeed speed
 			) => {
 				var timer = footstepTimer.Value;
-				if (entity.Has<MoveSpeed>())
-				{
-					float speed = entity.Ref<MoveSpeed>().Value;
-					float stepRate = stride.Value / Mathf.Max(speed, 1f);
-					timer.Duration = stepRate;
-				}
-				
-				timer.Tick(delta);
+				timer.Duration = stride.Value;
+				timer.Tick(delta * speed.Value);
 				footstepTimer.Value = timer;
 				
 				if (timer.JustFinished())
