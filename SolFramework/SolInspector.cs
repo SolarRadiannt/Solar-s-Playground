@@ -156,7 +156,7 @@ public static class SolInspector
 	}
 	private static void ShowComponents(Entity entity, List<ComponentTypeCache> components)
 	{
-		if (!ImGui.CollapsingHeader("Components", ImGuiTreeNodeFlags.FramePadding)) return;
+		if (!ImGui.CollapsingHeader("Components", ImGuiTreeNodeFlags.None)) return;
 		
 		ImGui.PushID(entity.GetHashCode());
 			string filter = HandleEntitySearch("Search Components:", entity, entitiesComponentFilter);
