@@ -45,12 +45,10 @@ public static class SolInspector
 	{
 		Scheduler.RegisterSystem(Process, priority);
 		
-		GD.Print("SolInspector initialized!");
-		
 		ImGuiGD.Connect(() =>
 		{
 			var entities = world.All;
-			ImGui.Begin("Sol Inspector");
+			ImGui.Begin(TITLE);
 			
 			HandleSearch("Search Entities:", ref _searchFilter);
 			
@@ -60,7 +58,6 @@ public static class SolInspector
 			
 			ImGui.End();
 		});
-		
 	}
 	
 	private static bool IsFiltered(string target, string filter)
@@ -136,8 +133,8 @@ public static class SolInspector
 				entityComponents.Add(members);
 		}
 		
-		ShowComponents(entity);
-		ShowTags(entity);
+		ShowComponents(entity, entityComponents);
+		ShowTags(entity, entityTags);
 		
 		entityComponents.Clear();
 		entityTags.Clear();
@@ -159,7 +156,7 @@ public static class SolInspector
 		
 		return filter;
 	}
-	private static void ShowComponents(Entity entity)
+	private static void ShowComponents(Entity entity, List<ComponentTypeCache> components)
 	{
 		if (!ImGui.CollapsingHeader("Components", ImGuiTreeNodeFlags.None)) return;
 		
@@ -169,7 +166,7 @@ public static class SolInspector
 		
 		ImGui.Indent();
 		
-		foreach (var members in entityComponents)
+		foreach (var members in components)
 		{
 			if (IsFiltered(members.Type.Name, filter))
 				continue;
@@ -217,7 +214,7 @@ public static class SolInspector
 		ImGui.Unindent();
 	}
 	
-	private static void ShowTags(Entity entity)
+	private static void ShowTags(Entity entity, List<(string name, System.Numerics.Vector4? color)> tags)
 	{
 		if (entityTags.Count == 0) return;
 		if (!ImGui.CollapsingHeader("Tags", ImGuiTreeNodeFlags.None)) return;
@@ -231,41 +228,34 @@ public static class SolInspector
 		float currentWidth = 0.0f;
 		bool firstInRow = true;
 		
-		foreach (var (tagName, color) in entityTags)
-		{
-			if (IsFiltered(tagName, filter))
-				continue;
-			
-			var textSize = ImGui.CalcTextSize(tagName);
-			float itemWidth = textSize.X + HORIZONTAL_TAGS_SPACE; // Text width + horizontal padding
-			
-			// If it exceeds the available window width, wrap to the next line
-			if (!firstInRow && (currentWidth + itemWidth) > availableWidth)
-			{
-				currentWidth = 0.0f;
-				firstInRow = true;
-			}
-			
-			if (!firstInRow)
-			{
-				ImGui.SameLine();
-			}
-			
-			DrawTagBadge(tagName, color);
-			
-			currentWidth += itemWidth + 4.0f; // Add a small spacing buffer between tags
-			firstInRow = false;
-		}
+		foreach (var (tagName, color) in tags)
+			if (!IsFiltered(tagName, filter))
+				DisplayTag(tagName, color, ref firstInRow, ref currentWidth, availableWidth);
 		
 		ImGui.Unindent(); // Or just regular ImGui.Unindent();
 	}
 	
-	private static void DisplayTag(string name, System.Numerics.Vector4? color)
+	private static void DisplayTag(string name, System.Numerics.Vector4? color, ref bool firstInRow, ref float currentWidth, float availableWidth)
 	{
-		if (color.HasValue)
-			ImGui.TextColored(color.Value, $"• {name}");
-		else
-			ImGui.Text(name);
+		var textSize = ImGui.CalcTextSize(name);
+		float itemWidth = textSize.X + HORIZONTAL_TAGS_SPACE; // Text width + horizontal padding
+		
+		// If it exceeds the available window width, wrap to the next line
+		if (!firstInRow && (currentWidth + itemWidth) > availableWidth)
+		{
+			currentWidth = 0.0f;
+			firstInRow = true;
+		}
+		
+		if (!firstInRow)
+		{
+			ImGui.SameLine();
+		}
+		
+		DrawTagBadge(name, color);
+		
+		currentWidth += itemWidth + 4.0f; // Add a small spacing buffer between tags
+		firstInRow = false;
 	}
 	
 	private static void DrawTagBadge(string text, System.Numerics.Vector4? customColor)
@@ -324,13 +314,14 @@ public static class SolInspector
 		
 		var type = value.GetType();
 		
-		
-		if (type.IsPrimitive || type.IsEnum || type == typeof(string) || 
-			type == typeof(Vector2) || type == typeof(Vector3) || type == typeof(Vector4))
+		if (type.IsPrimitive || type.IsEnum
+			|| type == typeof(string) || type == typeof(Vector2)
+			|| type == typeof(Vector3) || type == typeof(Vector4))
 		{
 			ImGui.Text($"{name}: {value}");
 			return;
 		}
+
 		if (ImGui.TreeNode($"{name} ({type.Name})"))
 		{
 			var members = GetOrCacheType(type);	
