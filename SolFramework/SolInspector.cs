@@ -328,15 +328,13 @@ public static class SolInspector
 
 			// Display nested fields
 			foreach (var field in members.Fields)
-			{
 				DisplayValue(field.Name, field.GetValue(value), depth + 1);
-			}
+			
 			
 			// Display nested properties
 			foreach (var prop in members.Properties)
 			{
 				if (prop.GetIndexParameters().Length == 0 && prop.CanRead)
-				{
 					try 
 					{
 						DisplayValue(prop.Name, prop.GetValue(value), depth + 1);
@@ -345,7 +343,6 @@ public static class SolInspector
 					{
 						ImGui.Text($"{prop.Name}: [Error Reading]");
 					}
-				}
 			}
 			
 			ImGui.TreePop(); // Always pop the tree node when done!
@@ -403,6 +400,7 @@ public static class SolInspector
 		return members;
 	}
 	
+	// for catching transient event entities later.
 	private static void Process(double delta)
 	{
 		
