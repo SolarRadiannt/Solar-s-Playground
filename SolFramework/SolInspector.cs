@@ -7,6 +7,7 @@ using ImGuiNET;
 
 using SolFramework;
 using SolFramework.Scheduler;
+using SolFramework.Components;
 
 using System;
 using System.Reflection;
@@ -40,7 +41,7 @@ public static class SolInspector
 	private static readonly World world = Core.World;
 	private static Dictionary<Type, ComponentTypeCache> _memberCache = new();
 	private static string _searchFilter = "";
-	private static int priority => SPriority.Flush - 10;
+	private static int priority => SPriority.Lowest;
 	public static void Init()
 	{
 		Scheduler.RegisterSystem(Process, priority);
@@ -148,17 +149,14 @@ public static class SolInspector
 			filterDict[entity] = filter;
 		}
 		
-		
 		HandleSearch(title, ref filter);
 		
-		
 		filterDict[entity] = filter;
-		
 		return filter;
 	}
 	private static void ShowComponents(Entity entity, List<ComponentTypeCache> components)
 	{
-		if (!ImGui.CollapsingHeader("Components", ImGuiTreeNodeFlags.None)) return;
+		if (!ImGui.CollapsingHeader("Components", ImGuiTreeNodeFlags.FramePadding)) return;
 		
 		ImGui.PushID(entity.GetHashCode());
 			string filter = HandleEntitySearch("Search Components:", entity, entitiesComponentFilter);
@@ -403,6 +401,16 @@ public static class SolInspector
 	// for catching transient event entities later.
 	private static void Process(double delta)
 	{
-		
+		ClearEntitiesFromDicts();
 	}
+
+	private static Stream<Destroy>
+		destroyingEntities = world.Stream<Destroy>();
+	private static void ClearEntitiesFromDicts() =>
+		destroyingEntities.For(static
+		(in Entity entity, ref Destroy _) =>
+		{
+			entitiesComponentFilter.Remove(entity);
+		});
+	
 }
