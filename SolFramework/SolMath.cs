@@ -10,10 +10,9 @@ public static class SolMath
 		if (max <= min) return 0f;
 		return Mathf.Clamp((value - min) / (max - min), 0f, 1f);
 	}
-	public static float InverseNormalize(float value, float min, float max)
-	{
-		return 1f - Normalize(value, min, max);
-	}
+	public static float InverseNormalize(float value, float min, float max) =>
+		1f - Normalize(value, min, max);
+	
 	
 	public static float NormalizeSquared(float value, float min, float max)
 	{

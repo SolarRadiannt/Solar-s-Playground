@@ -1,1 +1,18 @@
 // ADD THE "Signal DotNet library"
+
+
+// COMPONENT INSPECTOR RULE:
+Goal Related:
+Lime
+
+Player related:
+Cyan
+
+Godot related:
+Violet
+
+Physics/Positioning related:
+Indigo
+
+Health related:
+Forest

@@ -16,12 +16,19 @@ using System.Collections.Generic;
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public class InspectorColorAttribute : Attribute
 {
-	public System.Numerics.Vector4 Color { get; }
-	public InspectorColorAttribute(float r, float g, float b, float a = 1.0f)
+    public System.Numerics.Vector4 Color { get; }
+	
+    public InspectorColorAttribute(float r, float g, float b, float a = 1.0f)
     {
         Color = new System.Numerics.Vector4(r, g, b, a);
     }
+	
+    public InspectorColorAttribute(InspectColor preset)
+    {
+        Color = InspectColors.Get(preset);
+    }
 }
+
 
 public static class SolInspector
 {

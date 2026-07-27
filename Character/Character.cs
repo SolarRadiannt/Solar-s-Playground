@@ -10,6 +10,7 @@ public partial class Character : EcsCharBody2D
 		entity.Add<Grounded>();
 		MoveManager.ApplyMovement(entity, 400);
 		FootstepManager.ApplyFootstep(entity, 3f);
+		HealthManager.ApplyHealth(entity, 100f);
 		GD.Print("Character spawned!");
 	}
 

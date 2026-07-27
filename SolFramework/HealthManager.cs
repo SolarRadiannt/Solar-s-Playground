@@ -2,9 +2,11 @@ namespace SolFramework.Managers;
 
 using fennecs;
 using SolFramework;
+using SolFramework.Tools;
 
-public record struct MaxHealth(float Value);
-public record struct Health(float Value);
+
+[InspectorColor(InspectColor.Forest)] public record struct MaxHealth(float Value);
+[InspectorColor(InspectColor.Forest)] public record struct Health(float Value);
 
 public record struct DamageWith(Entity Value);
 public record struct HealWith(Entity Value);
