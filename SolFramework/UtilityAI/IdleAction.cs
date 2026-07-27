@@ -6,7 +6,7 @@ public class IdleAction : BaseAction
 {
 	public override bool CanExecute(Entity entity) => true;
 	public override float Score(Entity entity) => 0.1f;
-	public override void Execute(Entity entity)
+	public override void Start(Entity entity)
 	{
 		if (!entity.Has<AgentIdle>())
 			entity.Add<AgentIdle>();

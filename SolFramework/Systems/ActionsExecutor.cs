@@ -77,7 +77,7 @@ public partial class ActionsExecutor : Node, ISystem
 			
 			currentAction?.Stop(entity);
 			
-			chosenAction.Execute(entity);
+			chosenAction.Start(entity);
 			entityActiveActionMap[entity] = chosenAction;
 		});
 }
