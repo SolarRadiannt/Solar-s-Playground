@@ -13,7 +13,7 @@ using GodotUtilities;
 public partial class HandleWanderer : Node, ISystem
 {
 	private static readonly World world = Core.World;
-	public int Priority => SPriority.Default;
+	public int Priority => SPriority.Action;
 	public void Process(double delta)
 	{
 		CooldownTicker(delta);
@@ -21,7 +21,7 @@ public partial class HandleWanderer : Node, ISystem
 	
 	public void Init()
 	{
-		Scheduler.RegisterSystem(this);
+		Scheduler.RegisterPhysicsSystem(this);
 	}
 	public override void _Ready() => Init();
 	
@@ -39,14 +39,15 @@ public partial class HandleWanderer : Node, ISystem
 	private static readonly Stream<EcsCharBody2D> toSetWanderGoal = 
 		world.Query<EcsCharBody2D>()
 		.Has<Wandering>()
+		.Not<WanderGoal>()
 		.Stream();
 	private static void WanderGoalSetter() =>
 		toSetWanderGoal.For(static
 		(in Entity entity, ref EcsCharBody2D body) =>
 		{
-			float range = WanderAction.WANDER_RANGE;
+			float range = WanderAction.WANDER_RADIUS;
 			var origin = body.GlobalPosition;
-			// MAKE A COMPREHENSIVE RANDOM LIBRARY!!!!
+			var goal = origin + SolRandom.RandVec2Radius(range);
 			
 		});
 }

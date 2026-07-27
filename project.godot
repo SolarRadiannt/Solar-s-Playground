@@ -36,7 +36,7 @@ project/assembly_name="Solar-s Playground"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GodotUtilities/plugin.cfg", "res://addons/extra_math_cs/plugin.cfg", "res://addons/imgui-godot/plugin.cfg")
+enabled=PackedStringArray("res://addons/GodotUtilities/plugin.cfg", "res://addons/imgui-godot/plugin.cfg")
 
 [godot_utilities]
 

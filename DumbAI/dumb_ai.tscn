@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://1ntk11obtxnj"]
 
-[ext_resource type="Script" uid="uid://busxan5fd1o6p" path="res://DumbAI/DumbAI.cs" id="1_dvh70"]
+[ext_resource type="Script" uid="uid://bhu2pwcrtw5xl" path="res://DumbAI/DumbAI.cs" id="1_dvh70"]
 [ext_resource type="Texture2D" uid="uid://f0lxhj6lo47r" path="res://DumbAI/images_6.jpg" id="1_t0em4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q0c55"]
