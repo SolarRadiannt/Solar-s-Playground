@@ -30,12 +30,12 @@ public partial class ActionsExecutor : Node, ISystem
 	}
 	public override void _Ready() => Init();
 	
-	private static BaseAction GetBestAction(Entity entity, List<BaseAction> actions)
+	private static BaseAction GetBestAction(Entity entity, BaseAction[] actions)
 	{
 		BaseAction best = null;
 		float highestScore = float.MinValue;
 
-		for (int i = 0; i < actions.Count; i++)
+		for (int i = 0; i < actions.Length; i++)
 		{
 			var action = actions[i];
 			if (!action.CanExecute(entity)) continue;
