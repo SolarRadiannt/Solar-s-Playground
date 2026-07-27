@@ -18,7 +18,7 @@ public partial class ActualVelCalc : Node, ISystem
 
     public void Init()
     {
-        Scheduler.RegisterSystem(this);
+        Scheduler.RegisterPhysicsSystem(this);
     }
 
     public override void _Ready() => Init();
