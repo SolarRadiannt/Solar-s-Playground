@@ -13,6 +13,7 @@ public static class SystemRegistry
 		new Systems.MovingChecker(),
 		new Systems.LookToMoveDirection(),
 		new Systems.Destruction(),
-		new Systems.MoveDirectionInput()
+		new Systems.MoveDirectionInput(),
+		new Systems.ActualVelCalc()
 	];
 }
