@@ -14,6 +14,8 @@ public static class SolRand
 	private static readonly Color MIN_COLOR = new(0f, 0f, 0f, 1f);
 	private static readonly Color MAX_COLOR = new(1f, 1f, 1f, 1f);
 	private static readonly RandomNumberGenerator _rng = new();
+
+    
     /// <summary>
     /// Sets the seed for the random number generator, making all subsequent results deterministic.
     /// </summary>

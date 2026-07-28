@@ -48,6 +48,5 @@ public partial class HandleWanderer : Node, ISystem
 			float range = WanderAction.WANDER_RADIUS;
 			var origin = body.GlobalPosition;
 			var goal = origin + SolRand.Vec2Radius(range);
-			
 		});
 }
