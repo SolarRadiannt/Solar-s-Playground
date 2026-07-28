@@ -1,13 +1,13 @@
 using fennecs;
 using Godot;
-using SolFramework.Components;
 
 using SolFramework;
+using SolFramework.Components;
 using SolFramework.Tools;
 
 
 [GlobalClass]
-[InspectorColor(0.518f, 0.047f, 0.961f)]
+[InspectorColor(InspectColor.Violet)]
 public abstract partial class EcsCharBody2D : CharacterBody2D
 {
 	protected Entity entity;

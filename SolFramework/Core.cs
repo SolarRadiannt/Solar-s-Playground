@@ -3,6 +3,7 @@ namespace SolFramework;
 using fennecs;
 using SolFramework.Components;
 
+
 public static class Core
 {
 	public static readonly World World = new();
