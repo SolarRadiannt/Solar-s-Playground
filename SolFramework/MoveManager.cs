@@ -19,7 +19,7 @@ public struct LookAtMoveDir;
 
 public static class MoveManager
 {
-	public const float MOVETO_REACH = 5f;
+	public const float MOVETO_REACH = 15f;
 	
 	public static void ApplyMovement(Entity entity, float moveSpeed) =>
 		entity
@@ -55,7 +55,7 @@ public static class MoveManager
 		var dir = entity.Ref<MoveDirection>().Value;
 		return dir.IsNormalized() ? dir : dir.Normalized();
 	}
-	public static float GetMoveToReach(Entity entity) =>
+	public static float GetReachDist(Entity entity) =>
 		entity.Has<MoveToReachDistance>()
 			? entity.Ref<MoveToReachDistance>().Value
 			: MOVETO_REACH;

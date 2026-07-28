@@ -17,9 +17,12 @@ public partial class MainGame : Node2D
 	public override void _Ready()
 	{
 		Instance = this;
+		
 		AddChildBatch(SolFramework.SystemRegistry.All);
 		AddChildBatch(SystemRegistry.All);
 		AddChildBatch(SolProjectiles.SystemRegistry.All);
+		AddChildBatch(SolActions.SystemRegistry.All);
+		
 		SolInspector.Init();
 	}
 	public override void _PhysicsProcess(double delta)

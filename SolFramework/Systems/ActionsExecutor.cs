@@ -1,4 +1,4 @@
-namespace Systems;
+namespace SolFramework.Systems;
 
 using Godot;
 using fennecs;
@@ -17,7 +17,7 @@ public partial class ActionsExecutor : Node, ISystem
 	private static readonly World world = Core.World;
 	private static readonly IdleAction _idleAction = new();
 	
-	public int Priority => SPriority.Action;
+	public int Priority => SPriority.Transformation;
 	public void Process(double delta)
 	{
 		AgentRemover();

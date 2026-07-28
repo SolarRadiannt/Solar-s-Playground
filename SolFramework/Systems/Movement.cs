@@ -10,7 +10,7 @@ using SolFramework.Managers;
 
 public partial class Movement : Node, ISystem
 {
-	public int Priority => SPriority.Action;
+	public int Priority => SPriority.Transformation;
 	public void Process(double delta)
 	{
 		HandleMoveTo();
@@ -19,7 +19,7 @@ public partial class Movement : Node, ISystem
 	
 	public void Init()
 	{
-		Scheduler.RegisterSystem(this);
+		Scheduler.RegisterPhysicsSystem(this);
 	}
 	
 	public override void _Ready() => Init();
@@ -48,8 +48,11 @@ public partial class Movement : Node, ISystem
 				
 				var resultant = goal - origin;
 				
-				if (resultant.Length() <= MoveManager.GetMoveToReach(entity))
+				if (resultant.Length() <= MoveManager.GetReachDist(entity))
+				{
 					moveDir.Value = Vector2.Zero;
+					entity.Remove<MoveToGoal>();
+				}
 				else
 					moveDir.Value = resultant.Normalized();
 			});

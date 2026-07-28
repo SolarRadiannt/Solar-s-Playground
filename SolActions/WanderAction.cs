@@ -12,12 +12,13 @@ public record struct WanderRadius(float Value);
 public record struct WanderCooldown(TickTimer Value);
 public record struct WanderGoal(Vector2 Value);
 public record struct WanderRached;
+public record struct WanderFinished;
 
 public record struct Wandering;
 
 public class WanderAction : BaseAction
 {
-	public static readonly float WANDER_RADIUS = 100f;
+	public static readonly float WANDER_RADIUS = 200f;
 	private static readonly float score = 0.2f;
 	
 	public override bool CanExecute(Entity entity) =>
@@ -25,7 +26,7 @@ public class WanderAction : BaseAction
 
 	public override float Score(Entity entity)
 	{
-		if (entity.Ref<WanderCooldown>().Value.JustFinished() | entity.Has<Wandering>())
+		if (entity.Has<WanderGoal>() | entity.Ref<WanderCooldown>().Value.JustFinished())
 			return score;
 		else
 			return 0f;
@@ -33,7 +34,7 @@ public class WanderAction : BaseAction
 
 	public override void Start(Entity entity)
 	{
-		entity.TryAdd<Wandering>();
+		entity.Add<Wandering>();
 	}
 
 	public override void Stop(Entity entity)
