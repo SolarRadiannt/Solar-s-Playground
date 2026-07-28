@@ -18,9 +18,10 @@ public struct Cooldown(double defaultDuration)
     public readonly float Normalized => (float)(1.0 - (timer / currentDuration));
 
     public void Start(double sec) => timer = currentDuration = sec;
+    public void Start(float sec) => Start((float)sec);
     public void Start() => timer = currentDuration = duration;
     public void Stop() => timer = 0f;
 
     public void Tick(double dt) => timer = Mathf.Max(0, timer - dt);
+    public void Tick(float dt) => Tick((float)dt);
 }
-
