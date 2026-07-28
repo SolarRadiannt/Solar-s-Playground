@@ -48,5 +48,19 @@ public partial class HandleWanderer : Node, ISystem
 			float range = WanderAction.WANDER_RADIUS;
 			var origin = body.GlobalPosition;
 			var goal = origin + SolRand.Vec2Radius(range);
+
+			entity.Add(new WanderGoal(goal));
+			MoveManager.MoveTo(entity, goal);
 		});
+	private static readonly Stream<EcsCharBody2D, WanderGoal> toCheckWanderReached=
+		world.Query<EcsCharBody2D, WanderGoal>()
+		.Has<Wandering>()
+		.Stream();
+	private static void WanderGoalChecker() =>
+		toCheckWanderReached.For(static
+			(in Entity entity, ref EcsCharBody2D body, ref WanderGoal goal) =>
+			{
+				
+			});
+
 }

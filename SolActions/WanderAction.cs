@@ -1,6 +1,6 @@
 namespace SolActions;
 
-using System.Numerics;
+using Godot;
 using fennecs;
 using GodotUtilities;
 using SolFramework;
@@ -25,7 +25,7 @@ public class WanderAction : BaseAction
 
 	public override float Score(Entity entity)
 	{
-		if (entity.Ref<WanderCooldown>().Value.JustFinished() | entity.Has<WanderGoal>())
+		if (entity.Ref<WanderCooldown>().Value.JustFinished() | entity.Has<Wandering>())
 			return score;
 		else
 			return 0f;
