@@ -25,9 +25,7 @@ public class WanderAction : BaseAction
 
 	public override float Score(Entity entity)
 	{
-		
-		
-		if (entity.Ref<WanderCooldown>().Value.JustFinished())
+		if (entity.Ref<WanderCooldown>().Value.JustFinished() | entity.Has<WanderGoal>())
 			return score;
 		else
 			return 0f;
