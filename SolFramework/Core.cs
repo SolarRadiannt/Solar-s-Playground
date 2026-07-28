@@ -22,4 +22,6 @@ public static class Core
 		else
 			entity.Add(new Name(name));
 	}
+	public static float GetMass(Entity entity) =>
+		entity.Has<Mass>() ? entity.Ref<Mass>().Value : 1f;
 }
