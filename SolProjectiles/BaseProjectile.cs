@@ -6,7 +6,7 @@ using SolFramework.Managers;
 using SolProjectiles.Components;
 
 [GlobalClass]
-public abstract partial class BaseProjectile : EcsCharBody2D
+public abstract partial class BaseProjectile : EcsNode2D
 {
 	protected abstract float Damage { get; }
 	protected abstract float MaxDistance { get; }
@@ -22,8 +22,8 @@ public abstract partial class BaseProjectile : EcsCharBody2D
 			.Add<LookAtMoveDir>()
 			.Add(new ProjectileSource(Source))
 			.Add(new ProjectileDamage(Damage))
-			.Add(new ProjectileMaxDistance(MaxDistance))
-			.Add(new ProjectileOrigin(GlobalPosition));
+			.Add(new ProjectileOrigin(GlobalPosition))
+			.Add(new ProjectileMaxDistance(MaxDistance));
 		
 		MoveManager.ApplyMovement(entity, Speed);
 		MoveManager.SetMoveDirection(entity, Direction);

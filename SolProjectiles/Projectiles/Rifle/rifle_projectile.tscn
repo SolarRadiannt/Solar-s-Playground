@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c173y16vwtbbx"]
+
+[ext_resource type="Texture2D" uid="uid://btb3y7oq8seet" path="res://LojiWall/e963ec6887909626795b3aef0082aa51.jpg" id="1_u481b"]
+
+[node name="RifleProjectile" type="Node2D" unique_id=567771384]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=117680383]
+position = Vector2(0, 0.49999905)
+scale = Vector2(0.24767801, 0.0729783)
+texture = ExtResource("1_u481b")

@@ -8,7 +8,7 @@ using SolFramework.Tools;
 
 [GlobalClass]
 [InspectorColor(InspectColor.Violet)]
-public abstract partial class EcsCharBody2D : CharacterBody2D
+public abstract partial class EcsRigidBody2D : RigidBody2D
 {
 	protected Entity entity;
 	public Entity Entity => entity;
@@ -19,18 +19,17 @@ public abstract partial class EcsCharBody2D : CharacterBody2D
 		if (!entity)
 			entity = Core.World.Spawn()
 						.Add(new Velocity(Vector2.Zero))
-						.Add(new Name(Name))
-						.Add<Character>();
+						.Add(new Name(Name));
 		
-		if (!entity.Has<EcsCharBody2D>())
+		if (!entity.Has<EcsRigidBody2D>())
 			entity.Add(this);
 		
 		OnEntityReady();
 	}
 	public override void _ExitTree()
 	{
-		if (entity && entity.Has<EcsCharBody2D>())
-			entity.Remove<EcsCharBody2D>();
+		if (entity && entity.Has<EcsRigidBody2D>())
+			entity.Remove<EcsRigidBody2D>();
 	}
 	
 	protected override void Dispose(bool disposing)

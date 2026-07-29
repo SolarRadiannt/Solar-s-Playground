@@ -3,7 +3,10 @@ using fennecs;
 using System.Diagnostics.CodeAnalysis;
 public static class EntityExtensions
 {
-	public static bool TryRef<T>(this Entity entity, out T component)
+	/// <summary>
+    /// Tries to read a copy of the plain component of type <typeparamref name="T"/>.
+    /// </summary>
+	public static bool TryRead<T>(this Entity entity, out T component)
 	{
 		if (entity.Has<T>())
 		{
@@ -28,6 +31,12 @@ public static class EntityExtensions
 
 		return true;
 	}
+	public static bool TryAdd<R>(this Entity entity, R value, Entity target) where R : notnull
+	{
+		if (entity.Has<R>(target)) return false;
+		entity.Add(value, target);
+		return true;
+	}
 
 	public static void Set<T>(this Entity entity, T component)
 	{
@@ -46,18 +55,30 @@ public static class EntityExtensions
 		return true;
 	}
 
-	// ============ Multi-Checks ============
+	public static bool TryRemove<R>(this Entity entity, Entity target) where R : notnull
+	{
+		if (!entity.Has<R>(target)) return false;
+		entity.Remove<R>(target);
+		return true;
+	}
 
-	// Works for any T1, T2 (struct, class, or record)
+	// ============ Multi-Checks ============
 	public static bool HasAll<T1, T2>(this Entity entity) 
 		=> entity.Has<T1>() && entity.Has<T2>();
-
 	public static bool HasAll<T1, T2, T3>(this Entity entity) 
 		=> entity.Has<T1>() && entity.Has<T2>() && entity.Has<T3>();
+	public static bool HasAll<T1, T2, T3, T4>(this Entity entity) 
+		=> entity.Has<T1>() && entity.Has<T2>() && entity.Has<T3>() && entity.Has<T4>();
+	public static bool HasAll<T1, T2, T3, T4, T5>(this Entity entity) 
+		=> entity.Has<T1>() && entity.Has<T2>() && entity.Has<T3>() && entity.Has<T4>() && entity.Has<T5>();
+	
 
 	public static bool HasAny<T1, T2>(this Entity entity) 
 		=> entity.Has<T1>() || entity.Has<T2>();
-
 	public static bool HasAny<T1, T2, T3>(this Entity entity) 
 		=> entity.Has<T1>() || entity.Has<T2>() || entity.Has<T3>();
+	public static bool HasAny<T1, T2, T3, T4>(this Entity entity) 
+		=> entity.Has<T1>() || entity.Has<T2>() || entity.Has<T3>() || entity.Has<T4>();
+	public static bool HasAny<T1, T2, T3, T4, T5>(this Entity entity) 
+		=> entity.Has<T1>() || entity.Has<T2>() || entity.Has<T3>() || entity.Has<T4>() || entity.Has<T5>();
 }
