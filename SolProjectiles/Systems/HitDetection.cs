@@ -9,8 +9,6 @@ using SolFramework.Scheduler;
 using SolFramework.Managers;
 
 using SolProjectiles.Components;
-using GodotUtilities;
-using Root;
 
 public partial class HitDetection : Node, ISystem
 {
@@ -26,8 +24,8 @@ public partial class HitDetection : Node, ISystem
 		Scheduler.RegisterPhysicsSystem(this);
 	}
 	public override void _Ready() => Init();
-	private static Stream<EcsNode2D, Velocity, ProjectileDamage, ProjectileSource, ProjectileOrigin> projectiles =
-		world.Query<EcsNode2D, Velocity, ProjectileDamage, ProjectileSource, ProjectileOrigin>()
+	private static Stream<EcsCharBody2D, ProjectileDamage, ProjectileSource> projectiles =
+		world.Query<EcsCharBody2D, ProjectileDamage, ProjectileSource>()
 		.Has<Projectile>()
 		.Not<Destroy>()
 		.Stream();
@@ -37,35 +35,22 @@ public partial class HitDetection : Node, ISystem
 		static(
 			float delta,
 			in Entity entity,
-			ref EcsNode2D projectile,
-			ref Velocity vel,
+			ref EcsCharBody2D body,
 			ref ProjectileDamage damage,
-			ref ProjectileSource source,
-			ref ProjectileOrigin origin
+			ref ProjectileSource source
 		) => {
-			var pos = projectile.GlobalPosition;
-			var nextPos = pos * (vel.Value * delta);
-
-			var resultant = pos - nextPos;
-			var dir = resultant.Normalized();
-			float dist = resultant.Length();
+			var data = body.MoveAndCollide(body.Velocity * delta);
+			if (data == null) return;
 			
-			if (PhysicsQuery2D.Raycast(origin: pos, direction: dir, dist, out var result))
+			if (data.GetCollider() is EcsCharBody2D otherBody)
 			{
-				var hitEvent = EEvent.Spawn()
-					.Add<HitEvent>()
-					.Add(new HitDataNormal(result.Normal))
-					.Add(new HitDataPosition(result.Position))
-					.Add(new HitDataObject(result.Collider))
-					.Add(new HitDataRid(result.ColliderRid))
-					.Add(new HitDataOrigin(origin.Value))
-					.Add(new HitDataDistance(entity.Ref<ProjectileCurrentDistance>().Value));
-				
-				entity
-					.Add(new ProjectileHitEvent(hitEvent))
-					.Add<Destroy>();
-			}
-			else
-				projectile.GlobalPosition = nextPos;
+				if (otherBody.Entity.ToRaw() == source.Value.ToRaw()) return;
+				GD.Print($"{Core.GetName(entity)} has hit and damaged {Core.GetName(otherBody.Entity)}");
+				HealthManager.Damage(damage.Value, otherBody.Entity, source.Value)
+					.Add(new DamageWith(entity)); // spawn transient event entity
+			};
+			
+			entity.Add(new ProjectileHitData(data));
+			entity.Add<Destroy>();
 		});
 }

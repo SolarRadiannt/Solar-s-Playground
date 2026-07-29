@@ -7,22 +7,28 @@ using Godot;
 using SolFramework;
 using SolProjectiles.Components;
 
+
+// merge this mater into SolFramework
 public static class ProjectileManager
 {
-	public static Entity Shoot(StringName projectileType, Vector2 origin, Vector2 direction, Entity? source, Entity? weapon)
+	private static Node ProjectileContainer => MainGame.Instance; // turn this into SolFramework.Config.ProjectileContainer
+	public static BaseProjectile Shoot(PackedScene projectileScene, Vector2 origin, Vector2 direction, Entity source)
 	{
-		var e = EEvent.Spawn()
+		var projectile = projectileScene.Instantiate<BaseProjectile>();
+		projectile.GlobalPosition = origin;
+		projectile.Direction = direction;
+		projectile.Source = source;
+		projectile.LookAt(origin + direction);
+		
+		ProjectileContainer.AddChild(projectile);
+		
+		EEvent.Spawn()
 			.Add(new ShootOrigin(origin))
-			.Add(new ShootProjectileType(projectileType))
-			.Add(new ShootDirection(direction))
+			.Add(new ShootProjectile(projectile))
+			.Add(new ShootSource(source))
 			.Add<ShootEvent>();
 		
-		if (source.HasValue)
-			e.Add(new ShootSource(source.Value));
-			
-		if (weapon.HasValue)
-			e.Add(new ShootWeapon(weapon.Value));
 		
-		return e;
+		return projectile;
 	}
 }

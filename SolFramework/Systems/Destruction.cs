@@ -16,14 +16,7 @@ public partial class Destruction : Node, ISystem
 			foreach (ref var body in bodies.Span)
 				body.QueueFree();
 		});
-		destroyRigidBody.Raw(static rigidBodies => {
-			foreach (ref var body in rigidBodies.Span)
-				body.QueueFree();
-		});
-		destroyNode2d.Raw(static nodes => {
-			foreach (ref var node in nodes.Span)
-				node.QueueFree();
-		});
+
 		toDestroy.Despawn();
 	}
 	
@@ -38,18 +31,10 @@ public partial class Destruction : Node, ISystem
 	private static readonly Stream<Destroy> toDestroy =
 		world.Query<Destroy>()
 			.Not<EcsCharBody2D>()
-			.Not<EcsNode2D>()
 			.Stream();
-	private static readonly Stream<EcsRigidBody2D> destroyRigidBody=
-		world.Query<EcsRigidBody2D>()
-			.Has<Destroy>()
-			.Stream();
+	
 	private static readonly Stream<EcsCharBody2D> destroyBody =
 		world.Query<EcsCharBody2D>()
-			.Has<Destroy>()
-			.Stream();
-	private static readonly Stream<EcsNode2D> destroyNode2d =
-		world.Query<EcsNode2D>()
 			.Has<Destroy>()
 			.Stream();
 }
