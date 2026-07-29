@@ -19,7 +19,8 @@ public abstract partial class EcsCharBody2D : CharacterBody2D
 		if (!entity)
 			entity = Core.World.Spawn()
 						.Add(new Velocity(Vector2.Zero))
-						.Add(new Name(Name));
+						.Add(new Name(Name))
+						.Add<Character>();
 		
 		if (!entity.Has<EcsCharBody2D>())
 			entity.Add(this);
