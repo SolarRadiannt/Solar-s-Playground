@@ -38,6 +38,12 @@ public partial class FarDestroyer : Node, ISystem
 			ref ProjectileMaxDistance maxDist
 		) => {
 			float distance = (origin.Value - body.GlobalPosition).Length();
+
+			if (!entity.Has<ProjectileCurrentDistance>())
+				entity.Add(new ProjectileCurrentDistance(distance));
+			else
+				entity.Ref<ProjectileCurrentDistance>().Value = distance;
+
 			if (distance >= maxDist.Value)
 				entity.Add<Destroy>();
 		});
