@@ -9,7 +9,7 @@ using SolProjectiles.Components;
 
 public static class ProjectileManager
 {
-	public static Entity Shoot(StringName projectileType, Vector2 origin, Vector2 direction, Entity? source, Entity? weapon)
+	public static Entity Shoot(StringName projectileType, Vector2 origin, Vector2 direction, Entity? source, Entity? weapon, uint? collisionMask)
 	{
 		var e = EEvent.Spawn()
 			.Add(new ShootOrigin(origin))
@@ -25,4 +25,7 @@ public static class ProjectileManager
 		
 		return e;
 	}
+
+	public static Entity Shoot(StringName projectileType, Vector2 origin, Vector2 direction, uint collisionMask) =>
+		Shoot(projectileType, origin, direction, null, null, collisionMask);
 }

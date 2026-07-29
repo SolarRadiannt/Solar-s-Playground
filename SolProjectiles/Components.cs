@@ -17,6 +17,7 @@ public record struct ShootDirection(Vector2 Value);
 public record struct ShootOrigin(Vector2 Value);
 public record struct ShootSource(Entity Value);
 public record struct ShootProjectileType(StringName Value);
+public record struct ShootCollisionMask(uint Value);
 public struct ShootEvent;
 
 public record struct HitDataPosition(Vector2 Value);
