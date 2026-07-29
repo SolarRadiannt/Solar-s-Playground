@@ -8,8 +8,8 @@ using SolFramework.Tools;
 [InspectorColor(InspectColor.Indigo)] public record struct ActualSpeed(float Value);
 [InspectorColor(InspectColor.Indigo)] public record struct LastPosition(Vector2 Value);
 
-public record struct Mass(float Value);
-public record struct Name(string Value);
+[InspectorColor(InspectColor.Indigo)] public record struct Mass(float Value);
+[InspectorColor(InspectColor.Gold)] public record struct Name(string Value);
 
 
 [InspectorColor(InspectColor.Cyan)] public struct Player;
