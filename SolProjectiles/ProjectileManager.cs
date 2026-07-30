@@ -9,6 +9,10 @@ using SolProjectiles.Components;
 
 public static class ProjectileManager
 {
+	public static void Init()
+	{
+		ProjectileRegistry.RegisterAllInFolder("res://SolProjectiles/Projectiles", true);
+	}
 	public static Entity Shoot(StringName projectileType, Vector2 origin, Vector2 direction, Entity? source, Entity? weapon, uint? collisionMask)
 	{
 		var e = EEvent.Spawn()
@@ -23,9 +27,15 @@ public static class ProjectileManager
 		if (weapon.HasValue)
 			e.Add(new ShootWeapon(weapon.Value));
 		
+		if (collisionMask.HasValue)
+			e.Add(new ShootCollisionMask(collisionMask.Value));
+
+		GD.Print("Projectile spawn requested");
+
 		return e;
 	}
 
 	public static Entity Shoot(StringName projectileType, Vector2 origin, Vector2 direction, uint collisionMask) =>
 		Shoot(projectileType, origin, direction, null, null, collisionMask);
+	
 }

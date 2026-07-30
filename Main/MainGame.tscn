@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ddkvocap1chk5" path="res://Main/MainGame.cs" id="1_pj85m"]
 [ext_resource type="PackedScene" uid="uid://dyknff3o83066" path="res://LojiWall/loji_wall.tscn" id="2_pfmoa"]
-[ext_resource type="PackedScene" uid="uid://cv2stkbw5y72y" path="res://Character/character.tscn" id="3_f4m3a"]
+[ext_resource type="PackedScene" uid="uid://cv2stkbw5y72y" path="res://CharacterPlayer/character_player.tscn" id="4_f4m3a"]
 [ext_resource type="PackedScene" uid="uid://1ntk11obtxnj" path="res://DumbAI/dumb_ai.tscn" id="4_pfmoa"]
 
 [node name="MainGame" type="Node2D" unique_id=1856033696]
@@ -11,12 +11,6 @@ metadata/juj = true
 
 [node name="LojiWall" parent="." unique_id=1973346265 instance=ExtResource("2_pfmoa")]
 position = Vector2(561, 332)
-
-[node name="Character" parent="." unique_id=1080916824 instance=ExtResource("3_f4m3a")]
-position = Vector2(173, 137)
-metadata/_edit_group_ = true
-
-[node name="Camera2D" type="Camera2D" parent="Character" unique_id=633422272]
 
 [node name="LojiWall2" parent="." unique_id=176771862 instance=ExtResource("2_pfmoa")]
 position = Vector2(3, 349)
@@ -44,3 +38,7 @@ scale = Vector2(0.20179549, 3.776383)
 
 [node name="DumbAI" parent="." unique_id=1012886651 instance=ExtResource("4_pfmoa")]
 position = Vector2(-221, -52)
+
+[node name="CharacterPlayer" parent="." unique_id=1080916824 instance=ExtResource("4_f4m3a")]
+
+[node name="Camera2D" type="Camera2D" parent="CharacterPlayer" unique_id=733376115]

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ProjectileDefinition" format=3 uid="uid://c8ogsmj72bx2b"]
+
+[ext_resource type="PackedScene" uid="uid://c173y16vwtbbx" path="res://SolProjectiles/Projectiles/RifleProjectile/RifleProjectile.tscn" id="1_12jud"]
+[ext_resource type="Script" uid="uid://b46i370xu1tec" path="res://SolProjectiles/ProjectileDefinition.cs" id="1_tn1ts"]
+
+[resource]
+script = ExtResource("1_tn1ts")
+Scene = ExtResource("1_12jud")
+Speed = 600.0
+Damage = 25
+MaxDistance = 1000
+metadata/_custom_type_script = "uid://b46i370xu1tec"

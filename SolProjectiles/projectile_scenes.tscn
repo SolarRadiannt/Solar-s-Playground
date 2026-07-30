@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://y5pqgu4mbvwb"]
-
-[ext_resource type="Script" uid="uid://edmtgkwbu5sp" path="res://SolProjectile/ProjectileScenes.cs" id="1_75hcl"]
-[ext_resource type="PackedScene" path="res://Projectiles/BasicProjectile/basic_projectile.tscn" id="2_nhoga"]
-
-[node name="ProjectileScenes" type="Node2D" unique_id=1947714279]
-script = ExtResource("1_75hcl")
-BasicProjectile = ExtResource("2_nhoga")
