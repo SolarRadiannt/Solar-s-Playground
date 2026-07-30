@@ -1,7 +1,10 @@
 namespace SolFramework.Components;
 
+using fennecs;
 using Godot;
 using SolFramework.Tools;
+
+[InspectorColor(InspectColor.Violet)] public record struct Node2DHandle(Node2D Value);
 
 [InspectorColor(InspectColor.Indigo)] public record struct Velocity(Vector2 Value);
 [InspectorColor(InspectColor.Indigo)] public record struct PushVelocity(Vector2 Value);

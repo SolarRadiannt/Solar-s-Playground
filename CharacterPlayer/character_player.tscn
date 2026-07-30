@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://cv2stkbw5y72y"]
 
-[ext_resource type="Script" uid="uid://dlkdawcjgiadw" path="res://Character/CharacterPlayer.cs" id="1_peiyb"]
-[ext_resource type="Texture2D" uid="uid://c60d1cndnfh3p" path="res://Character/IMG_20260518_115035.jpg" id="2_nwtvh"]
+[ext_resource type="Script" uid="uid://dlkdawcjgiadw" path="res://CharacterPlayer/CharacterPlayer.cs" id="1_peiyb"]
+[ext_resource type="Texture2D" uid="uid://c60d1cndnfh3p" path="res://CharacterPlayer/IMG_20260518_115035.jpg" id="2_nwtvh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q0c55"]
 size = Vector2(65, 71)
 
 [node name="CharacterPlayer" type="CharacterBody2D" unique_id=1080916824]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_peiyb")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=858111355]

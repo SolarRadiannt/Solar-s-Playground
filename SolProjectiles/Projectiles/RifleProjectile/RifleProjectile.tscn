@@ -3,11 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://btb3y7oq8seet" path="res://LojiWall/e963ec6887909626795b3aef0082aa51.jpg" id="1_g1s3e"]
 [ext_resource type="Script" uid="uid://d13we2rersxve" path="res://SolProjectiles/EcsProjectile2D.cs" id="1_nfyhx"]
 
-[node name="EcsProjectile2D" type="Node2D" unique_id=402896062]
+[node name="RifleProjectile" type="Node2D" unique_id=402896062]
 script = ExtResource("1_nfyhx")
 metadata/_custom_type_script = "uid://d13we2rersxve"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=480777362]
 position = Vector2(0, 0.49999905)
-scale = Vector2(0.24767801, 0.0729783)
+scale = Vector2(0.05, 0.015)
 texture = ExtResource("1_g1s3e")

@@ -25,7 +25,6 @@ public partial class CharacterPlayer : EcsCharBody2D
 		MoveAndSlide();	
 		if (firerate.Tick(delta).JustFinished())
 		{
-			GD.Print("Shoot!");
 			ProjectileManager.Shoot(ProjectileTypes.Rifle, GlobalPosition, Vector2.Left, entity, null, CollisionMask);
 		}
 	}

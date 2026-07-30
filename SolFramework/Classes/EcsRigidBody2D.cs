@@ -24,6 +24,9 @@ public abstract partial class EcsRigidBody2D : RigidBody2D
 		if (!entity.Has<EcsRigidBody2D>())
 			entity.Add(this);
 		
+		if (!entity.Has<Node2DHandle>())
+			entity.Add(new Node2DHandle(this));
+		
 		OnEntityReady();
 	}
 	public override void _ExitTree()

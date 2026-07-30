@@ -23,8 +23,8 @@ public partial class FarDestroyer : Node, ISystem
 		Scheduler.RegisterSystem(this);
 	}
 	public override void _Ready() => Init();
-	private static Stream<EcsCharBody2D, ProjectileOrigin, ProjectileMaxDistance> projectiles = 
-		world.Query<EcsCharBody2D, ProjectileOrigin, ProjectileMaxDistance>()
+	private static Stream<EcsNode2D, ProjectileOrigin, ProjectileMaxDistance> projectiles = 
+		world.Query<EcsNode2D, ProjectileOrigin, ProjectileMaxDistance>()
 		.Has<Projectile>()
 		.Not<Destroy>()
 		.Stream();
@@ -33,11 +33,11 @@ public partial class FarDestroyer : Node, ISystem
 		static
 		(
 			in Entity entity,
-			ref EcsCharBody2D body,
+			ref EcsNode2D projectile,
 			ref ProjectileOrigin origin,
 			ref ProjectileMaxDistance maxDist
 		) => {
-			float distance = (origin.Value - body.GlobalPosition).Length();
+			float distance = (origin.Value - projectile.GlobalPosition).Length();
 
 			if (!entity.Has<ProjectileCurrentDistance>())
 				entity.Add(new ProjectileCurrentDistance(distance));

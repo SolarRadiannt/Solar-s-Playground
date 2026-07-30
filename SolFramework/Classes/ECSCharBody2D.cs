@@ -26,6 +26,9 @@ public abstract partial class EcsCharBody2D : CharacterBody2D
 		if (!entity.Has<EcsCharBody2D>())
 			entity.Add(this);
 		
+		if (!entity.Has<Node2DHandle>())
+			entity.Add(new Node2DHandle(this));
+		
 		OnEntityReady();
 	}
 	public override void _ExitTree()

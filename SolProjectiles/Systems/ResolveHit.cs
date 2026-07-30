@@ -12,7 +12,7 @@ using SolProjectiles.Components;
 using GodotUtilities;
 using Root;
 
-public partial class HitDetection : Node, ISystem
+public partial class ResolveHit : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	public int Priority => SPriority.Applying;
@@ -45,20 +45,20 @@ public partial class HitDetection : Node, ISystem
 			var pos = projectile.GlobalPosition;
 			var nextPos = pos + (vel.Value * delta);
 
-			var resultant = pos - nextPos;
+			var resultant = nextPos - pos;
 			var dir = resultant.Normalized();
 			float dist = resultant.Length();
 			
 			uint mask = entity.TryRead<ProjectileCollisionMask>(out var maskComp) 
-                ? maskComp.Value
-                : uint.MaxValue;
+				? maskComp.Value
+				: uint.MaxValue;
 			
 			if (!PhysicsQuery2D.Raycast(origin: pos, direction: dir, dist, out var result, mask))
 			{
-				projectile.Position = nextPos;
+				projectile.GlobalPosition = nextPos;
 				return;
 			}
-
+			
 			var hitEvent = EEvent.Spawn()
 				.Add<HitEvent>()
 				.Add(new HitDataNormal(result.Normal))

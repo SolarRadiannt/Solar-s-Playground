@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_tn1ts")
 Scene = ExtResource("1_12jud")
-Speed = 600.0
+Speed = 1000.0
 Damage = 25
-MaxDistance = 1000
+MaxDistance = 10000
 metadata/_custom_type_script = "uid://b46i370xu1tec"

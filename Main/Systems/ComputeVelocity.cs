@@ -17,6 +17,7 @@ public partial class ComputeVelocity : Node, ISystem
 	{
 		ResetVelocity();
 		ApplyMoveVelocity();
+		ApplyMoveVelocityToNode2D();
 	}
 	
 	public void Init()
@@ -44,6 +45,19 @@ public partial class ComputeVelocity : Node, ISystem
 	private static void ApplyMoveVelocity()
 	{
 		toApplyMoveVel.For(static
+			(ref Velocity vel, ref MoveVelocity moveVel) =>
+				vel.Value += moveVel.Value
+			);
+	}
+	
+	private static readonly Stream<Velocity, MoveVelocity> toApplyMoveVelToNode2D =
+		world.Query<Velocity, MoveVelocity>()
+			.Has<EcsNode2D>()
+			.Not<Grounded>()
+			.Stream();
+		private static void ApplyMoveVelocityToNode2D()
+	{
+		toApplyMoveVelToNode2D.For(static
 			(ref Velocity vel, ref MoveVelocity moveVel) =>
 				vel.Value += moveVel.Value
 			);
