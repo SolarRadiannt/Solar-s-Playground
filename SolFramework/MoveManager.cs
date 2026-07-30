@@ -26,6 +26,11 @@ public static class MoveManager
 			.Add(new MoveSpeed(moveSpeed))
 			.Add(new MoveVelocity(Vector2.Zero))
 			.Add(new MoveDirection(Vector2.Zero));
+	public static void ApplyMovement(Entity entity, float moveSpeed, Vector2 dir) =>
+		entity
+			.Add(new MoveSpeed(moveSpeed))
+			.Add(new MoveVelocity(Vector2.Zero))
+			.Add(new MoveDirection(dir));
 	public static void SetMoveDirection(Entity entity, Vector2 direction)
 	{
 		if (entity.Has<MoveDirection>())
