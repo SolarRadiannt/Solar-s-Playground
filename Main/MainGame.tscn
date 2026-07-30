@@ -29,7 +29,7 @@ position = Vector2(1435.9999, -87)
 scale = Vector2(0.2429312, 7.9273524)
 
 [node name="LojiWall6" parent="." unique_id=1143112867 instance=ExtResource("2_pfmoa")]
-position = Vector2(975, -1091.9999)
+position = Vector2(975.00006, -1084.9999)
 scale = Vector2(2.4455805, 0.6476517)
 
 [node name="LojiWall7" parent="." unique_id=421296974 instance=ExtResource("2_pfmoa")]
