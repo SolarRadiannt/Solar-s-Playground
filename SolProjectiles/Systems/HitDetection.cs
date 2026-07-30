@@ -26,8 +26,8 @@ public partial class HitDetection : Node, ISystem
 		Scheduler.RegisterPhysicsSystem(this);
 	}
 	public override void _Ready() => Init();
-	private static Stream<EcsNode2D, Velocity, ProjectileDamage, ProjectileSource, ProjectileOrigin> projectiles =
-		world.Query<EcsNode2D, Velocity, ProjectileDamage, ProjectileSource, ProjectileOrigin>()
+	private static Stream<EcsNode2D, Velocity, ProjectileDamage, ProjectileOrigin> projectiles =
+		world.Query<EcsNode2D, Velocity, ProjectileDamage, ProjectileOrigin>()
 		.Has<Projectile>()
 		.Not<Destroy>()
 		.Stream();
@@ -40,32 +40,39 @@ public partial class HitDetection : Node, ISystem
 			ref EcsNode2D projectile,
 			ref Velocity vel,
 			ref ProjectileDamage damage,
-			ref ProjectileSource source,
 			ref ProjectileOrigin origin
 		) => {
 			var pos = projectile.GlobalPosition;
-			var nextPos = pos * (vel.Value * delta);
+			var nextPos = pos + (vel.Value * delta);
 
 			var resultant = pos - nextPos;
 			var dir = resultant.Normalized();
 			float dist = resultant.Length();
 			
-			if (PhysicsQuery2D.Raycast(origin: pos, direction: dir, dist, out var result))
+			uint mask = entity.TryRead<ProjectileCollisionMask>(out var maskComp) 
+                ? maskComp.Value
+                : uint.MaxValue;
+			
+			if (!PhysicsQuery2D.Raycast(origin: pos, direction: dir, dist, out var result, mask))
 			{
-				var hitEvent = EEvent.Spawn()
-					.Add<HitEvent>()
-					.Add(new HitDataNormal(result.Normal))
-					.Add(new HitDataPosition(result.Position))
-					.Add(new HitDataObject(result.Collider))
-					.Add(new HitDataRid(result.ColliderRid))
-					.Add(new HitDataOrigin(origin.Value))
-					.Add(new HitDataDistance(entity.Ref<ProjectileCurrentDistance>().Value));
-				
-				entity
-					.Add(new ProjectileHitEvent(hitEvent))
-					.Add<Destroy>();
+				projectile.Position = nextPos;
+				return;
 			}
-			else
-				projectile.GlobalPosition = nextPos;
+
+			var hitEvent = EEvent.Spawn()
+				.Add<HitEvent>()
+				.Add(new HitDataNormal(result.Normal))
+				.Add(new HitDataPosition(result.Position))
+				.Add(new HitDataObject(result.Collider))
+				.Add(new HitDataRid(result.ColliderRid))
+				.Add(new HitDataOrigin(origin.Value))
+				.Add(new HitDataDistance(entity.Ref<ProjectileCurrentDistance>().Value));
+			
+			if (entity.Has<ProjectileSource>())
+				hitEvent.Add(new HitDataSource(entity.Ref<ProjectileSource>().Value));
+
+			entity
+				.Add(new ProjectileHitEvent(hitEvent))
+				.Add<Destroy>();	
 		});
 }

@@ -4,6 +4,8 @@ using Godot;
 
 using SolFramework.Scheduler;
 using SolFramework.Tools;
+using SolProjectiles;
+using SolProjectiles.Managers;
 
 public partial class MainGame : Node2D
 {
@@ -23,6 +25,7 @@ public partial class MainGame : Node2D
 		AddChildBatch(SolProjectiles.SystemRegistry.All);
 		AddChildBatch(SolActions.SystemRegistry.All);
 		
+		ProjectileManager.Init();
 		SolInspector.Init();
 	}
 	public override void _PhysicsProcess(double delta)
