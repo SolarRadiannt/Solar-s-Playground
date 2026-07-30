@@ -30,6 +30,8 @@ public static class ProjectileManager
 		if (collisionMask.HasValue)
 			e.Add(new ShootCollisionMask(collisionMask.Value));
 
+		GD.Print("Projectile spawn requested");
+
 		return e;
 	}
 

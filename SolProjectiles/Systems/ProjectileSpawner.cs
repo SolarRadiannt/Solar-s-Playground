@@ -16,7 +16,7 @@ using GodotUtilities;
 public partial class ProjectileSpawner : Node, ISystem
 {
 	private static readonly World world = Core.World;
-	public int Priority => SPriority.Applying - 100;
+	public int Priority => SPriority.Applying;
 	public void Process(double delta)
 	{
 		ProjectileSpawning();
@@ -24,7 +24,8 @@ public partial class ProjectileSpawner : Node, ISystem
 	
 	public void Init()
 	{
-		Scheduler.RegisterPhysicsSystem(this);
+		
+		Scheduler.RegisterSystem(this);
 	}
 	public override void _Ready() => Init();
 	private static Stream<ShootProjectileType, ShootOrigin, ShootDirection> spawnEvents =
@@ -40,6 +41,7 @@ public partial class ProjectileSpawner : Node, ISystem
 			ref ShootOrigin origin,
             ref ShootDirection direction
 		) => {
+			GD.Print("spawning projectile...");
 			if (!ProjectileRegistry.TryGetData(type.Value, out var data))
 				return;
 			
@@ -48,8 +50,12 @@ public partial class ProjectileSpawner : Node, ISystem
 			projectile.LookAtDir(direction.Value);
 			projectile.Init();
 			
-			var entity = projectile.Entity;
-
+			var entity = projectile.Entity
+				.Add(new ProjectileDamage(data.Damage))
+				.Add(new ProjectileMaxDistance(data.MaxDistance))
+				.Add(new ProjectileOrigin(origin.Value))
+				.Add(new ProjectileCurrentDistance(0f));
+			
 			if (reqEntity.TryRead<ShootSource>(out var source))
 				entity.Adapt(new ProjectileSource(source.Value));
 
@@ -59,8 +65,8 @@ public partial class ProjectileSpawner : Node, ISystem
 			if (reqEntity.TryRead<ShootCollisionMask>(out var mask))
 				entity.Add(new ProjectileCollisionMask(mask.Value));
 
-			MoveManager.ApplyMovement(entity, data.Speed);
-			MoveManager.SetMoveDirection(entity, direction.Value);
+			MoveManager.ApplyMovement(entity, data.Speed, direction.Value);
+
 			MainGame.Instance.AddChild(projectile);
 		});
 }

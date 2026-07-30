@@ -14,7 +14,7 @@ public partial class DumbAI : EcsCharBody2D
 		
 		entity.Add<Grounded>();
 		MoveManager.ApplyMovement(entity, 400);
-		FootstepManager.ApplyFootstep(entity, 3f);
+		FootstepManager.ApplyFootstep(entity, 2f);
 		HealthManager.ApplyHealth(entity, 100f);
 		
 		entity.Add(new WanderCooldown(new TickTimer(5f)));

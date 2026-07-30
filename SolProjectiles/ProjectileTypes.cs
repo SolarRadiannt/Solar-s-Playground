@@ -3,5 +3,5 @@ using Godot;
 
 public static class ProjectileTypes
 {
-    public static readonly StringName Rifle = "Rifle";
+    public static readonly StringName Rifle = "RifleProjectile";
 }

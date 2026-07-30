@@ -6,7 +6,7 @@ using SolFramework.Tools;
 using SolProjectiles;
 using SolProjectiles.Managers;
 
-public partial class Character : EcsCharBody2D
+public partial class CharacterPlayer : EcsCharBody2D
 {
 	public TickTimer firerate = new(1f, true);
 	protected override void OnEntityReady()
@@ -15,7 +15,7 @@ public partial class Character : EcsCharBody2D
 		entity.Add<Grounded>();
 		MoveManager.ApplyMovement(entity, 400);
 		HealthManager.ApplyHealth(entity, 100f);
-		FootstepManager.ApplyFootstep(entity, 3f);
+		FootstepManager.ApplyFootstep(entity, 2f);
 		
 		GD.Print("Character spawned!");
 	}
@@ -25,10 +25,9 @@ public partial class Character : EcsCharBody2D
 		MoveAndSlide();	
 		if (firerate.Tick(delta).JustFinished())
 		{
-			
-			ProjectileManager.Shoot(ProjectileTypes.Rifle, GlobalPosition, Vector2.Left, CollisionMask);
+			GD.Print("Shoot!");
+			ProjectileManager.Shoot(ProjectileTypes.Rifle, GlobalPosition, Vector2.Left, entity, null, CollisionMask);
 		}
-
 	}
 
 }
