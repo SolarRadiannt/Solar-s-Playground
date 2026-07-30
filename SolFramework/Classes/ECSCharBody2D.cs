@@ -14,6 +14,7 @@ public abstract partial class EcsCharBody2D : CharacterBody2D
 	public Entity Entity => entity;
 	protected abstract void OnEntityReady();
 	
+	
 	public override void _EnterTree()
 	{
 		if (!entity)
