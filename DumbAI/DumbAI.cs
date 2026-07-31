@@ -10,11 +10,9 @@ public partial class DumbAI : EcsCharBody2D
 {
 	protected override void OnEntityReady()
 	{
-		GD.Print("dumb ai spawned");
-		
 		entity.Add<Grounded>();
 		MoveManager.ApplyMovement(entity, 400);
-		FootstepManager.ApplyFootstep(entity, 2f);
+		FootstepManager.ApplyFootstep(entity, 2.5f);
 		HealthManager.ApplyHealth(entity, 100f);
 		
 		entity.Add(new WanderCooldown(new TickTimer(5f)));

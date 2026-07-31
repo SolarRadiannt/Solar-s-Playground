@@ -52,7 +52,7 @@ public static class HealthManager
 	public static Entity Damage(float amount, Entity[] targets, Entity? source, Entity? with) =>
 		Damage(amount, targets, source.HasValue ? [source.Value] : null, with.HasValue ? [with.Value] : null);
 
-	public static Entity Heal(float amount, Entity[] targets, Entity[]? sources = null!, Entity[]? withs = null!)
+	public static Entity Heal(float amount, Entity[] targets, Entity[] sources = null!, Entity[] withs = null!)
 	{
 		var eevent = EEvent.Spawn()
 			.Add<HealEvent>();
