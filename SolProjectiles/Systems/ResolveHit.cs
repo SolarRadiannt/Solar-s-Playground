@@ -68,6 +68,9 @@ public partial class ResolveHit : Node, ISystem
 				.Add(new HitDataOrigin(origin.Value))
 				.Add(new HitDataDistance(entity.Ref<ProjectileCurrentDistance>().Value));
 			
+			if (entity.Has<ProjectileWeapon>())
+				hitEvent.Add(new HitDataWeapon(entity.Ref<ProjectileWeapon>().Value));
+
 			if (entity.Has<ProjectileSource>())
 				hitEvent.Add(new HitDataSource(entity.Ref<ProjectileSource>().Value));
 

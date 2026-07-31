@@ -23,6 +23,7 @@ public record struct ShootCollisionMask(uint Value);
 
 public struct ShootEvent;
 
+public record struct HitDataWeapon(Entity entity);
 public record struct HitDataPosition(Vector2 Value);
 public record struct HitDataProjectile(EcsProjectile2D Value);
 public record struct HitDataNormal(Vector2 Value);
