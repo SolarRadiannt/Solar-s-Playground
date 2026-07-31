@@ -1,8 +1,17 @@
 namespace SolFramework;
 using fennecs;
 using System.Diagnostics.CodeAnalysis;
+using SolFramework.Components;
 public static class EntityExtensions
 {
+	public static string GetName(this Entity entity)
+	{
+		if (entity.Has<Name>())
+			return entity.Ref<Name>().Value;
+		else
+			return entity.ToRaw().ToString();
+	}
+
 	/// <summary>
     /// Tries to read a copy of the plain component of type <typeparamref name="T"/>.
     /// </summary>
