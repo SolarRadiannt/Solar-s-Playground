@@ -26,7 +26,7 @@ public static class HealthManager
 			.Add(new Health(health))
 			.Add(new MaxHealth(health));
 	
-	public static Entity Damage(float amount, Entity[] targets, Entity[]? sources = null!, Entity[]? withs = null!)
+	public static Entity Damage(float amount, Entity[] targets, Entity[] sources = null!, Entity[] withs = null!)
 	{
 		var eevent = EEvent.Spawn()
 			.Add<DamageEvent>();

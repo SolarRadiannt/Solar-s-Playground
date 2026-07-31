@@ -14,9 +14,11 @@ using SolFramework.Tools;
 
 [InspectorColor(InspectColor.Indigo)] public record struct Mass(float Value);
 [InspectorColor(InspectColor.Gold)] public record struct Name(string Value);
+[InspectorColor(InspectColor.Gold)] public record struct Variance(float Value);
 
 [InspectorColor(InspectColor.SkyBlue)] public struct Character;
 [InspectorColor(InspectColor.Cyan)] public struct Player;
+
 public struct ChildOf;
 public struct Destroy;
 
