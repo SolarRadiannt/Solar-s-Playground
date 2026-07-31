@@ -10,6 +10,8 @@ using SolFramework.Components;
 
 using SharpResults.Types;
 using SharpResults.Core.Types;
+using System.Linq;
+
 
 public enum ToolFailReason
 {
@@ -33,72 +35,82 @@ public static class ToolsManager
         return false;
     }
 
+    public static Entity[] GetOwnedTools(Entity owner) =>
+        world.Query()
+            .Has<OwnedBy>(owner)
+            .Has<Tool>()
+            .Compile().ToArray();
+
     public static bool TryGetEquipped(Entity owner, out Entity tool) =>
         world.Query()
             .Has<EquippedBy>(owner)
-            .Compile()
-            .TryFirst(out tool);
+            .Has<Tool>()
+            .Compile().TryFirst(out tool);
     
-    public static bool Pickup(Entity tool, Entity owner)
-    {
-        if (!IsTool(tool)) return false;
-
-        EEvent.Spawn()
-            .Add<PickupEvent>()
-            .Add<PickedUpBy>(owner);
-
-        return true;
-    }
-
-    public static bool Drop(Entity tool, Entity owner)
-    {
-        if (!IsTool(tool)) return false;
-        
-        EEvent.Spawn()
-            .Add<DropEvent>()
-            .Add<PickedUpBy>(owner);
-        
-        return true;
-    }
-
     public static bool TryGetOwner(Entity tool, out Entity owner) =>
         world.Query()
             .Has<Owning>(tool)
-            .Compile()
-            .TryFirst(out owner);
+            .Has<Tool>()
+            .Compile().TryFirst(out owner);
+    
+    public static Result<Entity, ToolFailReason> Pickup(Entity tool, Entity owner)
+    {
+        if (!IsTool(tool)) return ToolFailReason.NotATool;
 
-	public static Result<Unit, ToolFailReason> Equip(Entity tool)
+        return EEvent.Spawn()
+            .Add<PickupEvent>()
+            .Add<PickedUpBy>(owner)
+            .Add<PickupTool>(tool);
+    }
+
+    public static Result<Entity, ToolFailReason> Drop(Entity tool, Entity owner)
+    {
+        if (!IsTool(tool)) return ToolFailReason.NotATool;
+        
+        return EEvent.Spawn()
+            .Add<DropEvent>()
+            .Add<PickedUpBy>(owner)
+            .Add<DropTool>(tool);
+    }
+
+	public static Result<Entity, ToolFailReason> Equip(Entity tool, bool swap = false)
     {
         if (!IsTool(tool)) return ToolFailReason.NotATool;
         if (!TryGetOwner(tool, out var owner)) return ToolFailReason.NoOwner;
 
-        EEvent.Spawn()
+        var eevent = EEvent.Spawn()
             .Add<EquipEvent>()
             .Add<EquippingTool>(tool)
             .Add<Equippant>(owner);
-
-        return Unit.Default;
+        
+        if (swap)
+            eevent.Add<SwapEquip>();
+        
+        return eevent;
     }
 
-    public static Result<Unit, ToolFailReason> Unequip(Entity tool)
+    public static Result<Entity, ToolFailReason> Unequip(Entity tool)
     {
         if (!IsTool(tool)) return ToolFailReason.NotATool;
         if (!TryGetOwner(tool, out var owner)) return ToolFailReason.NoOwner;
         if (!TryGetEquipped(owner, out var otherTool)) return ToolFailReason.NothingEquipped;
         if (tool != otherTool) return ToolFailReason.NotEquipped;
-
-        return Unit.Default;
+        
+        return EEvent.Spawn()
+            .Add<UnequipEvent>()
+            .Add<Unequippant>(owner)
+            .Add<UnequippedTool>(tool);
     }
 
-    public static Result<Unit, ToolFailReason> OwnerUnequip(Entity owner)
+    public static Result<Entity, ToolFailReason> OwnerUnequip(Entity owner)
     {
         if (!TryGetEquipped(owner, out var tool)) return ToolFailReason.NothingEquipped;
         if (!TryGetOwner(tool, out var otherOwner)) return ToolFailReason.NoOwner;
         if (owner.ToRaw() != otherOwner.ToRaw()) return ToolFailReason.NotTheOwner;
 
-        EEvent.Spawn()
-            .Add<UnequipEvent>();
-
-        return Unit.Default;
+        return EEvent.Spawn()
+            .Add<UnequipEvent>()
+            .Add<Unequippant>(owner)
+            .Add<UnequippedTool>(tool);
     }
 }

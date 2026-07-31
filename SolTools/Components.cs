@@ -16,9 +16,13 @@ public struct Unequippant;
 public struct EquippedTool;
 public struct UnequippedTool;
 
+public struct PickupTool;
+public struct DropTool;
+
 public struct EquippedBy;
 
 public struct PickedUpBy;
 public struct DroppedBy;
+public struct SwapEquip;
 
 public struct Tool;

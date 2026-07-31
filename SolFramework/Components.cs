@@ -19,6 +19,7 @@ using SolFramework.Tools;
 [InspectorColor(InspectColor.SkyBlue)] public struct Character;
 [InspectorColor(InspectColor.Cyan)] public struct Player;
 
+public struct OwnedBy;
 public struct Owning;
 public struct ChildOf;
 public struct Destroy;
