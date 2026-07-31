@@ -7,7 +7,7 @@ using fennecs;
 using SolFramework;
 using SolFramework.Managers;
 using SolFramework.Scheduler;
-
+using System.Linq;
 
 
 public partial class HealthApply : Node, ISystem
