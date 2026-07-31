@@ -22,19 +22,19 @@ public abstract partial class EcsNode2D : Node2D
 					.Add(new Name(Name));
 		}
 		
-		if (!entity.Has<EcsNode2D>())
-			entity.Add(this);
-		
-		if (!entity.Has<Node2DHandle>())
-			entity.Add(new Node2DHandle(this));
+		entity.TryAdd(this);
+		entity.TryAdd(new Node2DHandle(this));
 		
 		OnEntityReady();
 	}
 	
 	public override void _ExitTree()
 	{
-		if (entity && entity.Has<EcsNode2D>())
-			entity.Remove<EcsNode2D>();
+		if (entity)
+		{
+			entity.TryRemove<EcsNode2D>();
+			entity.TryRemove<Node2DHandle>();
+		}
 	}
 	
 	protected override void Dispose(bool disposing)

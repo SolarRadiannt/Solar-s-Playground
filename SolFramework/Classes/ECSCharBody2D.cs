@@ -23,18 +23,18 @@ public abstract partial class EcsCharBody2D : CharacterBody2D
 						.Add(new Name(Name))
 						.Add<Character>();
 		
-		if (!entity.Has<EcsCharBody2D>())
-			entity.Add(this);
-		
-		if (!entity.Has<Node2DHandle>())
-			entity.Add(new Node2DHandle(this));
+		entity.TryAdd(this);
+		entity.TryAdd(new Node2DHandle(this));
 		
 		OnEntityReady();
 	}
 	public override void _ExitTree()
 	{
-		if (entity && entity.Has<EcsCharBody2D>())
-			entity.Remove<EcsCharBody2D>();
+		if (entity)
+		{
+			entity.TryRemove<EcsCharBody2D>();
+			entity.TryRemove<Node2DHandle>();
+		}
 	}
 	
 	protected override void Dispose(bool disposing)

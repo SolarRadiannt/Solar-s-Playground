@@ -8,12 +8,10 @@ public class IdleAction : BaseAction
 	public override float Score(Entity entity) => 0.1f;
 	public override void Start(Entity entity)
 	{
-		if (!entity.Has<AgentIdle>())
-			entity.Add<AgentIdle>();
+		entity.TryAdd<AgentIdle>();
 	}
 	public override void Stop(Entity entity)
 	{
-		if (entity.Has<AgentIdle>())
-			entity.Remove<AgentIdle>();
+		entity.TryRemove<AgentIdle>();
 	}
 }
