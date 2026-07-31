@@ -38,33 +38,51 @@ public partial class HealthApply : Node, ISystem
 			});
 	}
 	
-	private static readonly Stream<DamageTarget, DamageAmount> toApplyDamage =
-		world.Query<DamageTarget, DamageAmount>()
-			.Has<DamageEvent>()
+	private static readonly Stream<DamageEvent> toApplyDamage =
+		world.Query<DamageEvent>()
+			.Has<Damage>(Match.Entity)
 			.Not<EventCancelled>()
 			.Stream();
 	private static void ApplyDamages()
 	{
-		toApplyDamage.For(
-			static (ref DamageTarget target, ref DamageAmount amount) =>
+		toApplyDamage.For(static
+		(in Entity eevent, ref DamageEvent _) =>
+		{
+			world.Query<Health>()
+				.Has<Damage>(eevent)
+				.Stream()
+			.For(eevent, static
+			(Entity ev, in Entity target, ref Health health) =>
 			{
-				if (!target.Value.Has<Health>() || amount.Value <= 0) return;
-				target.Value.Ref<Health>().Value -= amount.Value;
+				float damage = target.Ref<Damage>(ev).Value;
+				if (damage <= 0) return;
+
+				health.Value -= damage;
 			});
+		});
 	}
 	
-	private static readonly Stream<HealTarget, HealAmount> toApplyHealth =
-		world.Query<HealTarget, HealAmount>()
-			.Has<HealEvent>()
+	private static readonly Stream<HealEvent> toApplyHealth =
+		world.Query<HealEvent>()
+			.Has<Heal>(Match.Entity)
 			.Not<EventCancelled>()
 			.Stream();
 	private static void ApplyHeals()
 	{
-		toApplyHealth.For(
-			static (ref HealTarget target, ref HealAmount amount) =>
+		toApplyHealth.For(static
+		(in Entity eevent, ref HealEvent _) =>
+		{
+			world.Query<Health>()
+				.Has<Heal>(eevent)
+				.Stream()
+			.For(eevent, static
+			(Entity ev, in Entity target, ref Health health) =>
 			{
-				if (!target.Value.Has<Health>() || amount.Value <= 0) return;
-				target.Value.Ref<Health>().Value += amount.Value;
+				float heal = target.Ref<Heal>(ev).Value;
+				if (heal <= 0) return;
+
+				health.Value += heal;
 			});
+		});
 	}
 }
