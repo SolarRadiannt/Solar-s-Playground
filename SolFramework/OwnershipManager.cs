@@ -14,7 +14,7 @@ public struct OwnedEntity;
 public struct NewOwner;
 
 public struct PreviouslyOwned;
-public struct PreviousOwner;
+public struct OldOwner;
 
 public enum OwnershipError
 {
@@ -22,18 +22,19 @@ public enum OwnershipError
 	HasOwner,
 	NoOwner,
 }
+
 public static class OwnershipManager
 {
 	private static readonly World world = Core.World;
 	
-	public static Entity GetOwned(Entity owned) =>
+	public static Entity GetOwned(Entity owner) =>
 		world.Query()
-			.Has<Owning>(owned)
+			.Has<Owning>(owner)
 			.Compile().First();
 	
-	public static Entity GetOwner(Entity owner) =>
+	public static Entity GetOwner(Entity owned) =>
 		world.Query()
-			.Has<OwnedBy>(owner)
+			.Has<OwnedBy>(owned)
 			.Compile().First();
 	
 	public static bool TryGetOwner(Entity owned, out Entity owner) =>
@@ -51,7 +52,7 @@ public static class OwnershipManager
 			.Has<OwnedBy>(owner)
 			.Compile().ToArray();
 	
-	public static Result<Unit, OwnershipError> AddOwner(Entity owner, Entity toOwn)
+	public static Result<Entity, OwnershipError> AddOwner(Entity owner, Entity toOwn)
 	{
 		if (TryGetOwner(toOwn, out var otherOwner))
 			if (owner.ToRaw() == otherOwner.ToRaw())
@@ -62,7 +63,10 @@ public static class OwnershipManager
 		toOwn.Add<OwnedBy>(owner);
 		owner.Add<Owning>(toOwn);
 		
-		return Unit.Default;
+		return EEvent.Spawn()
+			.Add<OwnershipChangedEvent>()
+			.Add<OwnedEntity>(toOwn)
+			.Add<NewOwner>(owner);
 	}
 	
 	public static Result<Entity, OwnershipError> RemoveOwner(Entity owned)
@@ -73,11 +77,12 @@ public static class OwnershipManager
 		owned.Remove<OwnedBy>(owner);
 		
 		return EEvent.Spawn()
-			.Add<OwnedEntity>(owned)
-			.Add<PreviousOwner>(owner);
+			.Add<OwnershipChangedEvent>()
+			.Add<OldOwner>(owner)
+			.Add<PreviouslyOwned>(owned);
 	}
 	
-	public static Result<Unit, OwnershipError> SetOwner(Entity owner, Entity toOwn)
+	public static Result<(Entity prevOwnerEvent, Entity currentOwnerEvent), OwnershipError> SetOwner(Entity owner, Entity toOwn)
 	{
 		if (TryGetOwner(toOwn, out var otherOwner))
 		{
@@ -91,6 +96,15 @@ public static class OwnershipManager
 		owner.Add<Owning>(toOwn);
 		toOwn.Add<OwnedBy>(owner);
 		
-		return Unit.Default;
+		return (
+			EEvent.Spawn()
+				.Add<OwnershipChangedEvent>()
+				.Add<OldOwner>(otherOwner)
+				.Add<PreviouslyOwned>(toOwn),
+			EEvent.Spawn()
+				.Add<OwnershipChangedEvent>()
+				.Add<NewOwner>(owner)
+				.Add<OwnedEntity>(toOwn)
+		);
 	}
 }
