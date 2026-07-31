@@ -1,9 +1,24 @@
 namespace SolTools.Components;
 
-public struct OwnedBy;
+public struct Equipping;
+
+public struct EquipEvent;
+public struct UnequipEvent;
+public struct PickupEvent;
+public struct DropEvent;
+
+public struct EquippingTool;
+public struct UnequippingTool;
+
+public struct Equippant;
+public struct Unequippant;
+
+public struct EquippedTool;
+public struct UnequippedTool;
+
 public struct EquippedBy;
 
-public struct EquippedEvent;
-public struct UnequippedEvent;
+public struct PickedUpBy;
+public struct DroppedBy;
 
 public struct Tool;
