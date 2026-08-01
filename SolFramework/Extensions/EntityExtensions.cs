@@ -2,8 +2,11 @@ namespace SolFramework;
 using fennecs;
 using System.Diagnostics.CodeAnalysis;
 using SolFramework.Components;
+using System.Linq;
+
 public static class EntityExtensions
 {
+	private static readonly World world = Core.World;
 	public static string GetName(this Entity entity)
 	{
 		if (entity.Has<Name>())
@@ -11,7 +14,25 @@ public static class EntityExtensions
 		else
 			return entity.ToRaw().ToString();
 	}
-
+	
+	public static Entity[] Targets<R>(this Entity entity) =>
+		world.Query()
+			.Has<R>(entity)
+			.Compile()
+			.ToArray();
+	
+	public static Entity TargetFirst<R>(this Entity entity) =>
+		world.Query()
+			.Has<R>(entity)
+			.Compile()
+			.First();
+	
+	public static bool TryTargetFirst<R>(this Entity entity, out Entity target) =>
+		world.Query()
+			.Has<R>(entity)
+			.Compile()
+			.TryFirst(out target);
+	
 	/// <summary>
     /// Tries to read a copy of the plain component of type <typeparamref name="T"/>.
     /// </summary>
