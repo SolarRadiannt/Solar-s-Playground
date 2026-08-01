@@ -7,6 +7,6 @@ public partial class Rifle : BaseTool2D
 	protected override void OnEntityReady()
 	{
 		base.OnEntityReady();
-		entity.Add<Firearm>()
+		entity.Add<Firearm>();
 	}
 }
