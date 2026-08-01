@@ -1,28 +1,23 @@
-namespace SolTools.Components;
+using fennecs;
 
-public struct Equipping;
+namespace SolTools.Components;
 
 public struct EquipEvent;
 public struct UnequipEvent;
 public struct PickupEvent;
 public struct DropEvent;
 
-public struct EquippingTool;
-public struct UnequippingTool;
+public record struct EquippingBy(Entity Value);
+public record struct EquippingTool(Entity Value);
+public record struct UnequippingBy(Entity Value);
+public record struct UnequippingTool(Entity Value);
 
-public struct Equippant;
-public struct Unequippant;
+public record struct DroppedTool(Entity Value);
+public record struct DroppedBy(Entity Value);
 
-public struct EquippedTool;
-public struct UnequippedTool;
-
-public struct PickupTool;
-public struct DropTool;
+public record struct PickedUpTool(Entity Value);
+public record struct PickedUpBy(Entity Value);
 
 public struct EquippedBy;
-
-public struct PickedUpBy;
-public struct DroppedBy;
 public struct SwapEquip;
-
 public struct Tool;

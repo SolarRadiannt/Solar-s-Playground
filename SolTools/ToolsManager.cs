@@ -60,8 +60,8 @@ public static class ToolsManager
 
         return EEvent.Spawn()
             .Add<PickupEvent>()
-            .Add<PickedUpBy>(owner)
-            .Add<PickupTool>(tool);
+            .Add(new PickedUpBy(owner))
+            .Add(new PickedUpTool(tool));
     }
 
     public static Result<Entity, ToolError> Drop(Entity tool, Entity owner)
@@ -70,8 +70,8 @@ public static class ToolsManager
         
         return EEvent.Spawn()
             .Add<DropEvent>()
-            .Add<PickedUpBy>(owner)
-            .Add<DropTool>(tool);
+            .Add(new DroppedBy(owner))
+            .Add(new DroppedTool(tool));
     }
 
 	public static Result<Entity, ToolError> Equip(Entity tool, bool swap = false)
@@ -79,13 +79,13 @@ public static class ToolsManager
         if (!IsTool(tool)) return ToolError.NotATool;
         if (!TryGetOwner(tool, out var owner)) return ToolError.NoOwner;
         if (TryGetEquipped(owner, out var otherTool))
-            if (tool.ToRaw() == otherTool.ToRaw())
+            if (tool.Equals(otherTool))
                 return ToolError.AlreadyEquipped;
         
         var eevent = EEvent.Spawn()
             .Add<EquipEvent>()
-            .Add<EquippingTool>(tool)
-            .Add<Equippant>(owner);
+            .Add(new EquippingBy(owner))
+            .Add(new EquippingTool(tool));
         
         if (swap)
             eevent.Add<SwapEquip>();
@@ -98,23 +98,23 @@ public static class ToolsManager
         if (!IsTool(tool)) return ToolError.NotATool;
         if (!TryGetOwner(tool, out var owner)) return ToolError.NoOwner;
         if (!TryGetEquipped(owner, out var otherTool)) return ToolError.NothingEquipped;
-        if (tool != otherTool) return ToolError.NotEquipped;
+        if (tool.Equals(otherTool)) return ToolError.NotEquipped;
         
         return EEvent.Spawn()
             .Add<UnequipEvent>()
-            .Add<Unequippant>(owner)
-            .Add<UnequippedTool>(tool);
+            .Add(new UnequippingBy(owner))
+            .Add(new UnequippingTool(tool));
     }
 
     public static Result<Entity, ToolError> OwnerUnequip(Entity owner)
     {
         if (!TryGetEquipped(owner, out var tool)) return ToolError.NothingEquipped;
         if (!TryGetOwner(tool, out var otherOwner)) return ToolError.NoOwner;
-        if (owner.ToRaw() != otherOwner.ToRaw()) return ToolError.NotTheOwner;
+        if (owner.Equals(otherOwner)) return ToolError.NotTheOwner;
 
         return EEvent.Spawn()
             .Add<UnequipEvent>()
-            .Add<Unequippant>(owner)
-            .Add<UnequippedTool>(tool);
+            .Add(new UnequippingBy(owner))
+            .Add(new UnequippingTool(tool));
     }
 }
