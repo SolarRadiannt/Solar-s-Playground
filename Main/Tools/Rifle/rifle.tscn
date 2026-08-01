@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bqp7pyg0yjeuy"]
+
+[ext_resource type="Texture2D" uid="uid://di7kxsbtot1b" path="res://Main/Tools/Rifle/IMG_20260518_115145.jpg" id="1_ocsma"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_q0c55"]
+script/source = "using Godot;
+using System;
+
+public partial class Rifle : BaseTool2D
+{
+}
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m03lu"]
+size = Vector2(108, 32)
+
+[node name="Rifle" type="Area2D" unique_id=1588306560]
+collision_layer = 8
+collision_mask = 15
+script = SubResource("CSharpScript_q0c55")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=176670745]
+scale = Vector2(0.1, 0.02)
+texture = ExtResource("1_ocsma")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=181652728]
+position = Vector2(0, -4.7683716e-07)
+shape = SubResource("RectangleShape2D_m03lu")
