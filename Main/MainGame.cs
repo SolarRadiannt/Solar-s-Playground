@@ -25,7 +25,7 @@ public partial class MainGame : Node2D
 		AddChildBatch(SolProjectiles.SystemRegistry.All);
 		AddChildBatch(SolActions.SystemRegistry.All);
 		
-		ProjectileManager.Init();
+		ProjectileRegistry.RegisterAllInFolder("res://Main/Projectiles", true);
 		SolInspector.Init();
 	}
 	public override void _PhysicsProcess(double delta)

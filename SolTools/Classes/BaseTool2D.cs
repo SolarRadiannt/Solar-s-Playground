@@ -5,11 +5,10 @@ using SolTools.Components;
 
 
 [GlobalClass]
-public partial class EcsTool2D : EcsArea2D
+public abstract partial class BaseTool2D : EcsArea2D
 {
 	protected override void OnEntityReady()
 	{
-		entity
-			.Add<Tool>();
+		entity.Add<Tool>();
 	}
 }

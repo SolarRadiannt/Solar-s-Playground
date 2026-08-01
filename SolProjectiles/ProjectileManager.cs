@@ -9,10 +9,11 @@ using SolProjectiles.Components;
 
 public static class ProjectileManager
 {
-	public static void Init()
-	{
-		ProjectileRegistry.RegisterAllInFolder("res://SolProjectiles/Projectiles", true);
-	}
+	// public static void Init()
+	// {
+	// 	ProjectileRegistry.RegisterAllInFolder("res://SolProjectiles/Projectiles", true);
+	// }
+	
 	public static Entity Shoot(StringName projectileType, Vector2 origin, Vector2 direction, Entity? source, Entity? weapon, uint? collisionMask)
 	{
 		var e = EEvent.Spawn()
