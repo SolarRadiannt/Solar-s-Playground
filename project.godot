@@ -38,6 +38,16 @@ project/assembly_name="Solar-s Playground"
 
 enabled=PackedStringArray("res://addons/GodotUtilities/plugin.cfg", "res://addons/imgui-godot/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://Main/": "yellow",
+"res://SolActions/": "pink",
+"res://SolFramework/": "yellow",
+"res://SolProjectiles/": "orange",
+"res://SolTools/": "teal"
+}
+
 [godot_utilities]
 
 audio/sfx_folder="res://Audios/SFXs"
@@ -86,6 +96,7 @@ shoot={
 2d_physics/layer_1="World"
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Enemy"
+2d_physics/layer_4="Tool"
 
 [physics]
 

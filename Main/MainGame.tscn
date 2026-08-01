@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dyknff3o83066" path="res://LojiWall/loji_wall.tscn" id="2_pfmoa"]
 [ext_resource type="PackedScene" uid="uid://cv2stkbw5y72y" path="res://CharacterPlayer/character_player.tscn" id="4_f4m3a"]
 [ext_resource type="PackedScene" uid="uid://1ntk11obtxnj" path="res://DumbAI/dumb_ai.tscn" id="4_pfmoa"]
+[ext_resource type="PackedScene" uid="uid://bqp7pyg0yjeuy" path="res://Main/Tools/Rifle/rifle.tscn" id="5_f4m3a"]
 
 [node name="MainGame" type="Node2D" unique_id=1856033696]
 script = ExtResource("1_pj85m")
@@ -42,3 +43,6 @@ position = Vector2(-221, -52)
 [node name="CharacterPlayer" parent="." unique_id=1080916824 instance=ExtResource("4_f4m3a")]
 
 [node name="Camera2D" type="Camera2D" parent="CharacterPlayer" unique_id=733376115]
+
+[node name="Rifle" parent="." unique_id=1588306560 instance=ExtResource("5_f4m3a")]
+position = Vector2(285, -125)
