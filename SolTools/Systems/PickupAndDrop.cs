@@ -1,4 +1,4 @@
-namespace Systems;
+namespace SolTools.Systems;
 
 using Godot;
 using System;
@@ -11,12 +11,10 @@ using SolFramework.Managers;
 using SolTools.Components;
 using System.Linq;
 using Root;
-
+using SolTools.Managers;
 
 public partial class PickupAndDrop : Node, ISystem
 {
-	// put a dedicated droped tools later
-	public static readonly Node2D DroppedToolsContainer = MainGame.Instance; 
 	private static readonly World world = Core.World;
 	public int Priority => SPriority.Applying + 1;
 	public void Process(double delta)
@@ -31,38 +29,46 @@ public partial class PickupAndDrop : Node, ISystem
 	}
 	public override void _Ready() => Init();
 	
-	private static readonly Stream<PickedUpBy, PickedUpTool> toPickup =
-		world.Query<PickedUpBy, PickedUpTool>()
+	private static readonly Stream<PickupBy, PickupTool> toPickup =
+		world.Query<PickupBy, PickupTool>()
 			.Has<PickupEvent>()
 			.Not<EventCancelled>()
 			.Stream();
 	private static void HandlePickup() =>
 		toPickup.For(static
-		(ref PickedUpBy newOwner, ref PickedUpTool tool) =>
+		(ref PickupBy newOwner, ref PickupTool tool) =>
 		{
-			if (!newOwner.Value.TryRead<Node2DHandle>(out var ownerHandle)) return;
-			if (!tool.Value.TryRead<EcsArea2D>(out var toolHandle)) return;
+			OwnershipManager.SetOwner(newOwner.Value, tool.Value);
 			
-			toolHandle.Visible = false;
-			toolHandle.SetDeferred("disabled", true);
-			toolHandle.SetParent(ownerHandle.Value);
+			if (tool.Value.TryRead<EcsArea2D>(out var toolHandle))
+			{
+				if (!newOwner.Value.TryRead<Node2DHandle>(out var ownerHandle)) return;
+				
+				toolHandle.Visible = false;
+				toolHandle.SetDeferred("disabled", true);
+				toolHandle.SetParent(ownerHandle.Value);
+			}
 		});
 	
-	private static readonly Stream<DroppedBy, DroppedTool> toDrop =
-		world.Query<DroppedBy, DroppedTool>()
+	private static readonly Stream<DropBy, DropTool> toDrop =
+		world.Query<DropBy, DropTool>()
 			.Has<DropEvent>()
 			.Not<EventCancelled>()
 			.Stream();
 	private static void HandleDrop() =>
 		toDrop.For(static
-		(ref DroppedBy droppant, ref DroppedTool tool) =>
+		(ref DropBy droppant, ref DropTool tool) =>
 		{
-			if (!droppant.Value.TryRead<Node2DHandle>(out var droppantHandle)) return;
-			if (!tool.Value.TryRead<EcsArea2D>(out var toolHandle)) return;
+			OwnershipManager.RemoveOwner(tool.Value);
 			
-			toolHandle.Visible = true;
-			toolHandle.GlobalPosition = droppantHandle.Value.GlobalPosition; 
-			toolHandle.SetDeferred("disabled", false);
-			toolHandle.SetParent(DroppedToolsContainer);
+			if (tool.Value.TryRead<EcsArea2D>(out var toolHandle))
+			{
+				if (!droppant.Value.TryRead<Node2DHandle>(out var droppantHandle)) return;
+				toolHandle.Visible = true;
+				toolHandle.SetDeferred("disabled", false);
+				toolHandle.SetParent(ToolsManager.DroppedToolsContainer);
+				
+				toolHandle.GlobalPosition = droppantHandle.Value.GlobalPosition; 
+			}
 		});
 }

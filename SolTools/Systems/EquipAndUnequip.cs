@@ -1,4 +1,4 @@
-namespace Systems;
+namespace SolTools.Systems;
 
 using Godot;
 using System;
@@ -9,14 +9,17 @@ using SolFramework.Components;
 using SolFramework.Scheduler;
 using SolFramework.Managers;
 using SolTools.Components;
+using SolTools.Managers;
+
 
 public partial class EquipAndUnequip : Node, ISystem
 {
 	private static readonly World world = Core.World;
-	public int Priority => SPriority.Default;
+	public int Priority => SPriority.Applying;
 	public void Process(double delta)
 	{
-		
+		HandleEquip();
+		HandleUnequip();
 	}
 	
 	public void Init()
@@ -27,33 +30,44 @@ public partial class EquipAndUnequip : Node, ISystem
 	
 	private static readonly Stream<EquippingBy, EquippingTool> toEquip = 
 		world.Query<EquippingBy, EquippingTool>()
-			.Has<EquipEvent>()
+			.Has<EquippingEvent>()
 			.Not<EventCancelled>()
 			.Stream();
 	private static void HandleEquip() =>
 		toEquip.For(static
-		(ref EquippingBy owner, ref EquippingTool tool) =>
+		(in Entity eevent, ref EquippingBy owner, ref EquippingTool tool) =>
 		{
 			if (!owner.Value.TryRead<Node2DHandle>(out var ownerHandle)) return;
 			if (!tool.Value.TryRead<EcsArea2D>(out var toolHandle)) return;
 			
+			if (eevent.Has<SwapEquip>() && ToolsManager.TryGetEquipped(owner.Value, out var equippedTool))
+			{
+				if (equippedTool.TryRead<EcsArea2D>(out var oldToolHandle))
+					oldToolHandle.Visible = false;
+				
+				equippedTool.Remove<EquippedBy>();
+				owner.Value.Remove<EquippedTool>();
+			}
+			
 			toolHandle.Visible = true;
-			tool.Value.Add<EquippedBy>(owner.Value);
+			tool.Value.Add(new EquippedBy(owner.Value));
+			owner.Value.Add(new EquippedTool(tool.Value));
 		});
 	
 	private static readonly Stream<UnequippingBy, UnequippingTool> toUnequip =
 		world.Query<UnequippingBy, UnequippingTool>()
-			.Has<UnequipEvent>()
+			.Has<UnequippingEvent>()
 			.Not<EventCancelled>()
 			.Stream();
 	private static void HandleUnequip() =>
 		toUnequip.For(static
 		(ref UnequippingBy owner, ref UnequippingTool tool) =>
 		{
-			if (!owner.Value.TryRead<Node2DHandle>(out var ownerHandle)) return;
-			if (!tool.Value.TryRead<EcsArea2D>(out var toolHandle)) return;
+			if (tool.Value.TryRead<EcsArea2D>(out var toolHandle))
+				toolHandle.Visible = false;
 			
-			toolHandle.Visible = false;
-			tool.Value.Remove<EquippedBy>(owner.Value);
+			
+			tool.Value.Remove<EquippedBy>();
+			owner.Value.TryRemove<EquippedTool>();
 		});
 }
