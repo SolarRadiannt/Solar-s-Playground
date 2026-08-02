@@ -1,4 +1,4 @@
-namespace SolTools.Systems;
+namespace SolItems.Systems;
 
 using Godot;
 using System;
@@ -9,8 +9,8 @@ using SolFramework.Components;
 using SolFramework.Scheduler;
 using SolFramework.Managers;
 
-using SolTools;
-using SolTools.Components;
+using SolItems;
+using SolItems.Components;
 
 // Default system that enforce no stealing.
 public partial class CheckPickupOwnership : Node, ISystem
@@ -27,16 +27,16 @@ public partial class CheckPickupOwnership : Node, ISystem
 		Scheduler.RegisterSystem(this);
 	}
 	public override void _Ready() => Init();
-	private static readonly Stream<PickupTool, PickupBy> toCheckIfOwned = 
-		world.Query<PickupTool, PickupBy>()
+	private static readonly Stream<PickupItem, PickupBy> toCheckIfOwned = 
+		world.Query<PickupItem, PickupBy>()
 			.Has<PickupEvent>()
 			.Not<EventCancelled>()
 			.Stream();
 	public static void CheckOwnership() =>
 		toCheckIfOwned.For(static
-		(in Entity eevent, ref PickupTool tool, ref PickupBy newOwner) =>
+		(in Entity eevent, ref PickupItem item, ref PickupBy newOwner) =>
 		{
-			if (OwnershipManager.TryGetOwner(tool.Value, out var existingOwner))
+			if (OwnershipManager.TryGetOwner(item.Value, out var existingOwner))
 			{
 				eevent
 					.Add<PickupAlreadyOwned>()

@@ -23,5 +23,6 @@ public struct OwnedBy;
 public struct Owning;
 public struct ChildOf;
 public struct Destroy;
+public struct Visuals;
 
 [InspectorColor(InspectColor.Brown)] public struct Grounded;

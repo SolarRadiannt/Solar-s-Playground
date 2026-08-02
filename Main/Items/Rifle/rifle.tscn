@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bc4tluw7btkdy"]
+
+[ext_resource type="Texture2D" uid="uid://l0av2lsi5atf" path="res://Main/Items/Rifle/IMG_20260517_183005.jpg" id="1_q7lt7"]
+[ext_resource type="Script" uid="uid://ddd3ufxp352r5" path="res://Main/Items/Rifle/Rifle.cs" id="1_rvj8m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q0c55"]
+size = Vector2(74, 28)
+
+[node name="Rifle" type="Area2D" unique_id=899284441]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("1_rvj8m")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2003582954]
+rotation = 1.5707964
+scale = Vector2(0.0261481, 0.036504395)
+texture = ExtResource("1_q7lt7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1224676377]
+shape = SubResource("RectangleShape2D_q0c55")

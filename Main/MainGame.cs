@@ -24,7 +24,7 @@ public partial class MainGame : Node2D
 		AddChildBatch(SystemRegistry.All);
 		AddChildBatch(SolProjectiles.SystemRegistry.All);
 		AddChildBatch(SolActions.SystemRegistry.All);
-		AddChildBatch(SolTools.SystemRegistry.All);
+		AddChildBatch(SolItems.SystemRegistry.All);
 		
 		ProjectileRegistry.RegisterAllInFolder("res://Main/Projectiles", true);
 		SolInspector.Init();

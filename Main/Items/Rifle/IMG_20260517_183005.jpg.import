@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://di7kxsbtot1b"
-path="res://.godot/imported/IMG_20260518_115145.jpg-ba24ed7ef2ef9aa866ba72949d751c6c.ctex"
+uid="uid://l0av2lsi5atf"
+path="res://.godot/imported/IMG_20260517_183005.jpg-a9c4f3b3c7da11fc799204434c8d0d8e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Main/Tools/Rifle/IMG_20260518_115145.jpg"
-dest_files=["res://.godot/imported/IMG_20260518_115145.jpg-ba24ed7ef2ef9aa866ba72949d751c6c.ctex"]
+source_file="res://Main/Items/Rifle/IMG_20260517_183005.jpg"
+dest_files=["res://.godot/imported/IMG_20260517_183005.jpg-a9c4f3b3c7da11fc799204434c8d0d8e.ctex"]
 
 [params]
 

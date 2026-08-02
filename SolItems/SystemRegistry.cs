@@ -1,4 +1,4 @@
-namespace SolTools;
+namespace SolItems;
 using Godot;
 
 public static class SystemRegistry
