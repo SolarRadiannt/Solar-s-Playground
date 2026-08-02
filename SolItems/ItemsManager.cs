@@ -13,7 +13,7 @@ using SolFramework.Components;
 using SharpResults.Types;
 
 using SolItems.Components;
-
+using SolFramework.Managers;
 
 public enum ItemError
 {
@@ -70,9 +70,7 @@ public static class ItemsManager
     }
     
     public static bool TryGetOwner(Entity item, out Entity owner) =>
-        world.Query()
-            .Has<Owning>(item)
-            .Compile().TryFirst(out owner);
+        OwnershipManager.TryGetOwner(item, out owner);
     
     public static Result<Entity, ItemError> Pickup(Entity item, Entity owner)
     {

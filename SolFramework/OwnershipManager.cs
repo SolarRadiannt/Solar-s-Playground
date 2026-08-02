@@ -29,18 +29,22 @@ public static class OwnershipManager
 	
 	public static Entity GetOwned(Entity owner) =>
 		world.Query()
-			.Has<Owning>(owner)
+			.Has<OwnedBy>(owner)
 			.Compile().First();
 	
 	public static Entity GetOwner(Entity owned) =>
-		world.Query()
-			.Has<OwnedBy>(owned)
-			.Compile().First();
+		owned.Ref<OwnedBy>(owned).Target;
 	
-	public static bool TryGetOwner(Entity owned, out Entity owner) =>
-		world.Query()
-			.Has<Owning>(owned)
-			.Compile().TryFirst(out owner);
+	public static bool TryGetOwner(Entity owned, out Entity owner)
+	{
+		if (owned.TryRead<OwnedBy>(out var owncomp))
+		{
+			owner = owncomp.Target;
+			return true;
+		}
+		owner = default;
+		return false;
+	}
 	
 	public static bool TryGetOwned(Entity owner, out Entity owned) =>
 		world.Query()
@@ -60,8 +64,7 @@ public static class OwnershipManager
 			else
 				return OwnershipError.HasOwner;
 		
-		toOwn.Add<OwnedBy>(owner);
-		owner.Add<Owning>(toOwn);
+		toOwn.Add<OwnedBy>(new(owner), owner);
 		
 		return EEvent.Spawn()
 			.Add<OwnershipChangedEvent>()
@@ -73,7 +76,6 @@ public static class OwnershipManager
 	{
 		if (!TryGetOwner(owned, out var owner)) return OwnershipError.NoOwner;
 		
-		owner.Remove<Owning>(owned);
 		owned.Remove<OwnedBy>(owner);
 		
 		return EEvent.Spawn()
@@ -89,12 +91,10 @@ public static class OwnershipManager
 			if (owner.ToRaw() == otherOwner.ToRaw())
 				return OwnershipError.AlreadyOwned;
 			
-			otherOwner.Remove<Owning>(toOwn);
 			toOwn.Remove<OwnedBy>(otherOwner);
 		}
 		
-		owner.Add<Owning>(toOwn);
-		toOwn.Add<OwnedBy>(owner);
+		toOwn.Add<OwnedBy>(new(owner), owner);
 		
 		return (
 			EEvent.Spawn()

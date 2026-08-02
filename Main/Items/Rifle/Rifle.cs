@@ -1,5 +1,6 @@
 using Godot;
 using Root.Components;
+using SolItems.Components;
 using System;
 
 public partial class Rifle : BaseItem2D
@@ -8,6 +9,7 @@ public partial class Rifle : BaseItem2D
 	{
 		base.OnEntityReady();
 		GD.Print("firearm is ready!");
-		entity.Add<Firearm>();
+		entity.Add<ItemType<Firearm>>()
+			.Add<Pickupable>();
 	}
 }

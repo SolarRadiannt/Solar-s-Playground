@@ -19,8 +19,8 @@ using SolFramework.Tools;
 [InspectorColor(InspectColor.SkyBlue)] public struct Character;
 [InspectorColor(InspectColor.Cyan)] public struct Player;
 
-public struct OwnedBy;
-public struct Owning;
+public record struct PickupDistance(float Value);
+public record struct OwnedBy(Entity Target);
 public struct ChildOf;
 public struct Destroy;
 public struct Visuals;
