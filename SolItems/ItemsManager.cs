@@ -28,6 +28,8 @@ public enum ItemError
     OtherToolEquipped,
 }
 
+
+
 public static class ItemsManager
 {
     // put a dedicated droped tools later
@@ -88,16 +90,25 @@ public static class ItemsManager
             .Add(new PickupItem(item));
     }
 
+    public static Result<Entity, ItemError> Drop(Entity item, Entity owner)
+    {
+        if (!IsItem(item)) return ItemError.NotAnItem;
+        if (TryGetOwner(item, out var currentOwner) && !currentOwner.Equals(owner))
+            return ItemError.NotTheOwner;
+        
+        return EEvent.Spawn()
+            .Add<DropEvent>()
+            .Add(new DropBy(owner))
+            .Add(new DropItem(item));
+    }
+
     public static Result<Entity, ItemError> Drop(Entity item)
     {
         if (!IsItem(item)) return ItemError.NotAnItem;
         if (!TryGetOwner(item, out var owner))
             return ItemError.AlreadyDropped;
         
-        return EEvent.Spawn()
-            .Add<DropEvent>()
-            .Add(new DropBy(owner))
-            .Add(new DropItem(item));
+        return Drop(item, owner);
     }
 
 	public static Result<Entity, ItemError> Equip(Entity item, bool swap = false)
