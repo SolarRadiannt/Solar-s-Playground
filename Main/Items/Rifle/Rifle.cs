@@ -10,6 +10,7 @@ public partial class Rifle : EcsArea2D
 		GD.Print("firearm is ready!");
 		entity.Add<ItemType<Firearm>>()
 			.Add<Item>()
-			.Add<Pickupable>();
+			.Add<Pickupable>()
+			.Add<FirearmType<Root.Components.Rifle>>();
 	}
 }
