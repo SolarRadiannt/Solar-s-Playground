@@ -8,7 +8,7 @@ using SolFramework;
 using SolFramework.Scheduler;
 using SolFramework.Managers;
 using GodotUtilities;
-
+using SolFramework.Components;
 
 public partial class HandleWanderer : Node, ISystem
 {
@@ -38,32 +38,33 @@ public partial class HandleWanderer : Node, ISystem
 			cooldown.Value.Tick(dt);
 		});
 	
-	private static readonly Stream<EcsCharBody2D> toSetWanderGoal = 
-		world.Query<EcsCharBody2D>()
+	private static readonly Stream<Node2DHandle> toSetWanderGoal = 
+		world.Query<Node2DHandle>()
 		.Has<Wandering>()
 		.Not<WanderGoal>()
 		.Stream();
 	private static void WanderGoalSetter() =>
 	toSetWanderGoal.For(static
-	(in Entity entity, ref EcsCharBody2D body) =>
+	(in Entity entity, ref Node2DHandle handle) =>
 	{
 		float range = WanderAction.WANDER_RADIUS;
-		var origin = body.GlobalPosition;
+		var origin = handle.Value.GlobalPosition;
 		var goal = origin + SolRand.Vec2Radius(range);
 
 		entity.Add(new WanderGoal(goal));
 		MoveManager.MoveTo(entity, goal);
 	});
-	private static readonly Stream<EcsCharBody2D, WanderGoal> toCheckWanderReached=
-		world.Query<EcsCharBody2D, WanderGoal>()
+
+	private static readonly Stream<Node2DHandle, WanderGoal> toCheckWanderReached=
+		world.Query<Node2DHandle, WanderGoal>()
 		.Has<Wandering>()
 		.Stream();
 	private static void WanderGoalChecker() =>
 	toCheckWanderReached.For(static
-	(in Entity entity, ref EcsCharBody2D body, ref WanderGoal goal) =>
+	(in Entity entity, ref Node2DHandle handle, ref WanderGoal goal) =>
 	{
 		float reachDist = MoveManager.GetReachDist(entity);
-		float dist = body.GlobalPosition.DistanceTo(goal.Value);
+		float dist = handle.Value.GlobalPosition.DistanceTo(goal.Value);
 		if (dist <= reachDist)
 			entity.Remove<WanderGoal>();
 	});

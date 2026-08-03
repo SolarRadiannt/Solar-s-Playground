@@ -7,6 +7,8 @@ using SolFramework;
 using SolFramework.Tools;
 using SolFramework.UtilityAI;
 using SolFramework.UtilityAI.Components;
+using SolFramework.Components;
+
 
 public record struct WanderRadius(float Value);
 public record struct WanderCooldown(TickTimer Value);
@@ -22,7 +24,7 @@ public class WanderAction : BaseAction
 	private static readonly float score = 0.2f;
 	
 	public override bool CanRun(Entity entity) =>
-		entity.HasAll<WanderCooldown, EcsCharBody2D>();
+		entity.HasAll<WanderCooldown, Node2DHandle>();
 
 	public override float Score(Entity entity)
 	{
