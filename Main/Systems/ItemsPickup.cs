@@ -1,4 +1,4 @@
-namespace Systems;
+namespace Root.Systems;
 
 using Godot;
 using System;
@@ -10,13 +10,13 @@ using SolFramework.Scheduler;
 using SolFramework.Managers;
 using Root.Components;
 
-public partial class ToolsPickup : Node, ISystem
+public partial class ItemsPickup : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	public int Priority => SPriority.Action;
 	public void Process(double delta)
 	{
-		
+		PickupHandler();
 	}
 	
 	public void Init()
@@ -25,13 +25,15 @@ public partial class ToolsPickup : Node, ISystem
 	}
 	public override void _Ready() => Init();
 	
-	private static readonly Stream<EcsArea2D> pickpables =
+	private static readonly Stream<EcsArea2D> pickupables =
 		world.Query<EcsArea2D>()
 			.Has<Pickupable>()
 			.Not<OwnedBy>(Entity.Any)
 			.Stream();
-	private static void PickupHandler()
-	{
-		
-	}
+	private static void PickupHandler() =>
+		pickupables.For(static
+		(ref EcsArea2D area) =>
+		{
+			
+		});
 }
