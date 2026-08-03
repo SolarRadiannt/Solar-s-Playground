@@ -15,6 +15,7 @@ using SharpResults.Types;
 using SolItems.Components;
 using SolFramework.Managers;
 
+using ItemResult = SharpResults.Types.Result<fennecs.Entity, ItemError>;
 public enum ItemError
 {
     AlreadyDropped,
@@ -27,8 +28,6 @@ public enum ItemError
     AlreadyPickedUp,
     OtherToolEquipped,
 }
-
-
 
 public static class ItemsManager
 {
@@ -74,7 +73,7 @@ public static class ItemsManager
     public static bool TryGetOwner(Entity item, out Entity owner) =>
         OwnershipManager.TryGetOwner(item, out owner);
     
-    public static Result<Entity, ItemError> Pickup(Entity item, Entity owner)
+    public static ItemResult Pickup(Entity item, Entity owner)
     {
         if (!IsItem(item)) return ItemError.NotAnItem;
         if (TryGetOwner(item, out var otherOwner))
@@ -90,7 +89,7 @@ public static class ItemsManager
             .Add(new PickupItem(item));
     }
 
-    public static Result<Entity, ItemError> Drop(Entity item, Entity owner)
+    public static ItemResult Drop(Entity item, Entity owner)
     {
         if (!IsItem(item)) return ItemError.NotAnItem;
         if (TryGetOwner(item, out var currentOwner) && !currentOwner.Equals(owner))
@@ -102,7 +101,7 @@ public static class ItemsManager
             .Add(new DropItem(item));
     }
 
-    public static Result<Entity, ItemError> Drop(Entity item)
+    public static ItemResult Drop(Entity item)
     {
         if (!IsItem(item)) return ItemError.NotAnItem;
         if (!TryGetOwner(item, out var owner))
@@ -111,7 +110,7 @@ public static class ItemsManager
         return Drop(item, owner);
     }
 
-	public static Result<Entity, ItemError> Equip(Entity item, bool swap = false)
+	public static ItemResult Equip(Entity item, bool swap = false)
     {
         if (!IsItem(item)) return ItemError.NotAnItem;
         if (!TryGetOwner(item, out var owner)) return ItemError.NoOwner;
@@ -131,7 +130,7 @@ public static class ItemsManager
         return eevent;
     }
     
-    public static Result<Entity, ItemError> Unequip(Entity item, Entity owner)
+    public static ItemResult Unequip(Entity item, Entity owner)
     {
         if (!IsItem(item)) return ItemError.NotAnItem;
         if (!TryGetEquipped(owner, out var otherTool)) return ItemError.NothingEquipped;
@@ -143,14 +142,14 @@ public static class ItemsManager
             .Add(new UnequippingItem(item));
     }
     
-    public static Result<Entity, ItemError> Unequip(Entity item)
+    public static ItemResult Unequip(Entity item)
     {
         if (!IsItem(item)) return ItemError.NotAnItem;
         if (!TryGetOwner(item, out var owner)) return ItemError.NoOwner;
         return Unequip(item, owner);
     }
 
-    public static Result<Entity, ItemError> OwnerUnequip(Entity owner)
+    public static ItemResult OwnerUnequip(Entity owner)
     {
         if (!TryGetEquipped(owner, out var tool)) return ItemError.NothingEquipped;
         return Unequip(tool, owner);
