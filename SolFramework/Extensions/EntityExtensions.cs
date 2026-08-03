@@ -10,7 +10,7 @@ public static class EntityExtensions
 	public static string GetName(this Entity entity)
 	{
 		if (entity.Has<Name>())
-			return entity.Ref<Name>().Value;
+			return entity.Ref<Name>();
 		else
 			return entity.ToRaw().ToString();
 	}
