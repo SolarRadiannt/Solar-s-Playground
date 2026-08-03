@@ -12,6 +12,8 @@ using SolFramework.Components;
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
+
 
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Class)]
 public class InspectorColorAttribute : Attribute
@@ -40,6 +42,7 @@ public static class SolInspector
 	{
 		public Type Type;
 		public bool IsTag;
+		public string DisplayName;
 		public FieldInfo[] Fields;
 		public PropertyInfo[] Properties;
 		public System.Numerics.Vector4? CustomColor;
@@ -66,6 +69,60 @@ public static class SolInspector
 			
 			ImGui.End();
 		});
+	}
+	
+	private static string GetFriendlyTypeName(Type type)
+	{
+		if (!type.IsGenericType)
+			return type.Name;
+		
+		// Strip the `1 or `2 suffix from the generic type name
+		int backtickIndex = type.Name.IndexOf('`');
+		string cleanName = backtickIndex > 0 ? type.Name.Substring(0, backtickIndex) : type.Name;
+		
+		// Recursively resolve generic arguments (e.g. Firearm)
+		string genericArgs = string.Join(", ", type.GetGenericArguments().Select(GetFriendlyTypeName));
+		
+		return $"{cleanName}<{genericArgs}>";
+	}
+	
+	private static ComponentTypeCache GetOrCacheType(Type type)
+	{
+		if (!_memberCache.TryGetValue(type, out var members))
+		{
+			var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			bool isTag = fields.Length == 0 && properties.Length == 0;
+			
+			string displayName = GetFriendlyTypeName(type);
+			
+			System.Numerics.Vector4? color = null;
+			var colorAttr = type.GetCustomAttribute<InspectorColorAttribute>();
+			
+			if (colorAttr == null && type.IsGenericType)
+				colorAttr = type.GetGenericTypeDefinition().GetCustomAttribute<InspectorColorAttribute>();
+			
+			if (colorAttr == null && type.IsGenericType)
+				foreach (var genericArg in type.GetGenericArguments())
+				{
+					colorAttr = genericArg.GetCustomAttribute<InspectorColorAttribute>();
+				}
+			
+			if (colorAttr != null)
+				color = colorAttr.Color;
+			
+			members = new ComponentTypeCache
+			{
+				Type = type,
+				DisplayName = displayName,
+				IsTag = isTag,
+				Properties = properties,
+				Fields = fields,
+				CustomColor = color,
+			};
+			_memberCache[type] = members;
+		}
+		return members;
 	}
 	
 	private static bool IsFiltered(string target, string filter)
@@ -136,7 +193,7 @@ public static class SolInspector
 			var members = GetOrCacheType(type);
 			
 			if (members.IsTag)
-				entityTags.Add((type.Name, members.CustomColor));
+				entityTags.Add((members.DisplayName, members.CustomColor));
 			else
 				entityComponents.Add(members);
 		}
@@ -193,7 +250,7 @@ public static class SolInspector
 		if (hasColor)
 			ImGui.PushStyleColor(ImGuiCol.Header, members.CustomColor.Value);
 		
-		bool isOpen = ImGui.CollapsingHeader(type.Name, ImGuiTreeNodeFlags.None);
+		bool isOpen = ImGui.CollapsingHeader(members.DisplayName, ImGuiTreeNodeFlags.None);
 
 		if (hasColor)
 			ImGui.PopStyleColor();
@@ -375,34 +432,6 @@ public static class SolInspector
 			return true;
 		}
 		return false;
-	}
-	
-	private static ComponentTypeCache GetOrCacheType(Type type)
-	{
-		if (!_memberCache.TryGetValue(type, out var members))
-		{
-			var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-			bool isTag = fields.Length == 0 && properties.Length == 0;
-			
-			System.Numerics.Vector4? color = null;
-			var colorAttr = type.GetCustomAttribute<InspectorColorAttribute>();
-			if (colorAttr != null)
-			{
-				color = colorAttr.Color;
-			}
-			
-			members = new ComponentTypeCache
-			{
-				Type = type,
-				IsTag = isTag,
-				Properties = properties,
-				Fields = fields,
-				CustomColor = color,
-			};
-			_memberCache[type] = members;
-		}
-		return members;
 	}
 	
 	// for catching transient event entities later.

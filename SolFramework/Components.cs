@@ -4,25 +4,32 @@ using fennecs;
 using Godot;
 using SolFramework.Tools;
 
-[InspectorColor(InspectColor.Violet)] public record struct Node2DHandle(Node2D Value);
+[InspectorColor(InspectColor.Violet)] public record struct Node2DHandle(Node2D Value) : IEcsComponent<Node2D>
+{
+	public static implicit operator Node2D(Node2DHandle self) => self.Value;
+};
 
-[InspectorColor(InspectColor.Indigo)] public record struct Velocity(Vector2 Value);
-[InspectorColor(InspectColor.Indigo)] public record struct PushVelocity(Vector2 Value);
-[InspectorColor(InspectColor.Indigo)] public record struct ActualVelocity(Vector2 Value);
-[InspectorColor(InspectColor.Indigo)] public record struct ActualSpeed(float Value);
-[InspectorColor(InspectColor.Indigo)] public record struct LastPosition(Vector2 Value);
+[InspectorColor(InspectColor.Indigo)] public record struct Velocity(Vector2 Value) : IEcsComponent<Vector2>;
+[InspectorColor(InspectColor.Indigo)] public record struct PushVelocity(Vector2 Value) : IEcsComponent<Vector2>;
+[InspectorColor(InspectColor.Indigo)] public record struct ActualVelocity(Vector2 Value) : IEcsComponent<Vector2>;
+[InspectorColor(InspectColor.Indigo)] public record struct LastPosition(Vector2 Value) : IEcsComponent<Vector2>;
+[InspectorColor(InspectColor.Indigo)] public record struct ActualSpeed(float Value) : IEcsComponent<float>;
 
-[InspectorColor(InspectColor.Indigo)] public record struct Mass(float Value);
-[InspectorColor(InspectColor.Gold)] public record struct Name(string Value);
-[InspectorColor(InspectColor.Gold)] public record struct Variance(float Value);
 
-[InspectorColor(InspectColor.SkyBlue)] public struct Character;
-[InspectorColor(InspectColor.Cyan)] public struct Player;
+[InspectorColor(InspectColor.Indigo)] public record struct Mass(float Value) : IEcsComponent<float>;
+[InspectorColor(InspectColor.Gold)] public record struct Name(string Value) : IEcsComponent<string>
+{
+	public static implicit operator Name(string value) => new(value);
+	public static implicit operator string(Name self) => self.Value;
+};
+[InspectorColor(InspectColor.Gold)] public record struct Variance(float Value) : IEcsComponent<float>;
 
-public record struct PickupDistance(float Value);
-public record struct OwnedBy(Entity Target);
-public struct ChildOf;
-public struct Destroy;
-public struct Visuals;
+public record struct PickupDistance(float Value) : IEcsComponent<float>;
+public record struct OwnedBy(Entity Target) : IEcsTargetRelation<OwnedBy>;
+[InspectorColor(InspectColor.SkyBlue)] public struct Character : IEcsTag;
+[InspectorColor(InspectColor.Cyan)] public struct Player : IEcsTag;
+public record struct ChildOf : IEcsTag;
+public record struct Destroy : IEcsTag;
+public record struct Visuals : IEcsTag;
 
 [InspectorColor(InspectColor.Brown)] public struct Grounded;
