@@ -9,6 +9,8 @@ using SolFramework.Scheduler;
 using SolFramework.Managers;
 using GodotUtilities;
 using SolFramework.Components;
+using SolFramework.UtilityAI.Components;
+
 
 public partial class HandleWanderer : Node, ISystem
 {
@@ -30,6 +32,7 @@ public partial class HandleWanderer : Node, ISystem
 	private static readonly Stream<WanderCooldown> tickCooldown =
 		world.Query<WanderCooldown>()
 			.Not<Wandering>()
+			.Has<AgentIdle>()
 			.Stream();
 	private static void CooldownTicker(double delta) =>
 		tickCooldown.For((float)delta, static
