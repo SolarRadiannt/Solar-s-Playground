@@ -4,7 +4,7 @@ using SolFramework.UtilityAI.Components;
 
 public class IdleAction : BaseAction
 {
-	public override bool CanExecute(Entity entity) => true;
+	public override bool CanRun(Entity entity) => true;
 	public override float Score(Entity entity) => 0.1f;
 	public override void Start(Entity entity)
 	{

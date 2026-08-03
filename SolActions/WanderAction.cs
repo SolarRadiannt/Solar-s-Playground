@@ -21,7 +21,7 @@ public class WanderAction : BaseAction
 	public static readonly float WANDER_RADIUS = 200f;
 	private static readonly float score = 0.2f;
 	
-	public override bool CanExecute(Entity entity) =>
+	public override bool CanRun(Entity entity) =>
 		entity.HasAll<WanderCooldown, EcsCharBody2D>();
 
 	public override float Score(Entity entity)

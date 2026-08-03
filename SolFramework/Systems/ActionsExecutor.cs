@@ -38,7 +38,7 @@ public partial class ActionsExecutor : Node, ISystem
 		for (int i = 0; i < actions.Length; i++)
 		{
 			var action = actions[i];
-			if (!action.CanExecute(entity)) continue;
+			if (!action.CanRun(entity)) continue;
 
 			float score = action.Score(entity);
 			if (score > highestScore)
