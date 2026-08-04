@@ -69,11 +69,14 @@ public static class SolRand
 		return new Vector2(r * Mathf.Cos(angle), r * Mathf.Sin(angle));
 	}
 	
-	/// <summary>
-    /// Returns a random point uniformly distributed inside an axis‑aligned rectangle defined by <paramref name="min"/> and <paramref name="max"/>.
-    /// </summary>
-    /// <param name="min">The lower‑left corner of the rectangle (inclusive).</param>
-    /// <param name="max">The upper‑right corner of the rectangle (inclusive).</param>
+	public static Vector2 Vec2Box(Rect2 box) => Vec2Box(box.Position, box.End);
+    
+    
+    /// <summary>
+	/// Returns a random point uniformly distributed inside an axis‑aligned rectangle defined by <paramref name="min"/> and <paramref name="max"/>.
+	/// </summary>
+	/// <param name="min">The lower‑left corner of the rectangle (inclusive).</param>
+	/// <param name="max">The upper‑right corner of the rectangle (inclusive).</param>
 	public static Vector2 Vec2Box(Vector2 min, Vector2 max) => new(
 		Float(min.X, max.X),
 		Float(min.Y, max.Y)
