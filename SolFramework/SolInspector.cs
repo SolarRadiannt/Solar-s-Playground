@@ -38,6 +38,12 @@ public static class SolInspector
 	private static readonly int MAX_RECURIONS_DEPTH = 7;
 	
 	private static readonly float HORIZONTAL_TAGS_SPACE = 16f;
+
+	private static readonly InspectorColorAttribute GodotColor = new(InspectColor.Violet);
+	private static readonly string[] GodotObjects = [
+		"Node2D",	
+	];
+
 	private struct ComponentTypeCache
 	{
 		public Type Type;
@@ -97,8 +103,12 @@ public static class SolInspector
 			string displayName = GetFriendlyTypeName(type);
 			
 			System.Numerics.Vector4? color = null;
+
 			var colorAttr = type.GetCustomAttribute<InspectorColorAttribute>();
 			
+			if (GodotObjects.Contains(type.Name))
+				colorAttr = GodotColor;	
+
 			if (colorAttr == null && type.IsGenericType)
 				colorAttr = type.GetGenericTypeDefinition().GetCustomAttribute<InspectorColorAttribute>();
 			

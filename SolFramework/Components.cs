@@ -4,11 +4,6 @@ using fennecs;
 using Godot;
 using SolFramework.Tools;
 
-[InspectorColor(InspectColor.Violet)] public record struct Node2DHandle(Node2D Value) : IEcsComponent<Node2D>
-{
-	public static implicit operator Node2D(Node2DHandle self) => self.Value;
-};
-
 [InspectorColor(InspectColor.Indigo)] public record struct Velocity(Vector2 Value) : IEcsComponent<Vector2>;
 [InspectorColor(InspectColor.Indigo)] public record struct PushVelocity(Vector2 Value) : IEcsComponent<Vector2>;
 [InspectorColor(InspectColor.Indigo)] public record struct ActualVelocity(Vector2 Value) : IEcsComponent<Vector2>;
@@ -32,4 +27,4 @@ public record struct ChildOf : IEcsTag;
 public record struct Destroy : IEcsTag;
 public record struct Visuals : IEcsTag;
 
-[InspectorColor(InspectColor.Brown)] public struct Grounded;
+[InspectorColor(InspectColor.Brown)] public struct Grounded : IEcsTag;

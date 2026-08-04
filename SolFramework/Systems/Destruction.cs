@@ -14,7 +14,7 @@ public partial class Destruction : Node, ISystem
 	{
 		destroyHandles.Raw(static nodes => {
 			foreach (ref var node in nodes.Span)
-				node.Value.QueueFree();
+				node.QueueFree();
 		});
 		toDestroy.Despawn();
 	}
@@ -29,10 +29,10 @@ public partial class Destruction : Node, ISystem
 	private static readonly World world = Core.World;
 	private static readonly Stream<Destroy> toDestroy =
 		world.Query<Destroy>()
-			.Not<Node2DHandle>()
+			.Not<Node2D>()
 			.Stream();
-	private static readonly Stream<Node2DHandle> destroyHandles=
-		world.Query<Node2DHandle>()
+	private static readonly Stream<Node2D> destroyHandles=
+		world.Query<Node2D>()
 			.Has<Destroy>()
 			.Stream();
 }

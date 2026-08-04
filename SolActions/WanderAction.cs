@@ -24,7 +24,7 @@ public class WanderAction : BaseAction
 	private static readonly float score = 0.2f;
 	
 	public override bool CanRun(Entity entity) =>
-		entity.HasAll<WanderCooldown, Node2DHandle>();
+		entity.HasAll<WanderCooldown, Node2D>();
 
 	public override float Score(Entity entity)
 	{

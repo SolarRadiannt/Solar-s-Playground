@@ -43,11 +43,11 @@ public partial class PickupAndDrop : Node, ISystem
 			
 			if (item.Value.TryRead<EcsArea2D>(out var itemHandle))
 			{
-				if (!newOwner.Value.TryRead<Node2DHandle>(out var ownerHandle)) return;
+				if (!newOwner.Value.TryRead<Node2D>(out var ownerHandle)) return;
 				
 				itemHandle.Visible = false;
 				itemHandle.SetDeferred("disabled", true);
-				itemHandle.SetParent(ownerHandle.Value);
+				itemHandle.SetParent(ownerHandle);
 			}
 		});
 	
@@ -69,12 +69,12 @@ public partial class PickupAndDrop : Node, ISystem
 				.Add(new UnequippingItem(item.Value));
 			
 			if (!item.Value.TryRead<EcsArea2D>(out var itemHandle)) return;
-			if (!droppant.Value.TryRead<Node2DHandle>(out var droppantHandle)) return;
+			if (!droppant.Value.TryRead<Node2D>(out var droppantHandle)) return;
 			
 			itemHandle.Visible = true;
 			itemHandle.SetDeferred("disabled", false);
 			itemHandle.SetParent(ItemsManager.DroppedToolsContainer);
 			
-			itemHandle.GlobalPosition = droppantHandle.Value.GlobalPosition; 
+			itemHandle.GlobalPosition = droppantHandle.GlobalPosition; 
 		});
 }

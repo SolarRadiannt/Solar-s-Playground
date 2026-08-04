@@ -22,7 +22,7 @@ public abstract partial class EcsRigidBody2D : RigidBody2D
 						.Add(new Name(Name));
 		
 		entity.TryAdd(this);
-		entity.TryAdd(new Node2DHandle(this));
+		entity.TryAdd<Node2D>(this);
 		
 		OnEntityReady();
 	}
@@ -31,7 +31,7 @@ public abstract partial class EcsRigidBody2D : RigidBody2D
 		if (entity)
 		{
 			entity.TryRemove<EcsRigidBody2D>();
-			entity.TryRemove<Node2DHandle>();
+			entity.TryRemove<Node2D>();
 		}
 	}
 	

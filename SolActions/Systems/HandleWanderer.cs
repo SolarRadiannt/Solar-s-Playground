@@ -41,33 +41,33 @@ public partial class HandleWanderer : Node, ISystem
 			cooldown.Value.Tick(dt);
 		});
 	
-	private static readonly Stream<Node2DHandle> toSetWanderGoal = 
-		world.Query<Node2DHandle>()
+	private static readonly Stream<Node2D> toSetWanderGoal = 
+		world.Query<Node2D>()
 		.Has<Wandering>()
 		.Not<WanderGoal>()
 		.Stream();
 	private static void WanderGoalSetter() =>
 	toSetWanderGoal.For(static
-	(in Entity entity, ref Node2DHandle handle) =>
+	(in Entity entity, ref Node2D node) =>
 	{
 		float range = WanderAction.WANDER_RADIUS;
-		var origin = handle.Value.GlobalPosition;
+		var origin = node.GlobalPosition;
 		var goal = origin + SolRand.Vec2Radius(range);
 
 		entity.Add(new WanderGoal(goal));
 		MoveManager.MoveTo(entity, goal);
 	});
 
-	private static readonly Stream<Node2DHandle, WanderGoal> toCheckWanderReached=
-		world.Query<Node2DHandle, WanderGoal>()
+	private static readonly Stream<Node2D, WanderGoal> toCheckWanderReached=
+		world.Query<Node2D, WanderGoal>()
 		.Has<Wandering>()
 		.Stream();
 	private static void WanderGoalChecker() =>
 	toCheckWanderReached.For(static
-	(in Entity entity, ref Node2DHandle handle, ref WanderGoal goal) =>
+	(in Entity entity, ref Node2D node, ref WanderGoal goal) =>
 	{
 		float reachDist = MoveManager.GetReachDist(entity);
-		float dist = handle.Value.GlobalPosition.DistanceTo(goal.Value);
+		float dist = node.GlobalPosition.DistanceTo(goal.Value);
 		if (dist <= reachDist)
 			entity.Remove<WanderGoal>();
 	});
