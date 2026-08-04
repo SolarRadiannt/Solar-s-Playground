@@ -24,7 +24,7 @@ public abstract partial class EcsCharBody2D : CharacterBody2D
 						.Add<Character>();
 		
 		entity.TryAdd(this);
-		entity.TryAdd(new Node2DHandle(this));
+		entity.TryAdd<Node2D>(this);
 		
 		OnEntityReady();
 	}
@@ -33,7 +33,7 @@ public abstract partial class EcsCharBody2D : CharacterBody2D
 		if (entity)
 		{
 			entity.TryRemove<EcsCharBody2D>();
-			entity.TryRemove<Node2DHandle>();
+			entity.TryRemove<Node2D>();
 		}
 	}
 	

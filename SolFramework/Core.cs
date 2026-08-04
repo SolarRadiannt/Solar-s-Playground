@@ -1,20 +1,8 @@
 namespace SolFramework;
 
+using System;
 using fennecs;
 using SolFramework.Components;
-
-
-public interface IEcsComponent<T>
-{
-	T Value {get; set;}
-}
-
-public interface IEcsTargetRelation<TSelf>
-{
-	Entity Target { get; set; }
-}
-
-public interface IEcsTag;
 
 public static class Core
 {

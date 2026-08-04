@@ -23,7 +23,7 @@ public abstract partial class EcsNode2D : Node2D
 		}
 		
 		entity.TryAdd(this);
-		entity.TryAdd(new Node2DHandle(this));
+		entity.TryAdd<Node2D>(this);
 		
 		OnEntityReady();
 	}
@@ -33,7 +33,7 @@ public abstract partial class EcsNode2D : Node2D
 		if (entity)
 		{
 			entity.TryRemove<EcsNode2D>();
-			entity.TryRemove<Node2DHandle>();
+			entity.TryRemove<Node2D>();
 		}
 	}
 	

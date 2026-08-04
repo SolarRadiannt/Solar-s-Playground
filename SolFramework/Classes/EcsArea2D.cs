@@ -23,7 +23,7 @@ public abstract partial class EcsArea2D : Area2D
 						.Add<Character>();
 		
 		entity.TryAdd(this);
-		entity.TryAdd(new Node2DHandle(this));
+		entity.TryAdd<Node2D>(this);
 		
 		OnEntityReady();
 	}
@@ -32,7 +32,7 @@ public abstract partial class EcsArea2D : Area2D
 		if (entity)
 		{
 			entity.TryRemove<EcsArea2D>();
-			entity.TryRemove<Node2DHandle>();
+			entity.TryRemove<Node2D>();
 		}
 	}
 	

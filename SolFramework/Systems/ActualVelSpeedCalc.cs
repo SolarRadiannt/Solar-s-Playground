@@ -25,13 +25,13 @@ public partial class ActualVelCalc : Node, ISystem
 
     private static World world = Core.World;
 
-    private static Stream<Node2DHandle, LastPosition> calculateables =
-        world.Stream<Node2DHandle, LastPosition>(); 
+    private static Stream<Node2D, LastPosition> calculateables =
+        world.Stream<Node2D, LastPosition>(); 
     private static void CalculateActualVelAndSpeed() =>
         calculateables.For(static
-        (in Entity entity, ref Node2DHandle handle, ref LastPosition lastPos) =>
+        (in Entity entity, ref Node2D handle, ref LastPosition lastPos) =>
         {
-            var actualVel = handle.Value.GlobalPosition - lastPos.Value;
+            var actualVel = handle.GlobalPosition - lastPos.Value;
             float actualSpeed = actualVel.Length();
 
             if (entity.Has<ActualVelocity>())
@@ -46,14 +46,14 @@ public partial class ActualVelCalc : Node, ISystem
                 entity.Add(new ActualSpeed(actualSpeed));
         });
 
-    public static readonly Stream<Node2DHandle> toUpdate = world.Stream<Node2DHandle>();
+    public static readonly Stream<Node2D> toUpdate = world.Stream<Node2D>();
 	public static void UpdateLastPosition() =>
 		toUpdate.For(static
-		(in Entity entity, ref Node2DHandle handle) =>
+		(in Entity entity, ref Node2D handle) =>
 		{
 			if (entity.Has<LastPosition>())
-				entity.Ref<LastPosition>().Value = handle.Value.GlobalPosition;
+				entity.Ref<LastPosition>().Value = handle.GlobalPosition;
 			else
-				entity.Add(new LastPosition(handle.Value.GlobalPosition));
+				entity.Add(new LastPosition(handle.GlobalPosition));
 		});
 }
