@@ -19,8 +19,8 @@ public partial class PickupAndDrop : Node, ISystem
 	public int Priority => SPriority.Applying - 1;
 	public void Process(double delta)
 	{
-		HandlePickup();
-		HandleDrop();
+		toPickup.For(HandlePickup);
+		toDrop.For(HandleDrop);
 	}
 	
 	public void Init()
@@ -35,21 +35,19 @@ public partial class PickupAndDrop : Node, ISystem
 			.Not<EventCancelled>()
 			.Not<Visuals>()
 			.Stream();
-	private static void HandlePickup() =>
-		toPickup.For(static
-		(ref PickupBy newOwner, ref PickupItem item) =>
-		{
-			OwnershipManager.SetOwner(newOwner.Value, item.Value);
+	private static void HandlePickup(ref PickupBy newOwner, ref PickupItem item)
+	{
+		OwnershipManager.SetOwner(newOwner.Value, item.Value);
 			
-			if (item.Value.TryRead<EcsArea2D>(out var itemHandle))
-			{
-				if (!newOwner.Value.TryRead<Node2D>(out var ownerHandle)) return;
-				
-				itemHandle.Visible = false;
-				itemHandle.SetDeferred("disabled", true);
-				itemHandle.SetParent(ownerHandle);
-			}
-		});
+		if (item.Value.TryRead<EcsArea2D>(out var itemHandle))
+		{
+			if (!newOwner.Value.TryRead<Node2D>(out var ownerHandle)) return;
+			
+			itemHandle.Visible = false;
+			itemHandle.SetDeferred("disabled", true);
+			itemHandle.SetParent(ownerHandle);
+		}
+	}
 	
 	private static readonly Stream<DropBy, DropItem> toDrop =
 		world.Query<DropBy, DropItem>()
@@ -57,24 +55,22 @@ public partial class PickupAndDrop : Node, ISystem
 			.Not<EventCancelled>()
 			.Not<Visuals>()
 			.Stream();
-	private static void HandleDrop() =>
-		toDrop.For(static
-		(ref DropBy droppant, ref DropItem item) =>
-		{
-			OwnershipManager.RemoveOwner(item.Value);
-			EEvent.Spawn()
-				.Add<UnequippingEvent>()
-				.Add<Visuals>()
-				.Add(new UnequippingBy(droppant.Value))
-				.Add(new UnequippingItem(item.Value));
-			
-			if (!item.Value.TryRead<EcsArea2D>(out var itemHandle)) return;
-			if (!droppant.Value.TryRead<Node2D>(out var droppantHandle)) return;
-			
-			itemHandle.Visible = true;
-			itemHandle.SetDeferred("disabled", false);
-			itemHandle.SetParent(ItemsManager.DroppedToolsContainer);
-			
-			itemHandle.GlobalPosition = droppantHandle.GlobalPosition; 
-		});
+	private static void HandleDrop(ref DropBy droppant, ref DropItem item)
+	{
+		OwnershipManager.RemoveOwner(item.Value);
+		EEvent.Spawn()
+			.Add<UnequippingEvent>()
+			.Add<Visuals>()
+			.Add(new UnequippingBy(droppant.Value))
+			.Add(new UnequippingItem(item.Value));
+		
+		if (!item.Value.TryRead<EcsArea2D>(out var itemHandle)) return;
+		if (!droppant.Value.TryRead<Node2D>(out var droppantHandle)) return;
+		
+		itemHandle.Visible = true;
+		itemHandle.SetDeferred("disabled", false);
+		itemHandle.SetParent(ItemsManager.DroppedToolsContainer);
+		
+		itemHandle.GlobalPosition = droppantHandle.GlobalPosition;
+	}
 }

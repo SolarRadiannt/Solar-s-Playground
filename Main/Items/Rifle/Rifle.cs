@@ -8,9 +8,10 @@ public partial class Rifle : EcsArea2D
 	protected override void OnEntityReady()
 	{
 		GD.Print("firearm is ready!");
-		entity.Add<ItemType<Firearm>>()
+		entity
 			.Add<Item>()
-			.Add<Pickupable>()
-			.Add<FirearmType<Root.Components.Rifle>>();
+			.Add<Pickupable>();
+			// .Add<ItemType<Firearm>>()
+			// .Add<FirearmType<Root.Components.Rifle>>();
 	}
 }
