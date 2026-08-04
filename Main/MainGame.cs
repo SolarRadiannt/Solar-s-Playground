@@ -10,6 +10,7 @@ using SolProjectiles.Managers;
 public partial class MainGame : Node2D
 {
 	public static EcsCharBody2D Player;
+	public static World2D World2D;
 	public static MainGame Instance;
 	private void AddChildBatch(Node[] nodes)
 	{
@@ -19,6 +20,7 @@ public partial class MainGame : Node2D
 	public override void _Ready()
 	{
 		Instance = this;
+		World2D = GetWorld2D();
 		
 		AddChildBatch(SolFramework.SystemRegistry.All);
 		AddChildBatch(SystemRegistry.All);

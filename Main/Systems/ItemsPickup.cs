@@ -12,36 +12,45 @@ using Root.Components;
 using GodotUtilities;
 using SolItems.Components;
 using SolItems.Managers;
+using System.Linq;
+using SharpResults.Core;
 
 
 public partial class ItemsPickup : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	public int Priority => SPriority.Action;
+	public static SolPointQuery query = new SolPointQuery
+	{
+		CollideWithAreas = true
+	};
+	
 	public void Process(double delta)
 	{
 		if (!Input.IsActionJustPressed("pickup")) return;
 		
-		GD.Print("pickup clicked");
-		var space_state = MainGame.Instance.GetWorld2D().DirectSpaceState;
+		var mousePos = MainGame.Instance.GetGlobalMousePosition();
 		
-		var query = new PhysicsPointQueryParameters2D();
-		query.Position = MainGame.Instance.GlobalPosition;
-		var result = space_state.IntersectPoint(query);
-		if (result.PickRandom is EcsArea2D area)
-		{
-			var entity = area.Entity;
-			if (entity.HasAll<Pickupable, Item>()) return;
-			if (entity.Has<OwnedBy>(Entity.Any)) return;
-			
-			ItemsManager.Pickup(entity, MainGame.Player.Entity);
-			GD.Print($"{entity.GetName()} has been picked up");
-		}
+		GD.Print("pickup clicked");
+		var results = SolSpatial2D.IntersectPoint(mousePos, query);
+		GD.Print(results);
+		
+		foreach (var found in results)
+			if (found.Collider is EcsArea2D area)
+			{
+				var entity = area.Entity;
+				if (!entity.HasAll<Pickupable, Item>()) return;
+				if (entity.Has<OwnedBy>(Entity.Any)) return;
+				
+				ItemsManager.Pickup(entity, MainGame.Player.Entity);
+				GD.Print($"{entity.GetName()} has been picked up");
+				break;
+			}
 	}
 	
 	public void Init()
 	{
-		Scheduler.RegisterSystem(this);
+		Scheduler.RegisterPhysicsSystem(this);
 	}
 	public override void _Ready() => Init();
 }

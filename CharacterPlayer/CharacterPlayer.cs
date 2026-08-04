@@ -18,6 +18,8 @@ public partial class CharacterPlayer : EcsCharBody2D
 		HealthManager.ApplyHealth(entity, 100f);
 		FootstepManager.ApplyFootstep(entity, 2.5f);
 		
+		MainGame.Player = this;
+		
 		GD.Print("Character spawned!");
 	}
 
