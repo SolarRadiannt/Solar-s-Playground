@@ -27,8 +27,8 @@ public partial class ItemsPickup : Node, ISystem
 		
 		var query = new PhysicsPointQueryParameters2D();
 		query.Position = MainGame.Instance.GlobalPosition;
-		var result = space_state.IntersectPoint(query)
-		if (result is EcsArea2D area)
+		var result = space_state.IntersectPoint(query);
+		if (result.PickRandom is EcsArea2D area)
 		{
 			var entity = area.Entity;
 			if (entity.HasAll<Pickupable, Item>()) return;
