@@ -16,14 +16,14 @@ public abstract partial class EcsRigidBody2D : RigidBody2D
 	
 	public override void _EnterTree()
 	{
-		if (!entity)
-			entity = Core.World.Spawn()
-						.Add(new Velocity(Vector2.Zero))
-						.Add(new Name(Name));
+		if (entity) return;
+		entity = Core.World.Spawn()
+			.Add(new Velocity(Vector2.Zero))
+			.Add(new Name(Name));
 		
 		entity.TryAdd(this);
 		entity.TryAdd<Node2D>(this);
-		
+
 		OnEntityReady();
 	}
 	public override void _ExitTree()

@@ -16,14 +16,15 @@ public abstract partial class EcsArea2D : Area2D
 	
 	public override void _EnterTree()
 	{
-		if (!entity)
-			entity = Core.World.Spawn()
-						.Add(new Velocity(Vector2.Zero))
-						.Add(new Name(Name))
-						.Add<Character>();
+		if (entity) return;
+
+		entity = Core.World.Spawn()
+			.Add(new Velocity(Vector2.Zero))
+			.Add(new Name(Name))
+			.Add<Character>();
 		
-		entity.TryAdd(this);
-		entity.TryAdd<Node2D>(this);
+		entity.Add(this);
+		entity.Add<Node2D>(this);
 		
 		OnEntityReady();
 	}
