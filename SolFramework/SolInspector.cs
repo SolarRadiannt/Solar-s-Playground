@@ -163,11 +163,11 @@ public static class SolInspector
 		{
 			foreach (Entity entity in entities)
 			{
-				string entityName = Core.GetName(entity);
+				string entityName = entity.GetName();
 				
 				if (IsFiltered(entityName, _searchFilter)) continue;
 				
-				ImGui.PushID(entity.GetHashCode());
+				ImGui.PushID(entity.GetHashCode() + 2);
 				DisplayEntity(entity);
 				ImGui.PopID();
 			}
@@ -177,7 +177,7 @@ public static class SolInspector
 	
 	private static void DisplayEntity(Entity entity)
 	{
-		if (ImGui.CollapsingHeader(Core.GetName(entity), ImGuiTreeNodeFlags.None))
+		if (ImGui.CollapsingHeader($"[{entity.ToRaw()}] {entity.GetName()}", ImGuiTreeNodeFlags.None))
 		{
 			ImGui.Indent();
 			
@@ -188,12 +188,12 @@ public static class SolInspector
 	}
 	
 	private static readonly List<ComponentTypeCache>
-		entityComponents = new();
+		entityComponents = [];
 	private static readonly List<(string name, System.Numerics.Vector4? color)>
-		entityTags = new();
+		entityTags = [];
 	// Replaced the ECS component approach with a clean dictionary cache for component filters
-	private static Dictionary<Entity, string> entitiesComponentFilter = new();
-	private static Dictionary<Entity, string> entitiesTagsFilter = new();
+	private static readonly Dictionary<Entity, string> entitiesComponentFilter = [];
+	private static readonly Dictionary<Entity, string> entitiesTagsFilter = [];
 	
 	private static void DisplayResources(Entity entity)
 	{
