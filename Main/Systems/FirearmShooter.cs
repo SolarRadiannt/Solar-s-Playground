@@ -16,7 +16,7 @@ using System.Linq;
 using SharpResults.Core;
 
 
-public partial class ItemsPickup : Node, ISystem
+public partial class FirearmShooter : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	public int Priority => SPriority.Action;
