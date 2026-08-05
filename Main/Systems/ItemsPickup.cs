@@ -20,8 +20,8 @@ public partial class ItemsPickup : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	public int Priority => SPriority.Action;
-	public static SolPointQuery query = new SolPointQuery
-	{
+	public static readonly SolPointQuery query = new()
+    {
 		CollideWithAreas = true
 	};
 	
