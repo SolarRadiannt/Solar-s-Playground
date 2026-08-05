@@ -32,5 +32,5 @@ public record struct HitDataSource(Entity Value);
 public record struct HitDataDistance(float Value);
 public record struct HitDataObject(GodotObject Value);
 public record struct HitDataRid(Rid Value);
-
+public record struct HitDataDamage(float Value);
 public struct HitEvent;

@@ -19,7 +19,7 @@ public partial class CheckPickupOwnership : Node, ISystem
 	public int Priority => SPriority.Interception;
 	public void Process(double delta)
 	{
-		CheckOwnership();
+		toCheckIfOwned.For(CheckOwnership);
 	}
 	
 	public void Init()
@@ -32,15 +32,12 @@ public partial class CheckPickupOwnership : Node, ISystem
 			.Has<PickupEvent>()
 			.Not<EventCancelled>()
 			.Stream();
-	public static void CheckOwnership() =>
-		toCheckIfOwned.For(static
-		(in Entity eevent, ref PickupItem item, ref PickupBy newOwner) =>
-		{
-			if (OwnershipManager.TryGetOwner(item.Value, out var existingOwner))
-			{
-				eevent
-					.Add<PickupAlreadyOwned>()
-					.Add<EventCancelled>();
-			}
-		});
+	public static void CheckOwnership(in Entity eevent, ref PickupItem item, ref PickupBy newOwner)
+	{
+		if (OwnershipManager.TryGetOwner(item.Value, out var existingOwner) && !existingOwner.Equals(newOwner.Value))
+			eevent
+				.Add<PickupAlreadyOwned>()
+				.Add<EventCancelled>();
+		
+	}
 }

@@ -15,7 +15,7 @@ public partial class FarDestroyer : Node, ISystem
 	public int Priority => SPriority.Interception;
 	public void Process(double delta)
 	{
-		TooFarCheck();
+		projectiles.For(TooFarCheck);
 	}
 	
 	public void Init()
@@ -28,23 +28,20 @@ public partial class FarDestroyer : Node, ISystem
 		.Has<Projectile>()
 		.Not<Destroy>()
 		.Stream();
-	private static void TooFarCheck() =>
-		projectiles.For(
-		static
-		(
-			in Entity entity,
-			ref EcsNode2D projectile,
-			ref ProjectileOrigin origin,
-			ref ProjectileMaxDistance maxDist
-		) => {
-			float distance = (origin.Value - projectile.GlobalPosition).Length();
+	private static void TooFarCheck(
+		in Entity entity,
+		ref EcsNode2D projectile,
+		ref ProjectileOrigin origin,
+		ref ProjectileMaxDistance maxDist
+	) {
+		float distance = (origin.Value - projectile.GlobalPosition).Length();
 
-			if (!entity.Has<ProjectileCurrentDistance>())
-				entity.Add(new ProjectileCurrentDistance(distance));
-			else
-				entity.Ref<ProjectileCurrentDistance>().Value = distance;
+		if (!entity.Has<ProjectileCurrentDistance>())
+			entity.Add(new ProjectileCurrentDistance(distance));
+		else
+			entity.Ref<ProjectileCurrentDistance>().Value = distance;
 
-			if (distance >= maxDist.Value)
-				entity.Add<Destroy>();
-		});
+		if (distance >= maxDist.Value)
+			entity.Add<Destroy>();
+	}
 }

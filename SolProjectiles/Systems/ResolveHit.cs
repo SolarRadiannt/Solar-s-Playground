@@ -18,7 +18,7 @@ public partial class ResolveHit : Node, ISystem
 	public int Priority => SPriority.Applying;
 	public void Process(double delta)
 	{
-		ProcessProjectileHit(delta);
+		projectiles.For((float)delta, MoveAndCheckHit);
 	}
 	
 	public void Init()
@@ -31,51 +31,49 @@ public partial class ResolveHit : Node, ISystem
 		.Has<Projectile>()
 		.Not<Destroy>()
 		.Stream();
-	private static void ProcessProjectileHit(double delta) =>
-		projectiles.For(
-		(float)delta,
-		static(
-			float delta,
-			in Entity entity,
-			ref EcsNode2D projectile,
-			ref Velocity vel,
-			ref ProjectileDamage damage,
-			ref ProjectileOrigin origin
-		) => {
-			var pos = projectile.GlobalPosition;
-			var nextPos = pos + (vel.Value * delta);
+	private static void MoveAndCheckHit(
+		float delta,
+		in Entity entity,
+		ref EcsNode2D projectile,
+		ref Velocity vel,
+		ref ProjectileDamage damage,
+		ref ProjectileOrigin origin
+	) {
+		var pos = projectile.GlobalPosition;
+		var nextPos = pos + (vel.Value * delta);
 
-			var resultant = nextPos - pos;
-			var dir = resultant.Normalized();
-			float dist = resultant.Length();
-			
-			uint mask = entity.TryRead<ProjectileCollisionMask>(out var maskComp) 
-				? maskComp.Value
-				: uint.MaxValue;
-			
-			if (!PhysicsQuery2D.Raycast(origin: pos, direction: dir, dist, out var result, mask))
-			{
-				projectile.GlobalPosition = nextPos;
-				return;
-			}
-			
-			var hitEvent = EEvent.Spawn()
-				.Add<HitEvent>()
-				.Add(new HitDataNormal(result.Normal))
-				.Add(new HitDataPosition(result.Position))
-				.Add(new HitDataObject(result.Collider))
-				.Add(new HitDataRid(result.ColliderRid))
-				.Add(new HitDataOrigin(origin.Value))
-				.Add(new HitDataDistance(entity.Ref<ProjectileCurrentDistance>().Value));
-			
-			if (entity.Has<ProjectileWeapon>())
-				hitEvent.Add(new HitDataWeapon(entity.Ref<ProjectileWeapon>().Value));
+		var resultant = nextPos - pos;
+		var dir = resultant.Normalized();
+		float dist = resultant.Length();
+		
+		uint mask = entity.TryRead<ProjectileCollisionMask>(out var maskComp) 
+			? maskComp.Value
+			: uint.MaxValue;
+		
+		if (!PhysicsQuery2D.Raycast(origin: pos, direction: dir, dist, out var result, mask))
+		{
+			projectile.GlobalPosition = nextPos;
+			return;
+		}
+		
+		var hitEvent = EEvent.Spawn()
+			.Add<HitEvent>()
+			.Add(new HitDataNormal(result.Normal))
+			.Add(new HitDataPosition(result.Position))
+			.Add(new HitDataObject(result.Collider))
+			.Add(new HitDataRid(result.ColliderRid))
+			.Add(new HitDataOrigin(origin.Value))
+			.Add(new HitDataDistance(entity.Ref<ProjectileCurrentDistance>().Value))
+			.Add(new HitDataDamage(damage.Value));
+		
+		if (entity.Has<ProjectileWeapon>())
+			hitEvent.Add(new HitDataWeapon(entity.Ref<ProjectileWeapon>().Value));
 
-			if (entity.Has<ProjectileSource>())
-				hitEvent.Add(new HitDataSource(entity.Ref<ProjectileSource>().Value));
+		if (entity.Has<ProjectileSource>())
+			hitEvent.Add(new HitDataSource(entity.Ref<ProjectileSource>().Value));
 
-			entity
-				.Add(new ProjectileHitEvent(hitEvent))
-				.Add<Destroy>();	
-		});
+		entity
+			.Add(new ProjectileHitEvent(hitEvent))
+			.Add<Destroy>();
+	}
 }

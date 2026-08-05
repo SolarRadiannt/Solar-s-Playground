@@ -16,7 +16,7 @@ public partial class LookToMoveDirection : Node, ISystem
 	public int Priority => SPriority.Applying;
 	public void Process(double delta)
 	{
-		LookAtMoveDirection(delta);
+		toLookAtMoveDirection.For(LookAtMoveDirection);
 	}
 	
 	public void Init()
@@ -30,13 +30,6 @@ public partial class LookToMoveDirection : Node, ISystem
 			.Has<LookAtMoveDir>()
 			.Has<Moving>()
 			.Stream();
-	private static void LookAtMoveDirection(double delta) =>
-		toLookAtMoveDirection.For((float)delta, static
-		(float dt, in Entity entity, ref Node2D node, ref MoveDirection dir) =>
-		{
-			if (entity.Has<LookSpeed>())
-				node.SmoothlyLookAt(node.GlobalPosition + dir.Value, entity.Ref<LookSpeed>().Value, dt);
-			else
-				node.LookAt(node.GlobalPosition + dir.Value);
-		});
+	private static void LookAtMoveDirection(ref Node2D node, ref MoveDirection dir) =>
+		node.LookAtDir(dir.Value);
 }

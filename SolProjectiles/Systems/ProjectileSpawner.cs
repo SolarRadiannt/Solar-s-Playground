@@ -17,7 +17,7 @@ public partial class ProjectileSpawner : Node, ISystem
 	public int Priority => SPriority.Applying;
 	public void Process(double delta)
 	{
-		ProjectileSpawning();
+		spawnEvents.For(ProjectileSpawning);
 	}
 	
 	public void Init()
@@ -31,15 +31,13 @@ public partial class ProjectileSpawner : Node, ISystem
         .Not<EventCancelled>()
 		.Has<ShootEvent>()
 		.Stream();
-	private static void ProjectileSpawning() =>
-		spawnEvents.For(
-		static(
-			in Entity reqEntity,
-            ref ShootProjectileType type,
-			ref ShootOrigin origin,
-            ref ShootDirection direction
-		) => {
-			if (!ProjectileRegistry.TryGetData(type.Value, out var data))
+	private static void ProjectileSpawning(
+		in Entity reqEntity,
+		ref ShootProjectileType type,
+		ref ShootOrigin origin,
+		ref ShootDirection direction
+	) {
+		if (!ProjectileRegistry.TryGetData(type.Value, out var data))
 				return;
 			
 			var projectile = data.Scene.Instantiate<EcsProjectile2D>();
@@ -64,5 +62,5 @@ public partial class ProjectileSpawner : Node, ISystem
 				entity.Add(new ProjectileCollisionMask(mask.Value));
 			
 			MoveManager.ApplyMovement(entity, data.Speed, direction.Value);
-		});
+	}
 }

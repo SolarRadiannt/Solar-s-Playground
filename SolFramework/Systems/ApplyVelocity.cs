@@ -12,7 +12,7 @@ public partial class ApplyVelocity : Node, ISystem
 	public int Priority => SPriority.Applying + 5;
 	public void Process(double _)
 	{
-		ApplyVelocities();
+		toApplyVelocities.For(ApplyVelocities);
 	}
 	
 	public void Init()
@@ -26,12 +26,5 @@ public partial class ApplyVelocity : Node, ISystem
 	private static readonly World world = Core.World;
 	private static readonly Stream<EcsCharBody2D, Velocity> toApplyVelocities =
 		world.Stream<EcsCharBody2D, Velocity>();
-	private static void ApplyVelocities()
-	{
-		toApplyVelocities.For(
-			static (in Entity entity, ref EcsCharBody2D body, ref Velocity vel) =>
-			{
-				body.Velocity = vel.Value;
-			});
-	}
+	private static void ApplyVelocities(ref EcsCharBody2D body, ref Velocity vel) => body.Velocity = vel.Value;
 }

@@ -20,13 +20,13 @@ public partial class ActionsExecutor : Node, ISystem
 	public int Priority => SPriority.Transformation;
 	public void Process(double delta)
 	{
-		AgentRemover();
-		AgentUpdater();
+		agentsToUpdate.For(AgentUpdater);
 	}
 	
 	public void Init()
 	{
 		Scheduler.RegisterPhysicsSystem(this);
+		Scheduler.RegisterSystem(AgentRemover, SPriority.Flush + 1);
 	}
 	public override void _Ready() => Init();
 	
@@ -57,7 +57,7 @@ public partial class ActionsExecutor : Node, ISystem
 		world.Query<AgentActions>()
 		.Has<Destroy>()
 		.Stream();
-	private static void AgentRemover() =>
+	private static void AgentRemover(double _) =>
 		destroyedAgents.For(static
 		(in Entity entity, ref AgentActions _) => entityActiveActionMap.Remove(entity));
 	
@@ -65,19 +65,17 @@ public partial class ActionsExecutor : Node, ISystem
 		world.Query<AgentActions>()
 		.Not<AgentDisabled>()
 		.Stream();
-	private static void AgentUpdater() =>
-	agentsToUpdate.For(static
-		(in Entity entity, ref AgentActions actions) =>
-		{
-			 if (!entityActiveActionMap.TryGetValue(entity, out var currentAction))
-				currentAction = null;
-			
-			var chosenAction = GetBestAction(entity, actions.Value);
-			if (chosenAction == currentAction) return;
-			
-			currentAction?.Stop(entity);
-			
-			chosenAction.Start(entity);
-			entityActiveActionMap[entity] = chosenAction;
-		});
+	private static void AgentUpdater(in Entity entity, ref AgentActions actions)
+	{
+		if (!entityActiveActionMap.TryGetValue(entity, out var currentAction))
+			currentAction = null;
+		
+		var chosenAction = GetBestAction(entity, actions.Value);
+		if (chosenAction == currentAction) return;
+		
+		currentAction?.Stop(entity);
+		
+		chosenAction.Start(entity);
+		entityActiveActionMap[entity] = chosenAction;
+	}
 }

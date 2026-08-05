@@ -9,7 +9,7 @@ using SolFramework.Components;
 
 public partial class Destruction : Node, ISystem
 {
-	public int Priority => SPriority.Flush;
+	public int Priority => SPriority.Flush - 5;
 	public void Process(double _)
 	{
 		destroyHandles.Raw(static nodes => {

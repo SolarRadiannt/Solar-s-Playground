@@ -15,9 +15,9 @@ public partial class ComputeVelocity : Node, ISystem
 	
 	public void Process(double _)
 	{
-		ResetVelocity();
-		ApplyMoveVelocity();
-		ApplyMoveVelocityToNode2D();
+		toReset.For(ResetVelocity);
+		toApplyMoveVel.For(ApplyMoveVelocity);
+		toApplyMoveVelToNode2D.For(ApplyMoveVelocity);
 	}
 	
 	public void Init()
@@ -29,37 +29,19 @@ public partial class ComputeVelocity : Node, ISystem
 	private static readonly Stream<Velocity> toReset =
 		world.Query<Velocity>()
 			.Stream();
-	private static void ResetVelocity()
-	{
-		toReset.For(static
-		(ref Velocity vel) =>
-		{
-			vel.Value = Vector2.Zero;
-		});
-	}
-	
-	private static readonly Stream<Velocity, MoveVelocity> toApplyMoveVel =
-		world.Query<Velocity, MoveVelocity>()
-			.Has<Grounded>()
-			.Stream();
-	private static void ApplyMoveVelocity()
-	{
-		toApplyMoveVel.For(static
-			(ref Velocity vel, ref MoveVelocity moveVel) =>
-				vel.Value += moveVel.Value
-			);
-	}
-	
+	private static void ResetVelocity(ref Velocity vel) => vel.Value = Vector2.Zero;
+
 	private static readonly Stream<Velocity, MoveVelocity> toApplyMoveVelToNode2D =
 		world.Query<Velocity, MoveVelocity>()
 			.Has<EcsNode2D>()
 			.Not<Grounded>()
 			.Stream();
-		private static void ApplyMoveVelocityToNode2D()
+	private static readonly Stream<Velocity, MoveVelocity> toApplyMoveVel =
+		world.Query<Velocity, MoveVelocity>()
+			.Has<Grounded>()
+			.Stream();
+	private static void ApplyMoveVelocity(ref Velocity vel, ref MoveVelocity moveVel)
 	{
-		toApplyMoveVelToNode2D.For(static
-			(ref Velocity vel, ref MoveVelocity moveVel) =>
-				vel.Value += moveVel.Value
-			);
-	}
+		vel.Value += moveVel.Value;
+	}	
 }

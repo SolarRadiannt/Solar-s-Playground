@@ -15,9 +15,9 @@ public partial class HealthApply : Node, ISystem
 	public int Priority => SPriority.Applying;
 	public void Process(double _)
 	{
-		ApplyHeals();
-		ApplyClamping();
-		ApplyDamages();
+		toApplyHealth.For(ApplyHeals);
+		toClampHealth.For(ApplyClamping);
+		toApplyDamage.For(ApplyDamages);
 	}
 
 	public void Init()
@@ -29,27 +29,19 @@ public partial class HealthApply : Node, ISystem
 	private static readonly World world = Core.World;
 	private static readonly Stream<Health, MaxHealth> toClampHealth =
 		world.Stream<Health, MaxHealth>();
-	private static void ApplyClamping()
-	{
-		toClampHealth.For(
-			static (ref Health health, ref MaxHealth maxHealth) =>
-			{
-				health.Value = Math.Min(maxHealth.Value, health.Value);
-			});
-	}
+	private static void ApplyClamping(ref Health health, ref MaxHealth maxHealth) =>
+		health.Value = Math.Min(maxHealth.Value, health.Value);
 	
 	private static readonly Stream<DamageAmount, DamageTarget> toApplyDamage =
 		world.Query<DamageAmount, DamageTarget>()
 			.Has<DamageEvent>()
 			.Not<EventCancelled>()
 			.Stream();
-	private static void ApplyDamages() =>
-		toApplyDamage.For(static
-		(in Entity eevent, ref DamageAmount amount, ref DamageTarget target) =>
-		{
-			if (!target.Value.Has<Health>() || amount.Value <= 0) return;
+	private static void ApplyDamages(ref DamageAmount amount, ref DamageTarget target)
+	{
+		if (target.Value.Has<Health>() && amount.Value > 0) return;
 			target.Value.Ref<Health>().Value -= amount.Value;
-		});
+	}
 	
 	
 	private static readonly Stream<HealAmount, HealTarget> toApplyHealth =
@@ -57,13 +49,9 @@ public partial class HealthApply : Node, ISystem
 			.Has<HealEvent>()
 			.Not<EventCancelled>()
 			.Stream();
-	private static void ApplyHeals()
+	private static void ApplyHeals(ref HealAmount amount, ref HealTarget target)
 	{
-		toApplyHealth.For(static
-		(in Entity eevent, ref HealAmount amount, ref HealTarget target) =>
-		{
-			if (!target.Value.Has<Health>() || amount.Value <= 0) return;
+		if (target.Value.Has<Health>() && amount.Value > 0) return;
 			target.Value.Ref<Health>().Value += amount.Value;
-		});
 	}
 }

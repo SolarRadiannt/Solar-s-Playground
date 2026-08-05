@@ -19,7 +19,7 @@ public partial class FootstepSounds : Node, ISystem
 	
 	public void Process(double _)
 	{
-		PlayFootsteps();
+		footstepEvents.For(PlayFootsteps);
 	}
 	
 	public void Init()
@@ -44,11 +44,9 @@ public partial class FootstepSounds : Node, ISystem
 		world.Query<FootstepOrigin, FootstepMaterial, FootstepSource>()
 		.Has<FootstepEvent>()
 		.Stream();
-	private void PlayFootsteps() =>
-		footstepEvents.For(static
-			(ref FootstepOrigin origin, ref FootstepMaterial material, ref FootstepSource source) =>
-			{
-				var selected = MathUtil.PickRandom(footsteps);
-				AudioManager.Instance.PlaySfx2D(selected, origin.Value);
-			});
+	private void PlayFootsteps(ref FootstepOrigin origin, ref FootstepMaterial material, ref FootstepSource source)
+	{
+		var selected = MathUtil.PickRandom(footsteps);
+		AudioManager.Instance.PlaySfx2D(selected, origin.Value);
+	}
 }
