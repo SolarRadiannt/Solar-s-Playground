@@ -23,7 +23,7 @@ public abstract partial class EcsRigidBody2D : RigidBody2D
 		
 		entity.TryAdd(this);
 		entity.TryAdd<Node2D>(this);
-
+		
 		OnEntityReady();
 	}
 	public override void _ExitTree()
