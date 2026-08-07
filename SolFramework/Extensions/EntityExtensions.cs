@@ -3,6 +3,8 @@ using fennecs;
 using System.Diagnostics.CodeAnalysis;
 using SolFramework.Components;
 using System.Linq;
+using Godot;
+
 
 public static class EntityExtensions
 {
@@ -32,6 +34,31 @@ public static class EntityExtensions
 			.Has<R>(entity)
 			.Compile()
 			.TryFirst(out target);
+	
+	
+	public static bool TryRead<T>(this Entity entity, Match match, out T component)
+	{
+		if (entity.Has<T>(match))
+		{
+			component = entity.Ref<T>(match);
+			return true;
+		}
+		
+		component = default;
+		return false;
+	}
+	
+	public static bool TryRead<T>(this Entity entity, Entity relation, out T component)
+	{
+		if (entity.Has<T>(relation))
+		{
+			component = entity.Ref<T>(relation);
+			return true;
+		}
+		
+		component = default;
+		return false;
+	}
 	
 	/// <summary>
     /// Tries to read a copy of the plain component of type <typeparamref name="T"/>.

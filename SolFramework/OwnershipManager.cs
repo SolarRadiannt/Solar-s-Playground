@@ -2,7 +2,7 @@ namespace SolFramework.Managers;
 
 using System.Linq;
 using fennecs;
-
+using Godot;
 using SharpResults.Core.Types;
 using SharpResults.Types;
 
@@ -37,7 +37,7 @@ public static class OwnershipManager
 	
 	public static bool TryGetOwner(Entity owned, out Entity owner)
 	{
-		if (owned.TryRead<OwnedBy>(out var owncomp))
+		if (owned.TryRead<OwnedBy>(Entity.Any, out var owncomp))
 		{
 			owner = owncomp.Target;
 			return true;
@@ -65,6 +65,7 @@ public static class OwnershipManager
 				return OwnershipError.HasOwner;
 		
 		toOwn.Add<OwnedBy>(new(owner), owner);
+		GD.Print(toOwn.Has<OwnedBy>());
 		
 		return EEvent.Spawn()
 			.Add<OwnershipChangedEvent>()
@@ -84,7 +85,7 @@ public static class OwnershipManager
 			.Add<PreviouslyOwned>(owned);
 	}
 	
-	public static Result<(Entity prevOwnerEvent, Entity currentOwnerEvent), OwnershipError> SetOwner(Entity owner, Entity toOwn)
+	public static Result<(Entity previous, Entity current), OwnershipError> SetOwner(Entity owner, Entity toOwn)
 	{
 		if (TryGetOwner(toOwn, out var otherOwner))
 		{
@@ -94,7 +95,10 @@ public static class OwnershipManager
 			toOwn.Remove<OwnedBy>(otherOwner);
 		}
 		
+		GD.Print("Ownership being Set");
 		toOwn.Add<OwnedBy>(new(owner), owner);
+		GD.Print(toOwn.Has<OwnedBy>(Entity.Any));
+		GD.Print(toOwn.Has<OwnedBy>(owner));
 		
 		return (
 			EEvent.Spawn()

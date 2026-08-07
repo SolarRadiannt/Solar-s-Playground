@@ -36,13 +36,11 @@ public static class SolInspector
 {
 	private static readonly string TITLE = "Sol ECS Inspector";
 	private static readonly int MAX_RECURIONS_DEPTH = 7;
-	
+	private static readonly int MAX_RELATIONSHIP_DEPTH = 5;
 	private static readonly float HORIZONTAL_TAGS_SPACE = 16f;
+	private static readonly System.Numerics.Vector4 Amber = new InspectorColorAttribute(InspectColor.Violet).Color;
 
 	private static readonly InspectorColorAttribute GodotColor = new(InspectColor.Violet);
-	private static readonly string[] GodotObjects = [
-		"Node2D",	
-	];
 
 	private struct ComponentTypeCache
 	{
@@ -106,8 +104,8 @@ public static class SolInspector
 
 			var colorAttr = type.GetCustomAttribute<InspectorColorAttribute>();
 			
-			if (GodotObjects.Contains(type.Name))
-				colorAttr = GodotColor;	
+			if (typeof(GodotObject).IsAssignableFrom(type))
+				colorAttr = GodotColor;
 
 			if (colorAttr == null && type.IsGenericType)
 				colorAttr = type.GetGenericTypeDefinition().GetCustomAttribute<InspectorColorAttribute>();
@@ -195,8 +193,11 @@ public static class SolInspector
 	private static readonly Dictionary<Entity, string> entitiesComponentFilter = [];
 	private static readonly Dictionary<Entity, string> entitiesTagsFilter = [];
 	
-	private static void DisplayResources(Entity entity)
+	private static void DisplayResources(Entity entity, HashSet<Entity> visited = null, int depth = 0)
 	{
+		visited ??= new HashSet<Entity>();
+		visited.Add(entity);
+		
 		foreach (var comp in entity.Components)
 		{
 			var type = comp.Type;
@@ -210,6 +211,7 @@ public static class SolInspector
 		
 		ShowComponents(entity, entityComponents);
 		ShowTags(entity, entityTags);
+		ShowRelationships(entity, visited, depth);
 		
 		entityComponents.Clear();
 		entityTags.Clear();
@@ -233,7 +235,7 @@ public static class SolInspector
 		if (!ImGui.CollapsingHeader("Components", ImGuiTreeNodeFlags.None)) return;
 		
 		ImGui.PushID(entity.GetHashCode());
-			string filter = HandleEntitySearch("Search Components:", entity, entitiesComponentFilter);
+		string filter = HandleEntitySearch("Search Components:", entity, entitiesComponentFilter);
 		ImGui.PopID();
 		
 		ImGui.Indent();
@@ -305,6 +307,57 @@ public static class SolInspector
 				DisplayTag(tagName, color, ref firstInRow, ref currentWidth, availableWidth);
 		
 		ImGui.Unindent(); // Or just regular ImGui.Unindent();
+	}
+	
+	private static void ShowRelationships(Entity entity, HashSet<Entity> visited, int depth)
+	{
+		if (depth > MAX_RELATIONSHIP_DEPTH) return;
+		
+		var relationships = new List<(string relName, Entity target)>();
+		foreach (var comp in entity.Components)
+		{
+			var members = GetOrCacheType(comp.Type);
+			object data = entity.Get(comp.Type);
+			if (data == null) return;
+			
+			foreach (var field in members.Fields)
+				if (field.FieldType == typeof(Entity) && field.GetValue(data) is Entity target)
+					relationships.Add(($"{members.DisplayName}.{field.Name}", target));
+			
+			foreach (var prop in members.Properties)
+				if (prop.PropertyType == typeof(Entity) && prop.CanRead && prop.GetIndexParameters().Length == 0)
+					if (prop.GetValue(data) is Entity target)
+						relationships.Add(($"{members.DisplayName}.{prop.Name}", target));
+		}
+		
+		if (relationships.Count == 0) return;
+		if (!ImGui.CollapsingHeader($"Relationships ({relationships.Count})", ImGuiTreeNodeFlags.None)) return;
+		
+		ImGui.Indent();
+		
+		foreach (var (relationName, target) in relationships)
+		{
+			string nodeLabel = $"{relationName} -> [{target.ToRaw()}] {target.GetName()}";
+			if (visited.Contains(target))
+			{
+				ImGui.TextColored(Amber, $"{nodeLabel} (Circular Reference)");
+				continue;
+			}
+			
+			if (ImGui.TreeNode(nodeLabel))
+			{
+				visited.Add(target);
+				ImGui.Indent();
+				
+				DisplayResources(target, visited, depth + 1);
+				
+				ImGui.Unindent();
+				visited.Remove(target);
+				ImGui.TreePop();
+			}
+		}
+		
+		ImGui.Unindent();
 	}
 	
 	private static void DisplayTag(string name, System.Numerics.Vector4? color, ref bool firstInRow, ref float currentWidth, float availableWidth)

@@ -43,7 +43,21 @@ public static class ItemsManager
         GD.PushWarning($"{entity.GetName()} Is not a tool entity!");
         return false;
     }
-
+    
+    public static bool Activate(Entity item)
+    {
+        if (!IsItem(item)) return false;
+        
+        return item.TryAdd<Activated>();
+    }
+    
+    public static bool Deactivate(Entity item)
+    {
+        if (!IsItem(item)) return false;
+        
+        return item.TryRemove<Activated>();
+    }
+    
     public static Entity[] GetOwnedItems(Entity owner) =>
         world.Query()
             .Has<OwnedBy>(owner)

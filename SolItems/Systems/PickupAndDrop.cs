@@ -20,6 +20,8 @@ public partial class PickupAndDrop : Node, ISystem
 	public void Process(double delta)
 	{
 		toPickup.For(HandlePickup);
+		toPickup.For(ReadPickupRelationship);
+		
 		toDrop.For(HandleDrop);
 	}
 	
@@ -47,6 +49,14 @@ public partial class PickupAndDrop : Node, ISystem
 			itemHandle.SetDeferred("disabled", true);
 			itemHandle.SetParent(ownerHandle);
 		}
+	}
+	
+	private static void ReadPickupRelationship(ref PickupBy newOwner, ref PickupItem item)
+	{
+		GD.Print("reading system run");
+		GD.Print($"Is {item.Value.GetName()} owned by {newOwner.Value.GetName()}: ",
+			item.Value.Has<OwnedBy>(newOwner.Value)
+		);
 	}
 	
 	private static readonly Stream<DropBy, DropItem> toDrop =

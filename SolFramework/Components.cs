@@ -18,6 +18,7 @@ using SolFramework.Tools;
 	public static implicit operator string(Name self) => self.Value;
 };
 [InspectorColor(InspectColor.Gold)] public record struct Variance(float Value);
+[InspectorColor(InspectColor.Lime)] public record struct UID(string Value);
 
 public record struct PickupDistance(float Value);
 public record struct OwnedBy(Entity Target);
@@ -27,4 +28,6 @@ public record struct ChildOf;
 public record struct Destroy;
 public record struct Visuals;
 
+
 [InspectorColor(InspectColor.Brown)] public struct Grounded;
+[InspectorColor(InspectColor.Orange)] public struct Activated;

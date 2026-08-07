@@ -7,5 +7,6 @@ public static class SystemRegistry
 		new Systems.ComputeVelocity(),
 		new Systems.FootstepSounds(),
 		new Systems.ItemsPickup(),
+		new Systems.RifleEquipper(),
 	];
 }

@@ -20,30 +20,10 @@ public partial class FirearmShooter : Node, ISystem
 {
 	private static readonly World world = Core.World;
 	public int Priority => SPriority.Action;
-	public static readonly SolPointQuery query = new()
-    {
-		CollideWithAreas = true
-	};
 	
 	public void Process(double delta)
 	{
-		if (!Input.IsActionJustPressed("pickup")) return;
 		
-		var mousePos = MainGame.Instance.GetGlobalMousePosition();
-
-		var results = SolSpatial2D.IntersectPoint(mousePos, query);
-		
-		foreach (var found in results)
-			if (found.Collider is EcsArea2D area)
-			{
-				var entity = area.Entity;
-				if (!entity.HasAll<Pickupable, Item>()) return;
-				if (entity.Has<OwnedBy>(Entity.Any)) return;
-				
-				ItemsManager.Pickup(entity, MainGame.Player.Entity);
-				GD.Print($"{entity.GetName()} has been picked up");
-				break;
-			}
 	}
 	
 	public void Init()
